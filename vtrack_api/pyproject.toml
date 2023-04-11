@@ -2,16 +2,70 @@
 name = "vtrack-api"
 version = "0.1.0"
 description = ""
-authors = ["Jai Jain <jai.jain@acsicorp.com>"]
+authors = [
+    "Abhishek Vaish <abhishek.vaish@acsicorp.com>",
+    "Amogh Madan <amogh.madan@acsicorp.com>",
+    "Ayushi Agrawal <ayushi.agrawal@acsicorp.com>",
+    "Harsh Nohwar <harsh.nohwar@acsicorp.com>",
+    "Jai Jain <jai.jain@acsicorp.com>",
+    "Raghav Upadhyay <raghav.upadhyay@acsicorp.com>",
+    "Saumya Tiwari <saumya.tiwari@acsicorp.com>"
+]
 readme = "README.md"
 packages = []
 
 [tool.poetry.dependencies]
 python = "^3.10"
-django = "^4.2"
+django = ">=4.2.0,<4.3.0"
 djangorestframework = "^3.14.0"
+django-filter = "^23.1"
+django-guardian = "^2.4.0"
+pillow = "^9.5.0"
+drf-yasg = "^1.21.5"
+mysqlclient = "^2.1.1"
 
+
+[tool.poetry.group.dev.dependencies]
+werkzeug = "^2.2.3"
+django-extensions = "^3.2.1"
+tox = "^4.4.11"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+extend-exclude = '''
+^.*\b(migrations)\b.*$
+'''
+
+
+[tool.bandit]
+exclude_dirs = [
+    "./.eggs",
+    "./.git",
+    "./.tox",
+    "./build",
+    "./coverage",
+    "./dist",
+    "./venv",
+    "./__pycache__",
+    "*tests*",
+]
+
+
+[tool.mypy]
+exclude = '''
+^.*\b(migrations)\b.*$
+'''
+ignore_missing_imports = true
