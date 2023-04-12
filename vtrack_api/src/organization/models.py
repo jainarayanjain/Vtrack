@@ -14,18 +14,24 @@ class Country(models.Model):
         verbose_name = gettext_lazy("country")
         verbose_name_plural = gettext_lazy("countries")
 
+    def __str__(self):
+        return self.name
+
 
 class Organization(models.Model):
     """Organization Model"""
 
     name = models.CharField(gettext_lazy("name"), max_length=100)
-    is_active = models.BooleanField(gettext_lazy("is_active"))
+    is_active = models.BooleanField(gettext_lazy("active"), default=True)
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
         verbose_name = gettext_lazy("organization")
         verbose_name_plural = gettext_lazy("organizations")
+
+    def __str__(self):
+        return self.name
 
 
 class Address(models.Model):
@@ -44,8 +50,25 @@ class Address(models.Model):
     )
     postcode = models.BigIntegerField(gettext_lazy("postcode"))
     code = models.CharField(gettext_lazy("code"), max_length=20)
-    is_active = models.BooleanField(gettext_lazy("is_active"))
+    is_active = models.BooleanField(gettext_lazy("active"), default=True)
 
     class Meta:
         verbose_name = gettext_lazy("address")
         verbose_name_plural = gettext_lazy("addresses")
+
+    def __str__(self):  # pragma: no cover
+        address = (
+            ", ".join([self.street, self.city, self.region, str(self.country)])
+            + " - "
+            + str(self.postcode)
+        )
+        return address
+
+    @staticmethod
+    def clean_location(location):
+        return location.strip().lower().title()
+
+    def save(self, *args, **kwargs):
+        self.city = self.clean_location(self.city)
+        self.region = self.clean_location(self.region)
+        super().save(*args, **kwargs)
