@@ -23,7 +23,11 @@ admin.site.site_title = gettext_lazy("vTrack admin")
 admin.site.site_header = gettext_lazy("vTrack administration")
 admin.site.index_title = gettext_lazy("vTrack administration")
 
-v1 = []
+v1 = [
+    path("user/", include("user.urls")),
+    path("organization/", include("organization.urls")),
+    path("visitor/", include("visitor.urls")),
+]
 
 apis = [
     path("v1/", include(v1)),
@@ -42,11 +46,11 @@ if settings.DEBUG:  # pragma: no cover
     from rest_framework import permissions
 
     info = openapi.Info(
-        title="Purchase Order API",
+        title="vTrack API",
         default_version="v1",
-        description="Purchase order generation",
+        description="Visitor tracking",
         terms_of_service="https://acsicorp.com/",
-        contact=openapi.Contact(email="aakarsh.singh@acsicorp.com"),
+        contact=openapi.Contact(email="jai.jain@acsicorp.com"),
         license=openapi.License(name="Proprietary License"),
     )
 
