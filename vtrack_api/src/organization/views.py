@@ -32,6 +32,6 @@ class CountryViewSet(viewsets.ModelViewSet):
 class OrganizationViewSet(viewsets.ModelViewSet):
     """Organization View Set"""
 
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.filter(is_active=True)
     serializer_class = OrganizationSerializer
     filterset_class = OrganizationFilterSet
