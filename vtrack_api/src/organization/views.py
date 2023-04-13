@@ -1,15 +1,15 @@
 from rest_framework import viewsets
 
+from organization.filters import (
+    AddressFilterSet,
+    CountryFilterSet,
+    OrganizationFilterSet,
+)
 from organization.models import Address, Country, Organization
 from organization.serializers import (
     AddressSerializer,
     CountrySerializer,
     OrganizationSerializer,
-)
-from organization.filters import (
-    AddressFilterSet,
-    CountryFilterSet,
-    OrganizationFilterSet,
 )
 
 
