@@ -1,3 +1,5 @@
-from django.urls import path
+from config.apps import ConfigConfig
+
+app_name = ConfigConfig.name
 
 urlpatterns = []
