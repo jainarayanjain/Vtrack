@@ -32,7 +32,7 @@ class VisitorFilterSet(filters.FilterSet):
 
     class Meta:
         model = Visitor
-        fields = "__all__"
+        exclude = ["signature", "photo"]
 
 
 class TimingFilterSet(filters.FilterSet):

@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework import routers
 
+from user.apps import UserConfig
 from user.views import (
     DepartmentViewSet,
     DetailView,
@@ -8,6 +9,8 @@ from user.views import (
     LogoutView,
     ProfileViewSet,
 )
+
+app_name = UserConfig.name
 
 router = routers.DefaultRouter()
 router.register(r"departments", DepartmentViewSet, basename="department")
