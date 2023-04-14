@@ -12,10 +12,10 @@ router = routers.DefaultRouter()
 app_name = VisitorConfig.name
 router.register(r"timings", TimingViewSet, basename="timing")
 router.register(
-    r"national-identity", NationalIdentityViewSet, basename="national-identity"
+    r"national-identities", NationalIdentityViewSet, basename="national-identity"
 )
 router.register(r"purposes", PurposeViewSet, basename="purpose")
-router.register(r"visitor-type", VisitorTypeViewSet, basename="visitor-type")
+router.register(r"visitor-types", VisitorTypeViewSet, basename="visitor-type")
 router.register(r"visitors", VisitorViewSet, basename="visitor")
 
 
