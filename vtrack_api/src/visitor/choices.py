@@ -2,8 +2,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy
 
 
-class Type(models.IntegerChoices):
-    """Type Choices"""
+class Kind(models.IntegerChoices):
+    """Kind Choices"""
 
-    VISITOR_TYPE = 0, gettext_lazy("Visitor Type")
+    CATEGORY = 0, gettext_lazy("Category")
     NID = 1, gettext_lazy("National Identity")
+    PURPOSE = 2, gettext_lazy("Purpose")
