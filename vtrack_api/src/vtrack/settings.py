@@ -68,7 +68,6 @@ INSTALLED_APPS = [
     "guardian",
     # Custom Apps
     "config",
-    "organization",
     "user",
     "visitor",
 ] + literal_eval(CNF.get("DEFAULT", "INSTALLED_APPS"))
