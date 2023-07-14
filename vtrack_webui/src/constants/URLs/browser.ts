@@ -1,4 +1,4 @@
-export enum NextRouteEnum {
+export enum Browser {
   ROOT = "/",
   ANDROID_CHROME_192 = "/android-chrome-192x192.png",
   ANDROID_CHROME_512 = "/android-chrome-512x512.png",
@@ -7,4 +7,6 @@ export enum NextRouteEnum {
   FAVICON_32 = "/favicon-32x32.png",
   FAVICON = "/favicon.ico",
   HTTP_404 = "/404",
+  LOGIN_IMAGE = "/login_image.jpg",
+  VISITOR_DEATILS = "/visitor-details"
 }

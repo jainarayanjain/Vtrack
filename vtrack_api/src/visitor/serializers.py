@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
-from user.serializers import UserSerializer
+from user.serializers import AddressSerializer, UserSerializer
 from visitor.models import (
     Category,
+    Dropdown,
     NationalIdentity,
     Purpose,
     Timing,
-    Visitor,
-    VisitorType,
+    Visitor
 )
 
 
@@ -16,7 +16,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        exclude = ["type"]
+
+
+class DropdownSerializer(serializers.ModelSerializer):
+    """Dropdown Serializer"""
+
+    class Meta:
+        model = Dropdown
 
 
 class NationalIdentitySerializer(CategorySerializer):
@@ -24,13 +30,6 @@ class NationalIdentitySerializer(CategorySerializer):
 
     class Meta(CategorySerializer.Meta):
         model = NationalIdentity
-
-
-class VisitorTypeSerializer(CategorySerializer):
-    """Visitor Type Serializer"""
-
-    class Meta(CategorySerializer.Meta):
-        model = VisitorType
 
 
 class PurposeSerializer(serializers.ModelSerializer):
@@ -46,14 +45,21 @@ class PurposeSerializer(serializers.ModelSerializer):
 class VisitorSerializer(serializers.ModelSerializer):
     """Visitor Serializer"""
 
-    purpose = PurposeSerializer(read_only=True)
-    visitor_type = VisitorTypeSerializer(read_only=True)
     nid_type = NationalIdentitySerializer(read_only=True)
-    contact_person = UserSerializer(read_only=True)
 
     class Meta:
         model = Visitor
         fields = "__all__"
+
+
+class VisitSerializer(serializers.ModelSerializer):
+    """Visit Serializer"""
+
+    visitor = VisitorSerializer(read_only=True)
+    purpose = PurposeSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+    contact_person = UserSerializer(read_only=True)
+    address = AddressSerializer(read_only=True)
 
 
 class TimingSerializer(serializers.ModelSerializer):

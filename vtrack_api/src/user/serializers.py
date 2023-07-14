@@ -4,8 +4,34 @@ from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from organization.serializers import AddressSerializer
-from user.models import Department, Profile
+from user.models import Address, Country, Department, Organization, Profile
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    """Country Serializer"""
+
+    class Meta:
+        model = Country
+        fields = "__all__"
+
+
+class OrganizationSerializer(serializers.ModelSerializer):
+    """Organization Serializer"""
+
+    class Meta:
+        model = Organization
+        fields = "__all__"
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    """Address Serializer"""
+
+    organization = OrganizationSerializer(read_only=True)
+    country = CountrySerializer(read_only=True)
+
+    class Meta:
+        model = Address
+        fields = "__all__"
 
 
 class TokenSerializer(serializers.ModelSerializer):
