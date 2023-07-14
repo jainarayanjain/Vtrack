@@ -1,4 +1,4 @@
-import * as APIs from "./APIs";
-import { NextRouteEnum } from "./Next";
+import { API } from "./apis";
+import { Browser } from "./browser";
 
-export { APIs, NextRouteEnum };
+export { API, Browser };
