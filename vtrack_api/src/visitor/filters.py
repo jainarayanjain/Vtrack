@@ -1,6 +1,22 @@
 from django_filters import rest_framework as filters
 
-from visitor.models import NationalIdentity, Purpose, Timing, Visitor, VisitorType
+from visitor.models import Category, Dropdown, NationalIdentity, Purpose, Timing, Visit, Visitor
+
+
+class CategoryFilterSet(filters.FilterSet):
+    """Category Filter Set"""
+
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+
+class DropdownFilterSet(filters.FilterSet):
+    """Dropdown Filter Set"""
+
+    class Meta:
+        model = Dropdown
+        fields = "__all__"
 
 
 class NationalIdentityFilterSet(filters.FilterSet):
@@ -11,11 +27,11 @@ class NationalIdentityFilterSet(filters.FilterSet):
         fields = "__all__"
 
 
-class VisitorTypeFilterSet(filters.FilterSet):
-    """Visitor Type Filter Set"""
+class VisitFilterSet(filters.FilterSet):
+    """Visit Filter Set"""
 
     class Meta:
-        model = VisitorType
+        model = Visit
         fields = "__all__"
 
 
