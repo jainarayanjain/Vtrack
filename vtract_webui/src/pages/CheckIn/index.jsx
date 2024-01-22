@@ -1,20 +1,30 @@
 // src/components/CheckInPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import "../../assets/main.css"
+
 
 const CheckIn = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [phoneNumberError, setPhoneNumberError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [otpError, setOtpError] = useState('');
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(20); // Initial countdown time in seconds
 
-  const handlePhoneNumberChange = (e) => {
-    const input = e.target.value.replace(/\D/g, ''); // Allow only digits
-    setPhoneNumber(input);
 
-    if (input.length !== 10) {
-      setPhoneNumberError('Phone number must be 10 digits.');
+
+
+  const handleEmailChange = (e) => {
+    const input = e.target.value.trim(); // Trim whitespace
+    setEmail(input);
+
+    // Simple email validation (replace with a more robust solution if needed)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(input)) {
+      setEmailError('Please enter a valid email address.');
     } else {
-      setPhoneNumberError('');
+      setEmailError('');
     }
   };
 
@@ -29,64 +39,109 @@ const CheckIn = () => {
     }
   };
 
+  const handleSendOtp = () => {
+    // Simulating OTP sending with a timeout (replace with actual API call)
+    setTimeout(() => {
+      setIsOtpSent(true);
+      setIsButtonDisabled(true); // Disable the button after sending OTP
+      setCountdown(20); // Reset the countdown
+    }, 2000);
+  };
+
   const handleCheckIn = () => {
     // Add your check-in logic here
-    if (phoneNumberError || otpError) {
+    if (emailError || otpError) {
       console.log('Validation failed. Please fix errors.');
       return;
     }
 
-    console.log('Checking in:', { phoneNumber, otp });
+    console.log('Checking in:', { email, otp });
+
+    // Add logic to proceed to the next step or redirect
   };
+
+  useEffect(() => {
+    let timer;
+
+    if (isButtonDisabled) {
+      timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown === 1) {
+            clearInterval(timer);
+            setIsButtonDisabled(false); // Enable the button after the countdown
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(timer); // Cleanup timer on component unmount
+
+  }, [isButtonDisabled]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4">
-      <form className="w-full max-w-sm">
-        <div className="mb-4">
-          <label htmlFor="phoneNumber" className="block text-gray-700 text-sm font-bold mb-2">
-            Phone Number
+      <form className="w-full max-w-sm  form-shadow p-20">
+        <h1 className='mb-10 text-xl font-bold'>CheckIn Form</h1>
+        <div className="mb-1">
+          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+            Email Address
           </label>
           <input
-            type="tel"
-            id="phoneNumber"
-            name="phoneNumber"
-            value={phoneNumber}
-            onChange={handlePhoneNumberChange}
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={handleEmailChange}
             className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              phoneNumberError ? 'border-red-500' : ''
+              emailError ? 'border-red-500' : ''
             }`}
-            placeholder="Enter your phone number"
+            placeholder="Enter your email address"
           />
-          {phoneNumberError && (
-            <p className="text-red-500 text-xs italic mt-1">{phoneNumberError}</p>
+          {emailError && (
+            <p className="text-red-500 text-xs italic mt-1">{emailError}</p>
           )}
         </div>
-        <div className="mb-6">
-          <label htmlFor="otp" className="block text-gray-700 text-sm font-bold mb-2">
-            OTP
-          </label>
-          <input
-            type="text"
-            id="otp"
-            name="otp"
-            value={otp}
-            onChange={handleOtpChange}
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              otpError ? 'border-red-500' : ''
-            }`}
-            placeholder="Enter OTP"
-          />
-          {otpError && <p className="text-red-500 text-xs italic mt-1">{otpError}</p>}
-        </div>
-        <div className="flex items-center justify-between">
+        <div className="mb-2">
           <button
+            className={`${
+              isButtonDisabled ? 'text-gray-500 cursor-not-allowed' : 'text-blue-500 hover:underline focus:outline-none'
+            }`}
+            type="button"
+            onClick={handleSendOtp}
+            disabled={isButtonDisabled}
+          >
+            {isButtonDisabled ? `Resend OTP in ${countdown}s` : 'Send OTP'}
+          </button>
+        </div>
+        {/* {!isOtpSent ? ( */}
+          <div className="mb-6">
+            <label htmlFor="otp" className="block text-gray-700 text-sm font-bold mb-2">
+              OTP
+            </label>
+            <input
+              type="text"
+              id="otp"
+              name="otp"
+              value={otp}
+              onChange={handleOtpChange}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                otpError ? 'border-red-500' : ''
+              }`}
+              placeholder="Enter OTP"
+            />
+            {otpError && <p className="text-red-500 text-xs italic mt-1">{otpError}</p>}
+          </div>
+        {/* ) : null} */}
+        <div className="flex items-center justify-between">
+          <a href="/checkin/photo-interaction"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
             onClick={handleCheckIn}
+
           >
             Check-In
-          </button>
-          {/* <div className="w-12 h-12 bg-gray-300 rounded-full"></div> */}
+          </a>
         </div>
       </form>
     </div>
