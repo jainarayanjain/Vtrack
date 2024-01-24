@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from user.models import Address, Country, Department, Organization, Profile
+from user.models import Address, Country, Organization, Profile
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -83,19 +83,10 @@ class TokenSerializer(serializers.ModelSerializer):
             return self.Meta.model.objects.get(**validated_data)
 
 
-class DepartmentSerializer(serializers.ModelSerializer):
-    """Department Serializer"""
-
-    class Meta:
-        model = Department
-        fields = "__all__"
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     """Profile Serializer"""
 
     address = AddressSerializer(read_only=True)
-    department = DepartmentSerializer(read_only=True)
 
     class Meta:
         model = Profile
