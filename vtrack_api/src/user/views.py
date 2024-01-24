@@ -1,10 +1,9 @@
 from rest_framework import generics, permissions, viewsets
 from rest_framework.authtoken.models import Token
 
-from user.filters import DepartmentFilterSet, ProfileFilterSet
-from user.models import Department, Profile
+from user.filters import ProfileFilterSet
+from user.models import Profile
 from user.serializers import (
-    DepartmentSerializer,
     ProfileSerializer,
     TokenSerializer,
     UserSerializer,
@@ -36,13 +35,6 @@ class LogoutView(generics.DestroyAPIView):
     def get_object(self):
         return self.get_queryset().get(user=self.request.user)
 
-
-class DepartmentViewSet(viewsets.ModelViewSet):
-    """Department View Set"""
-
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
-    filterset_class = DepartmentFilterSet
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
