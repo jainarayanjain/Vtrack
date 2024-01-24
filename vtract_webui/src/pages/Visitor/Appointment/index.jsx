@@ -67,10 +67,10 @@ const AppointmentForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen align-middle">
-      <div className="form-shadow p-10 rounded-xl">
+      <div className="form-shadow p-10 rounded-2xl">
         <h1 className="text-2xl font-bold mb-6">Visitor Details Form</h1>
 
-        <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+        <form className="max-w-md mx-auto rounded-2xl" onSubmit={handleSubmit}>
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex flex-col mb-4 md:w-1/2">
               <label className="text-gray-700">First Name:</label>

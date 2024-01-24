@@ -80,9 +80,9 @@ const CheckIn = () => {
   }, [isButtonDisabled]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-4">
-      <form className="w-full max-w-sm  form-shadow p-20">
-        <h1 className='mb-10 text-xl font-bold'>CheckIn Form</h1>
+    <div className="flex flex-col items-center justify-center h-screen p-8  ">
+      <form className="w-full max-w-sm form-shadow p-8 rounded-2xl  md:text-xl lg:w-xl" >
+        <h1 className='mb-8 md: text-xl font-bold'>CheckIn Form</h1>
         <div className="mb-1">
           <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
             Email Address
@@ -105,7 +105,7 @@ const CheckIn = () => {
         <div className="mb-2">
           <button
             className={`${
-              isButtonDisabled ? 'text-gray-500 cursor-not-allowed' : 'text-blue-500 hover:underline focus:outline-none'
+              isButtonDisabled ? 'text-gray-700 cursor-not-allowed text-sm' : 'text-blue-700 hover:underline focus:outline-none text-sm'
             }`}
             type="button"
             onClick={handleSendOtp}
@@ -133,11 +133,12 @@ const CheckIn = () => {
             {otpError && <p className="text-red-500 text-xs italic mt-1">{otpError}</p>}
           </div>
         {/* ) : null} */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-row-reverse">
           <a href="/checkin/photo-interaction"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-green-500 hover:bg-green-700 text-sm  text-white font-bold py-3 px-5 rounded-xl focus:outline-none focus:shadow-outline"
             type="button"
             onClick={handleCheckIn}
+            shadow-lg
 
           >
             Check-In

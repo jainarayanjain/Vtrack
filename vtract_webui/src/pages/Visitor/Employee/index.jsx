@@ -104,7 +104,7 @@ const EmployeeForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center align-middle h-screen ">
-      <div className="form-shadow p-10">
+      <form className="form-shadow p-10 rounded-2xl">
         <h1 className="text-2xl font-bold mb-4">Employee Details Form</h1>
 
         <div className="flex flex-col gap-4">
@@ -181,7 +181,7 @@ const EmployeeForm = () => {
         >
           Submit
         </button>
-      </div>
+      </form>
     </div>
   );
 };

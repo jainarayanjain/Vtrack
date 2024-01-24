@@ -108,7 +108,7 @@ const ServiceProvider = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center ">
+    <div className="flex flex-col items-center justify-center rounded-2xl">
       <h1 className="text-2xl font-bold mb-4">Service Provider Form</h1>
 
       <div className="flex flex-col md:flex-col gap-4">
