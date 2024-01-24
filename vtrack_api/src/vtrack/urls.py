@@ -25,7 +25,6 @@ admin.site.index_title = gettext_lazy("vTrack administration")
 
 v1 = [
     path("user/", include("user.urls")),
-    path("organization/", include("organization.urls")),
     path("visitor/", include("visitor.urls")),
 ]
 

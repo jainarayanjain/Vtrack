@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from user.models import Address, Country, Department, Organization, Profile
+from user.models import Address, Country, Organization, Profile
 
 
 class AddressFilterSet(filters.FilterSet):
@@ -16,14 +16,6 @@ class CountryFilterSet(filters.FilterSet):
 
     class Meta:
         model = Country
-        fields = "__all__"
-
-
-class DepartmentFilterSet(filters.FilterSet):
-    """Department Filter Set"""
-
-    class Meta:
-        model = Department
         fields = "__all__"
 
 

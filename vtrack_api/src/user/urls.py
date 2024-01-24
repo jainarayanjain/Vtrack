@@ -3,7 +3,6 @@ from rest_framework import routers
 
 from user.apps import UserConfig
 from user.views import (
-    DepartmentViewSet,
     DetailView,
     LoginView,
     LogoutView,
@@ -13,7 +12,6 @@ from user.views import (
 app_name = UserConfig.name
 
 router = routers.DefaultRouter()
-router.register(r"departments", DepartmentViewSet, basename="department")
 router.register(r"profiles", ProfileViewSet, basename="profile")
 
 urlpatterns = [

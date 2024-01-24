@@ -1,40 +1,67 @@
-    from rest_framework import viewsets
+from rest_framework import viewsets
 
 from visitor.filters import (
-    NationalIdentityFilterSet,
-    PurposeFilterSet,
-    TimingFilterSet,
-    VisitorFilterSet,
-    VisitorTypeFilterSet,
+    AccessCardFilterSet,
+    ApprovalFilterSet,
+    CategoryFilterSet, HostFilterSet, NIDTypeFilterSet, TimingFilterSet,
+     ValidFilterSet
 )
-from visitor.models import NationalIdentity, Purpose, Timing, Visitor, VisitorType
+from visitor.models import AccessCard, Approval, Category, Host, NIDType, Timing, \
+    Visitor, Valid
 from visitor.serializers import (
-    NationalIdentitySerializer,
-    PurposeSerializer,
+    AccessCardSerializer,
+    ApprovalSerializer,
+    CategorySerializer,
+    HostSerializer,
+    NIDTypeSerializer,
     TimingSerializer,
     VisitorSerializer,
-    VisitorTypeSerializer,
+    ValidSerializer
 )
 
 
-class NationalIdentityViewSet(viewsets.ModelViewSet):
-    """ "National Identity View Set"""
+class AccessCardViewSet(viewsets.ModelViewSet):
+    """AccessCard View Set"""
 
-    queryset = NationalIdentity.objects.all()
-    serializer_class = NationalIdentitySerializer
-    filterset_class = NationalIdentityFilterSet
+    queryset = AccessCard.objects.all()
+    serializer_class = AccessCardSerializer
+    filterset_class = AccessCardFilterSet
 
 
-class PurposeViewSet(viewsets.ModelViewSet):
-    """ "Purpose View Set"""
+class ApprovalViewSet(viewsets.ModelViewSet):
+    """ Approval View Set"""
 
-    queryset = Purpose.objects.all()
-    serializer_class = PurposeSerializer
-    filterset_class = PurposeFilterSet
+    queryset = Approval.objects.all()
+    serializer_class = ApprovalSerializer
+    filterset_class = ApprovalFilterSet
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """ Category View Set"""
+
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filterset_class = CategoryFilterSet
+
+
+class HostViewSet(viewsets.ModelViewSet):
+    """ Host View Set"""
+
+    queryset = Host.objects.all()
+    serializer_class = HostSerializer
+    filterset_class = HostFilterSet
+
+
+class NIDTypeViewSet(viewsets.ModelViewSet):
+    """ NIDType View Set"""
+
+    queryset = NIDType.objects.all()
+    serializer_class = NIDTypeSerializer
+    filterset_class = NIDTypeFilterSet
 
 
 class TimingViewSet(viewsets.ModelViewSet):
-    """ "Timing View Set"""
+    """ Host View Set"""
 
     queryset = Timing.objects.all()
     serializer_class = TimingSerializer
@@ -42,16 +69,16 @@ class TimingViewSet(viewsets.ModelViewSet):
 
 
 class VisitorViewSet(viewsets.ModelViewSet):
-    """ "Visitor View Set"""
+    """ Visitor View Set"""
 
     queryset = Visitor.objects.all()
     serializer_class = VisitorSerializer
-    filterset_class = VisitorFilterSet
 
 
-class VisitorTypeViewSet(viewsets.ModelViewSet):
-    """ "Visitor Type View Set"""
 
-    queryset = VisitorType.objects.all()
-    serializer_class = VisitorTypeSerializer
-    filterset_class = VisitorTypeFilterSet
+class ValidViewSet(viewsets.ModelViewSet):
+    """ Valid View Set"""
+
+    queryset = Valid.objects.all()
+    serializer_class = ValidSerializer
+

@@ -2,13 +2,25 @@ from rest_framework import serializers
 
 from user.serializers import AddressSerializer, UserSerializer
 from visitor.models import (
-    Category,
-    Dropdown,
-    NationalIdentity,
-    Purpose,
-    Timing,
-    Visitor
+    AccessCard, Approval, Category, Host, NIDType, Timing,
+    Visitor, Valid
 )
+
+
+class AccessCardSerializer(serializers.ModelSerializer):
+    """AccessCard Serializer"""
+
+    class Meta:
+        model = AccessCard
+        fields = "__all__"
+
+
+class ApprovalSerializer(serializers.ModelSerializer):
+    """Approval Serializer"""
+
+    class Meta:
+        model = Approval
+        fields = "__all__"
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -16,57 +28,44 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
+        fields = "__all__"
 
 
-class DropdownSerializer(serializers.ModelSerializer):
-    """Dropdown Serializer"""
-
-    class Meta:
-        model = Dropdown
-
-
-class NationalIdentitySerializer(CategorySerializer):
-    """National Identity Serializer"""
-
-    class Meta(CategorySerializer.Meta):
-        model = NationalIdentity
-
-
-class PurposeSerializer(serializers.ModelSerializer):
-    """Purpose Serializer"""
-
-    category = CategorySerializer(read_only=True)
+class HostSerializer(serializers.ModelSerializer):
+    """Host Serializer"""
 
     class Meta:
-        model = Purpose
+        model = Host
+        fields = "__all__"
+
+
+class NIDTypeSerializer(serializers.ModelSerializer):
+    """NIDType Serializer"""
+
+    class Meta:
+        model = NIDType
+        fields = "__all__"
+
+
+class TimingSerializer(serializers.ModelSerializer):
+    """Timing Serializer"""
+
+    class Meta:
+        model = Timing
         fields = "__all__"
 
 
 class VisitorSerializer(serializers.ModelSerializer):
     """Visitor Serializer"""
 
-    nid_type = NationalIdentitySerializer(read_only=True)
-
     class Meta:
         model = Visitor
         fields = "__all__"
 
 
-class VisitSerializer(serializers.ModelSerializer):
-    """Visit Serializer"""
-
-    visitor = VisitorSerializer(read_only=True)
-    purpose = PurposeSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
-    contact_person = UserSerializer(read_only=True)
-    address = AddressSerializer(read_only=True)
-
-
-class TimingSerializer(serializers.ModelSerializer):
-    """Timing Serializer"""
-
-    visitor = VisitorSerializer(read_only=True)
+class ValidSerializer(serializers.ModelSerializer):
+    """Valid Serializer"""
 
     class Meta:
-        model = Timing
+        model = Valid
         fields = "__all__"
