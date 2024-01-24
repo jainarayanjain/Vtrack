@@ -1,54 +1,47 @@
 from django_filters import rest_framework as filters
 
-from visitor.models import Category, Dropdown, NationalIdentity, Purpose, Timing, Visit, Visitor
+from visitor.models import AccessCard, Approval, Category, Host, NIDType, Timing, \
+    Visitor, Valid
+
+
+class AccessCardFilterSet(filters.FilterSet):
+    """Access Card Filter Set"""
+
+    class Meta:
+        model = AccessCard
+        fields = "__all__"
+
+
+class ApprovalFilterSet(filters.FilterSet):
+    """Approval Filter Set"""
+
+    class Meta:
+        model = Approval
+        fields = "__all__"
 
 
 class CategoryFilterSet(filters.FilterSet):
-    """Category Filter Set"""
+    """ Category Filter Set"""
 
     class Meta:
         model = Category
         fields = "__all__"
 
 
-class DropdownFilterSet(filters.FilterSet):
-    """Dropdown Filter Set"""
+class HostFilterSet(filters.FilterSet):
+    """Host Filter Set"""
 
     class Meta:
-        model = Dropdown
+        model = Host
         fields = "__all__"
 
 
-class NationalIdentityFilterSet(filters.FilterSet):
-    """National Identity Filter Set"""
+class NIDTypeFilterSet(filters.FilterSet):
+    """NID Type Filter Set"""
 
     class Meta:
-        model = NationalIdentity
+        model = NIDType
         fields = "__all__"
-
-
-class VisitFilterSet(filters.FilterSet):
-    """Visit Filter Set"""
-
-    class Meta:
-        model = Visit
-        fields = "__all__"
-
-
-class PurposeFilterSet(filters.FilterSet):
-    """Purpose Filter Set"""
-
-    class Meta:
-        model = Purpose
-        fields = "__all__"
-
-
-class VisitorFilterSet(filters.FilterSet):
-    """Visitor Filter Set"""
-
-    class Meta:
-        model = Visitor
-        exclude = ["signature", "photo"]
 
 
 class TimingFilterSet(filters.FilterSet):
@@ -56,4 +49,13 @@ class TimingFilterSet(filters.FilterSet):
 
     class Meta:
         model = Timing
+        fields = "__all__"
+
+
+
+class ValidFilterSet(filters.FilterSet):
+    """Valid Filter Set"""
+
+    class Meta:
+        model = Valid
         fields = "__all__"
