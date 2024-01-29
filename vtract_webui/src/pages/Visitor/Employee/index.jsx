@@ -103,13 +103,13 @@ const EmployeeForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center align-middle h-screen ">
+    <div className="flex flex-col items-center justify-center align-middle h-screen">
       <form className="form-shadow p-10 rounded-2xl">
         <h1 className="text-2xl font-bold mb-4">Employee Details Form</h1>
 
         <div className="flex flex-col gap-4">
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-col mb-2 md:w-1/2">
+            <div className="flex flex-col  md:w-1/2">
               <label className="text-gray-700">First Name:</label>
               <input
                 type="text"
@@ -121,7 +121,7 @@ const EmployeeForm = () => {
               {errors.firstName && <p className="text-red-500">{errors.firstName}</p>}
             </div>
 
-            <div className="flex flex-col mb-4 md:w-1/2">
+            <div className="flex flex-col  md:w-1/2">
               <label className="text-gray-700">Last Name:</label>
               <input
                 type="text"
@@ -133,48 +133,51 @@ const EmployeeForm = () => {
               {errors.lastName && <p className="text-red-500">{errors.lastName}</p>}
             </div>
           </div>
-
-          <label className="text-gray-700">Phone No.:</label>
-          <input
-            type="text"
-            name="phoneNo"
-            value={formData.phoneNo}
-            onChange={handleChange}
-            className={`border rounded-md p-2 ${errors.phoneNo ? "border-red-500" : ""}`}
-          />
-          {errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
-
-          <label className="text-gray-700">Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={`border rounded-md p-2 ${errors.email ? "border-red-500" : ""}`}
-          />
-          {errors.email && <p className="text-red-500">{errors.email}</p>}
-
-          <label className="text-gray-700">Temp Access Card:</label>
-          <input
-            type="text"
-            name="tempAccessCard"
-            value={formData.tempAccessCard}
-            onChange={handleChange}
-            className={`border rounded-md p-2 ${errors.tempAccessCard ? "border-red-500" : ""}`}
-          />
-          {errors.tempAccessCard && <p className="text-red-500">{errors.tempAccessCard}</p>}
-
-          <label className="text-gray-700">Who do you wish to meet:</label>
-          <input
-            type="text"
-            name="meetingPerson"
-            value={formData.meetingPerson}
-            onChange={handleChange}
-            className={`border rounded-md p-2 ${errors.meetingPerson ? "border-red-500" : ""}`}
-          />
-          {errors.meetingPerson && <p className="text-red-500">{errors.meetingPerson}</p>}
+          <div className="flex flex-col">
+            <label className="text-gray-700">Phone No.:</label>
+            <input
+              type="text"
+              name="phoneNo"
+              value={formData.phoneNo}
+              onChange={handleChange}
+              className={`border rounded-md p-2 ${errors.phoneNo ? "border-red-500" : ""}`}
+            />
+            {errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
+          </div>
+          <div className="flex flex-col ">
+            <label className="text-gray-700">Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`border rounded-md p-2 ${errors.email ? "border-red-500" : ""}`}
+            />
+            {errors.email && <p className="text-red-500">{errors.email}</p>}
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-700">Temp Access Card:</label>
+            <input
+              type="text"
+              name="tempAccessCard"
+              value={formData.tempAccessCard}
+              onChange={handleChange}
+              className={`border rounded-md p-2 ${errors.tempAccessCard ? "border-red-500" : ""}`}
+            />
+            {errors.tempAccessCard && <p className="text-red-500">{errors.tempAccessCard}</p>}
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-700">Who do you wish to meet:</label>
+            <input
+              type="text"
+              name="meetingPerson"
+              value={formData.meetingPerson}
+              onChange={handleChange}
+              className={`border rounded-md p-2 ${errors.meetingPerson ? "border-red-500" : ""}`}
+            />
+            {errors.meetingPerson && <p className="text-red-500">{errors.meetingPerson}</p>}
+          </div>
         </div>
-
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
           onClick={handleSubmit}
