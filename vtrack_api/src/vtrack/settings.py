@@ -222,3 +222,13 @@ SWAGGER_SETTINGS = {
         "Token": {"type": "apiKey", "name": "Authorization", "in": "header"}
     },
 }
+
+# Sending email: SMTP
+# https://docs.djangoproject.com/en/3.2/topics/email/#smtp-backend
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = CNF.get("DEFAULT", "EMAIL_HOST")
+EMAIL_PORT = CNF.get("DEFAULT", "EMAIL_PORT")
+EMAIL_HOST_USER = CNF.get("DEFAULT", "EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = CNF.get("DEFAULT", "EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
