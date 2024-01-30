@@ -2,12 +2,17 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import SignatureCanvas from "react-signature-canvas";
+import { useAppDispatch } from "../../../hooks";
+import { setUserData } from "../../../features/userMediaSlice";
+import { Browser } from "../../../constants";
 
 const PageInteraction = () => {
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [signature, setSignature] = useState(null);
   const [showCaptureButton, setShowCaptureButton] = useState(false);
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const videoRef = useRef(null);
   const signatureRef = useRef(null);
@@ -76,15 +81,25 @@ const PageInteraction = () => {
 
   const handlePhotoSave = () => {
     let formData = new FormData();
-    formData.append('photo', profilePhoto ? convertBase64ToBlob(profilePhoto) : null);
-    formData.append('signature', signature ? convertBase64ToBlob(
-      signature) : null);
-
-
-  }
+    formData.append("photo", profilePhoto ? convertBase64ToBlob(profilePhoto) : null);
+    formData.append("signature", signature ? convertBase64ToBlob(signature) : null);
+  };
   const handleSignatureEnd = () => {
     const dataURL = signatureRef.current.toDataURL();
     setSignature(dataURL);
+  };
+
+  const handleMedia = () => {
+    console.log("this is being clicked====>");
+    const mediaPayload = {
+      profilePhoto,
+      signature,
+    };
+    dispatch(setUserData(mediaPayload));
+    if(profilePhoto && signature){
+      navigation.navigate(Browser.NIDTYPE);
+    }
+
   };
 
   const dummyImage = "/images/profile-photo.png";
@@ -172,15 +187,17 @@ const PageInteraction = () => {
           </div>
         )}
 
-        <a href="/visitor"
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl"
-          onClick={() => console.log("Check-In/Check-Out")}
-        >
-          Check-In/Check-Out
-        </a>
-      </div>
+      <button
+        className={`bg-green-500 ${
+          profilePhoto != null && signature != null ? "hover:bg-green-700 bg-green-600 cursor-pointer" : ""
+        } text-white font-bold py-2 px-4 rounded`}
+        onClick={handleMedia}
+        disabled={profilePhoto == null || signature == null}
+      >
+        Check-In/Check-Out
+      </button>
     </div>
-
+    </div>
   );
 };
 

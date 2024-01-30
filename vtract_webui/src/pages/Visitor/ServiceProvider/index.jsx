@@ -116,8 +116,8 @@ const ServiceProvider = () => {
       </div>
 
       <div className="flex flex-col md:flex-col gap-4">
-        <div className="flex flex-col sm:flex-row gap-4"> 
-          <div className="flex flex-col mb-4 md:w-1/2">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col mb-2 md:w-1/2">
             <label className="text-gray-700">First Name:</label>
             <input
               type="text"
@@ -129,7 +129,7 @@ const ServiceProvider = () => {
             {errors.firstName && <p className="text-red-500">{errors.firstName}</p>}
           </div>
 
-          <div className="flex flex-col mb-4 md:w-1/2">
+          <div className="flex flex-col mb-2 md:w-1/2">
             <label className="text-gray-700">Last Name:</label>
             <input
               type="text"
@@ -142,7 +142,7 @@ const ServiceProvider = () => {
           </div>
         </div>
 
-        <div className="relative z-0 w-full mb-5 group flex flex-col  gap-4">
+        <div className="relative z-0 w-full mb-2 group flex flex-col">
           <label className="text-gray-700">Phone Number:</label>
           <input
             type="text"
@@ -154,7 +154,7 @@ const ServiceProvider = () => {
           {submitted && errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
         </div>
 
-        <div className="relative z-0 w-full mb-5 group flex flex-col  gap-4">
+        <div className="relative z-0 w-full mb-2 group flex flex-col">
           <label className="text-gray-700">Company Email:</label>
           <input
             type="email"
@@ -166,7 +166,7 @@ const ServiceProvider = () => {
           {submitted && errors.companyEmail && <p className="text-red-500">{errors.companyEmail}</p>}
         </div>
 
-        <div className="relative z-0 w-full mb-5 group flex flex-col  gap-4">
+        <div className="relative z-0 w-full mb-2 group flex flex-col">
           <label className="text-gray-700">Purpose of Visit:</label>
           <select
             name="purposeOfVisit"
@@ -185,7 +185,7 @@ const ServiceProvider = () => {
           {submitted && errors.purposeOfVisit && <p className="text-red-500">{errors.purposeOfVisit}</p>}
         </div>
 
-        <div className="relative z-0 w-full mb-5 group flex flex-col  gap-4">
+        <div className="relative z-0 w-full mb-2 group flex flex-col">
           <label className="text-gray-700">Who do you wish to meet:</label>
           <input
             type="text"

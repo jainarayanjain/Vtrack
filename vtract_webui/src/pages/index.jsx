@@ -6,5 +6,6 @@ import CheckOut from "./CheckOut";
 import PhotoInteraction from "./CheckIn/ProfileInteraction";
 import Visitors from "./Visitor";
 import ServiceProvider from "./Visitor/ServiceProvider";
+import NIDForm from "./Visitor/NidForm";
 
-export {AppointmentForm, EmployeeVisitor, Home, CheckIn, CheckOut, PhotoInteraction ,ServiceProvider, Visitors};
+export {AppointmentForm, EmployeeVisitor, Home, CheckIn, CheckOut, PhotoInteraction ,ServiceProvider,NIDForm, Visitors};
