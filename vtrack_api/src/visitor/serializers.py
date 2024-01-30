@@ -1,9 +1,10 @@
+from django.utils import timezone
 from rest_framework import serializers
 
-from user.serializers import AddressSerializer, UserSerializer
+from visitor.helpers import check_otp
 from visitor.models import (
     AccessCard, Approval, Category, Host, NIDType, Timing,
-    Visitor, Valid
+    Valid, VisitorDetail,
 )
 
 
@@ -55,12 +56,18 @@ class TimingSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class VisitorSerializer(serializers.ModelSerializer):
+class VisitorDetailSerializer(serializers.ModelSerializer):
     """Visitor Serializer"""
 
     class Meta:
-        model = Visitor
+        model = VisitorDetail
         fields = "__all__"
+
+    def update(self, instance, validated_data):
+        instance = VisitorDetail.objects.filter(phone=validated_data['phone'])
+        approval_instance = Approval.objects.filter(instance.pk)
+        # fetch id of timing table from approval_instance
+        instance.check_out = timezone.now()
 
 
 class ValidSerializer(serializers.ModelSerializer):
@@ -69,3 +76,7 @@ class ValidSerializer(serializers.ModelSerializer):
     class Meta:
         model = Valid
         fields = "__all__"
+
+    def update(self, instance, validated_data):
+        if check_otp(validated_data['otp']):
+            instance.is_valid = True

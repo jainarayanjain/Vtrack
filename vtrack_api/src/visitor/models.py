@@ -11,6 +11,10 @@ class NIDType(models.Model):
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
+    class Meta:
+        verbose_name = gettext_lazy("nidtype")
+        verbose_name_plural = gettext_lazy("nidtypes")
+
 
 class Host(models.Model):
     """Host Model"""
@@ -20,48 +24,62 @@ class Host(models.Model):
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
+    class Meta:
+        verbose_name = gettext_lazy("host")
+        verbose_name_plural = gettext_lazy("hosts")
+
 
 class Category(models.Model):
     """Category Model"""
     name = models.CharField(gettext_lazy("name"), max_length=50)
     visit_purpose = models.CharField(gettext_lazy("visit purpose"), max_length=100)
 
+    class Meta:
+        verbose_name = gettext_lazy("category")
+        verbose_name_plural = gettext_lazy("categories")
 
-class Visitor(models.Model):
+
+class VisitorDetail(models.Model):
     """Visitor Model"""
 
-    name = models.CharField(gettext_lazy("first name"), max_length=50)
+    name = models.CharField(gettext_lazy("name"), max_length=50, blank=True, null=True)
     email = models.EmailField(gettext_lazy("email"))
-    phone = models.BigIntegerField(gettext_lazy("phone number"))
-    photo = models.ImageField(gettext_lazy("photo"))
-    signature = models.ImageField(gettext_lazy("signature"))
-    company = models.CharField(gettext_lazy("company"), max_length=50)
+    phone = models.BigIntegerField(gettext_lazy("phone number"), blank=True, null=True)
+    photo = models.ImageField(gettext_lazy("photo"), blank=True, null=True)
+    signature = models.ImageField(gettext_lazy("signature"), blank=True, null=True)
+    company = models.CharField(gettext_lazy("company"), max_length=50, blank=True,
+                               null=True)
     nid_type = models.ForeignKey(
         NIDType,
         on_delete=models.CASCADE,
         related_name="nid_type",
         verbose_name=gettext_lazy("national identity type"),
-    )
-    national_id = models.ImageField(gettext_lazy("national id"))
+        blank=True, null=True)
+    national_id = models.ImageField(gettext_lazy("national id"), blank=True, null=True)
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
-        verbose_name = gettext_lazy("visitor")
-        verbose_name_plural = gettext_lazy("visitors")
+        verbose_name = gettext_lazy("visitordetail")
+        verbose_name_plural = gettext_lazy("visitordetails")
 
 
 class Valid(models.Model):
     """Valid Model"""
-    otp = models.CharField(gettext_lazy("otp"), max_length=50)
-    is_valid = models.BooleanField(gettext_lazy("is_valid"), default=False)
+    otp = models.CharField(gettext_lazy("otp"), max_length=50, blank=True, null=True)
+    is_valid = models.BooleanField(gettext_lazy("is_valid"), default=False, blank=True,
+                                   null=True)
     visitor = models.ForeignKey(
-        Visitor,
+        VisitorDetail,
         on_delete=models.DO_NOTHING,
         verbose_name=gettext_lazy("visitor_id")
-    )
+        , blank=True, null=True)
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
+
+    class Meta:
+        verbose_name = gettext_lazy("valid")
+        verbose_name_plural = gettext_lazy("valids")
 
 
 class AccessCard(models.Model):
@@ -72,10 +90,14 @@ class AccessCard(models.Model):
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
+    class Meta:
+        verbose_name = gettext_lazy("accesscard")
+        verbose_name_plural = gettext_lazy("accesscards")
+
 
 class Approval(models.Model):
     """Approval Model"""
-    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE,
+    visitor = models.ForeignKey(VisitorDetail, on_delete=models.CASCADE,
                                 verbose_name=gettext_lazy("visitor id"))
     host = models.ForeignKey(Host, on_delete=models.CASCADE,
                              verbose_name=gettext_lazy("host id"))
@@ -87,12 +109,20 @@ class Approval(models.Model):
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
+    class Meta:
+        verbose_name = gettext_lazy("approval")
+        verbose_name_plural = gettext_lazy("approvals")
+
 
 class Timing(models.Model):
     """Timing Model"""
     check_in = models.DateTimeField(gettext_lazy("check in"))
-    check_out = models.DateTimeField(gettext_lazy("check in"))
+    check_out = models.DateTimeField(gettext_lazy("check in"), blank=True, null=True)
     approval = models.ForeignKey(Approval, on_delete=models.CASCADE,
                                  verbose_name=gettext_lazy("approval id"))
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
+
+    class Meta:
+        verbose_name = gettext_lazy("timing")
+        verbose_name_plural = gettext_lazy("timings")
