@@ -8,7 +8,7 @@ from visitor.views import (
     HostViewSet,
     NIDTypeViewSet,
     TimingViewSet,
-    VisitorViewSet,
+    VisitorDetailViewSet,
     ValidViewSet,
 )
 
@@ -22,7 +22,7 @@ router.register(r"hosts", HostViewSet, basename="host")
 router.register(r"nidtypes", NIDTypeViewSet, basename="nidtype")
 router.register(r"timings", TimingViewSet, basename="timing")
 router.register(r"valids", ValidViewSet, basename="timing")
-router.register(r"visit", VisitorViewSet, basename="visitor")
+router.register(r"visit", VisitorDetailViewSet, basename="visitor")
 
 
 urlpatterns = []
