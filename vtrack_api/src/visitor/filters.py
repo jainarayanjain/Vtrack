@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 
 from visitor.models import AccessCard, Approval, Category, Host, NIDType, Timing, \
-    Visitor, Valid
+    VisitorDetail, Valid
 
 
 class AccessCardFilterSet(filters.FilterSet):
