@@ -7,7 +7,7 @@ from visitor.filters import (
      ValidFilterSet
 )
 from visitor.models import AccessCard, Approval, Category, Host, NIDType, Timing, \
-    Visitor, Valid
+    VisitorDetail, Valid
 from visitor.serializers import (
     AccessCardSerializer,
     ApprovalSerializer,
@@ -15,7 +15,7 @@ from visitor.serializers import (
     HostSerializer,
     NIDTypeSerializer,
     TimingSerializer,
-    VisitorSerializer,
+    VisitorDetailSerializer,
     ValidSerializer
 )
 
@@ -68,11 +68,11 @@ class TimingViewSet(viewsets.ModelViewSet):
     filterset_class = TimingFilterSet
 
 
-class VisitorViewSet(viewsets.ModelViewSet):
+class VisitorDetailViewSet(viewsets.ModelViewSet):
     """ Visitor View Set"""
 
-    queryset = Visitor.objects.all()
-    serializer_class = VisitorSerializer
+    queryset = VisitorDetail.objects.all()
+    serializer_class = VisitorDetailSerializer
 
 
 
