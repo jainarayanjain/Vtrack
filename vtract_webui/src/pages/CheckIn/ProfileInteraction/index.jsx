@@ -74,13 +74,13 @@ const PageInteraction = () => {
     console.log(dataURL, "this is signature--->");
   };
 
-  const handlePhotoSave=()=>{
-    let formData=new FormData();
-    formData.append('photo',profilePhoto?convertBase64ToBlob(profilePhoto):null);
-    formData.append('signature',signature?convertBase64ToBlob(
-      signature):null);
+  const handlePhotoSave = () => {
+    let formData = new FormData();
+    formData.append('photo', profilePhoto ? convertBase64ToBlob(profilePhoto) : null);
+    formData.append('signature', signature ? convertBase64ToBlob(
+      signature) : null);
 
-    
+
   }
   const handleSignatureEnd = () => {
     const dataURL = signatureRef.current.toDataURL();
@@ -90,95 +90,97 @@ const PageInteraction = () => {
   const dummyImage = "/images/profile-photo.png";
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold mb-4">Employee Check-In/Check-Out</h1>
-
-      <div className="mb-8 relative">
-        <div className="relative rounded-full w-72 h-72 overflow-hidden ">
-          {profilePhoto ? (
-            <img src={profilePhoto} alt="Profile" className="object-cover w-full h-full" />
-          ) : (
-            <div>
-              {!showCaptureButton && (
-                <img src="/images/profile-photo.png" alt="Dummy Profile" className="object-cover w-full h-full" />
-              )}
-              {showCaptureButton && (
-                <video ref={videoRef} className="rounded-full w-full h-80 object-cover " autoPlay={true} />
-              )}
-            </div>
-          )}
+    <div className="flex flex-col items-center p-10 rounded-2xl .form-shadow justify-center  overflow-x-hidden ">
+      <div className="flex flex-col form-shadow justify-center items-center p-8 rounded-2xl">
+        
+        <div className='flex flex-row justify-between gap-28'>
+           <h1 className="text-2xl font-bold mb-4">Employee Check-In</h1>
+          <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
         </div>
+        
+          <div className="flex object-cover items-center rounded-full h-52 w-52 overflow-hidden justify-center ">
+            {profilePhoto ? (
+              <img src={profilePhoto} alt="Profile" className="object-cover w-full h-full" />
+            ) : (
+              <div>
+                {!showCaptureButton && (
+                  <img src="/images/profile-photo.png" alt="Dummy Profile" className=" object-cover w-52 h-52" />
+                )}
+                {showCaptureButton && (
+                  <video ref={videoRef} className="rounded-full w-52 h-52 object-cover" autoPlay={true} />
+                )}
+              </div>
+            )}
+          </div>
 
-      
 
-        <>
-          {showCaptureButton && (
-            <button
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded absolute  left-0 mt-2 ml-2 z-10"
-              onClick={handleCapturePhoto}
-            >
-              Capture Photo
-            </button>
-          )}
-        </>
-
-        <div className="flex gap-3 justify-center">
-        <>
-          {isPhotoCaptured && (
-            <button
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold  px-4 rounded mt-2"
-              onClick={handlePhotoSave}
-            >
-              Save Photo
-            </button>
-          )}
-        </>
-          {!showCaptureButton && (
+          <div className="flex gap-3 justify-center">
             <>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  bottom-0  z-10 mt-2"
-                onClick={handleProfilePhotoClick}
-              >
-                { !isPhotoCaptured?"Click for Profile Photo":"retake photo"}
-              </button>
+              {showCaptureButton && (
+                <button
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl .form-shadow left-0 mt-2 ml-2 z-10"
+                  onClick={handleCapturePhoto}
+                >
+                  Capture Photo
+                </button>
+              )}
+              {isPhotoCaptured && (
+                <button
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold  px-4 rounded-xl mt-2"
+                  onClick={handlePhotoSave}
+                >
+                  Save Photo
+                </button>
+              )}
             </>
-          )}
+            {!showCaptureButton && (
+              <>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl  bottom-0  z-10 mt-2"
+                  onClick={handleProfilePhotoClick}
+                >
+                  {!isPhotoCaptured ? "Click for Profile Photo" : "retake photo"}
+                </button>
+              </>
+            )}
+          </div>
+        
+
+        <div className="mb-8  ">
+          <label className="block text-xl font-medium text-gray-700 mb-2">Signature</label>
+          <SignatureCanvas
+            ref={signatureRef}
+            canvasProps={{ className: "border rounded-xl", width: "400%", height: "160%" }}
+            onEnd={handleSignatureEnd}
+          />
         </div>
+
+        {signature && (
+          <div className="mb-2">
+            <button
+              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold .form-shadow py-2 px-4 rounded-xl"
+              onClick={handleSignatureClear}
+            >
+              Clear Signature
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl ml-2"
+              onClick={handleSignatureSave}
+            >
+              Save Signature
+            </button>
+          </div>
+        )}
+
+        <a href="/visitor"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl"
+          onClick={() => console.log("Check-In/Check-Out")}
+        >
+          Check-In/Check-Out
+        </a>
       </div>
-
-      <div className="mb-8">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Signature</label>
-        <SignatureCanvas
-          ref={signatureRef}
-          canvasProps={{ className: "border rounded-md", width:500, height:170  }}
-          onEnd={handleSignatureEnd}
-        />
-      </div>
-
-      {signature && (
-        <div className="mb-2">
-          <button
-            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSignatureClear}
-          >
-            Clear Signature
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
-            onClick={handleSignatureSave}
-          >
-            Save Signature
-          </button>
-        </div>
-      )}
-
-      <a href="/visitor"
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => console.log("Check-In/Check-Out")}
-      >
-        Check-In/Check-Out
-      </a>
     </div>
+
   );
 };
 

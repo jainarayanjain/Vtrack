@@ -1,6 +1,7 @@
 // src/components/Page.js
 import React from "react";
-
+import { HiOutlineLogin } from "react-icons/hi";
+import { HiOutlineLogout } from "react-icons/hi";
 const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4 font-roboto">
@@ -12,17 +13,12 @@ const Home = () => {
       </div>
       <div className="flex flex-row items-center gap-5 ">
         <a href="/checkin" className="flex flex-col   items-center space-x-2">
-          <div className="bg-blue-200 hover:bg-blue-400 border rounded-full mb-4 p-10">
-            <img src="images/entry.png" alt="Check In Logo" className="h-20 w-20" />
-          </div>
+          
 
-          <button className=" hover:bg-blue-200 text-black font-bold py-2 px-4 rounded">Check In</button>
+          <button className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl"><div className="flex flex-row items-center justify-center gap-2"> <HiOutlineLogin style={{fontSize: "22px", fontWeight:"600"}} /> <span>Check In</span></div></button>
         </a>
         <a href="/checkout" className="flex flex-col items-center space-x-2">
-          <div className="bg-green-200 hover:bg-green-400 border rounded-full mb-4 p-10">
-            <img src="images/exit.png" alt="Check Out Logo" className="h-20 w-20" />
-          </div>
-          <button className=" hover:bg-green-200 text-black font-bold py-2 px-4 rounded">Check Out</button>
+        <button className=" bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl"><div className="flex flex-row items-center justify-center gap-2"> <HiOutlineLogout style={{fontSize: "22px", fontWeight:"600"}} /> <span>Check Out</span></div></button>
         </a>
         {/* <a href="#" className="flex flex-col items-center space-x-2">
           <div className="bg-yellow-200 hover:bg-yellow-400 border rounded-full mb-4 p-4">
