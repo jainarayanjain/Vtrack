@@ -68,8 +68,11 @@ const AppointmentForm = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen align-middle">
       <div className="form-shadow p-10 rounded-2xl">
-        <h1 className="text-2xl font-bold mb-6">Visitor Details Form</h1>
 
+        <div className='flex flex-row justify-between gap-28'>
+          <h1 className="text-2xl font-bold mb-6">Visitor Details Form</h1>
+          <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
+        </div>
         <form className="max-w-md mx-auto rounded-2xl" onSubmit={handleSubmit}>
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex flex-col mb-4 md:w-1/2">

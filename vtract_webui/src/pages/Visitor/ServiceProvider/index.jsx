@@ -109,7 +109,11 @@ const ServiceProvider = () => {
 
   return (
     <div className="flex flex-col items-center justify-center rounded-2xl">
-      <h1 className="text-2xl font-bold mb-4">Service Provider Form</h1>
+      
+      <div className='flex flex-row justify-between gap-28'>
+          <h1 className="text-2xl font-bold mb-4">Service Provider Form</h1> 
+          <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
+      </div>
 
       <div className="flex flex-col md:flex-col gap-4">
         <div className="flex flex-col sm:flex-row gap-4"> 
