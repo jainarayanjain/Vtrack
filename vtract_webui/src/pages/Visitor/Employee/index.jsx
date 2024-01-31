@@ -80,7 +80,6 @@ const EmployeeForm = () => {
       newErrors.meetingPerson = "Meeting Person is required";
     }
 
-    // If there are errors, update the state and prevent form submission
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -88,7 +87,6 @@ const EmployeeForm = () => {
       return;
     }
 
-    // If no errors, proceed to create a payload for the API
     const payload = {
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -98,13 +96,12 @@ const EmployeeForm = () => {
       meetingPerson: formData.meetingPerson,
     };
 
-    // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
   };
 
   return (
     <div className="flex flex-col items-center justify-center align-middle h-screen">
-      <form className="form-shadow p-10 rounded-2xl">
+      <form className="form-shadow p-10 rounded-2xl" onSubmit={handleSubmit}>
         <div className='flex flex-row justify-between gap-28'>
           <h1 className="text-2xl font-bold mb-4">Employee Details Form</h1>
           <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
