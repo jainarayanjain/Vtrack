@@ -45,7 +45,7 @@ const Visitors = () => {
             <span class="material-symbols-outlined">arrow_right_alt</span>
           </Link>
           <Link
-            to="visitor/service-provider"
+            to="/service-provider"
             className=" bg-sky-600 rounded-xl shadow-lg border-black text-white hover:bg-sky-700   font-bold py-2 px-4  flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Service Provider

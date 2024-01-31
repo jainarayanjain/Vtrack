@@ -4,8 +4,10 @@ const Browser={
    CHECKOUT:'/checkout',
    PHOTOINTERACTION:'/checkin/photo-interaction',
    VISITORTYPE:'/visitor',
+   NIDTYPE:'/visitor/nid-type',
+   HOSTDETAIL:'/visitor/host-details',
    EMPLOYEEVISITOR:'/visitor/employee',
-   SERVICEPROVIDER:'/visitor/service-provider',
+   SERVICEPROVIDER:'/service-provider',
    APPOINTMENTVISITOR:'/visitor/appointment-visitor',
 }
 

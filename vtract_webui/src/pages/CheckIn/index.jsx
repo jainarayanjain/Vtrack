@@ -1,18 +1,30 @@
 // src/components/CheckInPage.js
-import React, { useState, useEffect } from 'react';
-import "../../assets/main.css"
-
+import React, { useState, useEffect } from "react";
+import "../../assets/main.css";
+import { API, LOCAL_STORAGE_KEY } from "../../constants";
+import Axios from "../../services/axios";
+import {useNavigate} from 'react-router-dom'
+import { useAppSelector, useAppDispatch} from "../../hooks/index"
+import { selectIsLoggedIn, setLoggedIn } from "../../features/authSlice";
 
 const CheckIn = () => {
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [otpError, setOtpError] = useState('');
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [otpError, setOtpError] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [countdown, setCountdown] = useState(20); // Initial countdown time in seconds
 
+  const navigate = useNavigate();
+  const dispatch =useAppDispatch();
+  const selector=useAppSelector(selectIsLoggedIn);
 
+  useEffect(()=>{
+    if(selector || localStorage.getItem(LOCAL_STORAGE_KEY)!=undefined){
+      navigate("/checkin/photo-interaction")
+    }
+  },[])
 
 
   const handleEmailChange = (e) => {
@@ -20,23 +32,23 @@ const CheckIn = () => {
     setEmail(input);
 
     // Simple email validation (replace with a more robust solution if needed)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(input)) {
-      setEmailError('Please enter a valid email address.');
-    } else {
-      setEmailError('');
-    }
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(input)) {
+    //   setEmailError('Please enter a valid email address.');
+    // } else {
+    //   setEmailError('');
+    // }
   };
 
   const handleOtpChange = (e) => {
-    const input = e.target.value.replace(/\D/g, ''); // Allow only digits
-    setOtp(input);
+    // const input = e.target.value.replace(/\D/g, ""); // Allow only digits
+    setOtp(e.target.value);
 
-    if (!input) {
-      setOtpError('OTP is required.');
-    } else {
-      setOtpError('');
-    }
+    // if (!input) {
+    //   setOtpError("OTP is required.");
+    // } else {
+    //   setOtpError("");
+    // }
   };
 
   const handleSendOtp = () => {
@@ -48,16 +60,36 @@ const CheckIn = () => {
     }, 2000);
   };
 
-  const handleCheckIn = () => {
-    // Add your check-in logic here
+  const handleCheckIn = async () => {
     if (emailError || otpError) {
-      console.log('Validation failed. Please fix errors.');
+      console.log("Validation failed. Please fix errors.");
       return;
     }
+    console.log("Checking in:", { email, otp });
 
-    console.log('Checking in:', { email, otp });
-
-    // Add logic to proceed to the next step or redirect
+    const loginPayload = {
+      username: email,
+      password: otp,
+    };
+    try {
+      const response = await Axios.post(API.V1.ACCOUNT_LOGIN, loginPayload);
+      if (response.status === 401) {
+        console.log(response.data, "Invalid credentials");
+      }
+      const AccessToken = response.data.token;
+      console.log(AccessToken, "this is access token--->");
+      localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
+      if (response.status === 201) {
+        dispatch(setLoggedIn(true));
+        navigate("/checkin/photo-interaction");
+      }
+      // setUser(await response.data);
+      // await dispatch(fetchUser());
+      // navigate("/");
+      // setIsLoggedIn(true);
+    } catch (error) {
+      console.log(error, "something went wrong while logging in");
+    }
   };
 
   useEffect(() => {
@@ -76,16 +108,12 @@ const CheckIn = () => {
     }
 
     return () => clearInterval(timer); // Cleanup timer on component unmount
-
   }, [isButtonDisabled]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-8  ">
-      <form className="w-full max-w-sm form-shadow p-8 rounded-2xl  md:text-xl lg:w-xl" >
-        <div className='flex flex-row justify-between'>
-          <h1 className='mb-8 md: text-xl font-bold'>CheckIn Form</h1>
-          <img src="images/innova.png" alt="Company Logo" className="h-7  w-auto" />
-        </div>
+    <div className="flex flex-col items-center justify-center h-screen p-4">
+      <form className="w-full max-w-sm  form-shadow p-20">
+        <h1 className="mb-10 text-xl font-bold">CheckIn Form</h1>
         <div className="mb-1">
           <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
             Email Address
@@ -100,9 +128,7 @@ const CheckIn = () => {
               }`}
             placeholder="Enter your email address"
           />
-          {emailError && (
-            <p className="text-red-500 text-xs italic mt-1">{emailError}</p>
-          )}
+          {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
         </div>
         <div className="mb-2">
           <button
@@ -112,7 +138,7 @@ const CheckIn = () => {
             onClick={handleSendOtp}
             disabled={isButtonDisabled}
           >
-            {isButtonDisabled ? `Resend OTP in ${countdown}s` : 'Send OTP'}
+            {isButtonDisabled ? `Resend OTP in ${countdown}s` : "Send OTP"}
           </button>
         </div>
         {/* {!isOtpSent ? ( */}

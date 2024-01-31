@@ -17,7 +17,7 @@ services:
       - ./vtrack_api:/vtrack
       
   webui:
-    build: ./vtrack_webui
+    build: ./vtract_webui
     command: bash -c "npm run build && npm start"
     container_name: "vTrack-Frontend"
     environment:
@@ -27,7 +27,7 @@ services:
       - "3000:3000"
     restart: always
     volumes:
-      - ./vtrack_webui:/vtrack
+      - ./vtract_webui:/vtrack
     depends_on:
       - api
 
