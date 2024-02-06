@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 
 from visitor.helpers import check_otp
@@ -39,6 +40,13 @@ class HostSerializer(serializers.ModelSerializer):
         model = Host
         fields = "__all__"
 
+    def update(self, instance, validated_data):
+        """Check in logic """
+        if validated_data["is_approved"]:
+            t = Timing(approval=instance.approval, check_in=timezone.now())
+            t.save()
+        return super().update(instance, validated_data)
+
 
 class NIDTypeSerializer(serializers.ModelSerializer):
     """NIDType Serializer"""
@@ -51,9 +59,15 @@ class NIDTypeSerializer(serializers.ModelSerializer):
 class TimingSerializer(serializers.ModelSerializer):
     """Timing Serializer"""
 
+    phone_number = serializers.IntegerField(label=gettext_lazy("phone_number"),
+                                            read_only=True)
+
     class Meta:
         model = Timing
         fields = "__all__"
+
+    def validate(self, attrs):
+        breakpoint()
 
 
 class VisitorDetailSerializer(serializers.ModelSerializer):
@@ -62,12 +76,6 @@ class VisitorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = VisitorDetail
         fields = "__all__"
-
-    def update(self, instance, validated_data):
-        instance = VisitorDetail.objects.filter(phone=validated_data['phone'])
-        approval_instance = Approval.objects.filter(instance.pk)
-        # fetch id of timing table from approval_instance
-        instance.check_out = timezone.now()
 
 
 class ValidSerializer(serializers.ModelSerializer):
@@ -78,5 +86,8 @@ class ValidSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def update(self, instance, validated_data):
-        if check_otp(validated_data['otp']):
-            instance.is_valid = True
+        if not check_otp(validated_data['otp'], instance.otp):
+            msg = "Wrong otp"
+            raise serializers.ValidationError(msg)
+        instance.is_valid = True
+        return super().update(instance, validated_data)

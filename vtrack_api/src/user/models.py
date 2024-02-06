@@ -38,6 +38,10 @@ class Organization(models.Model):
 class Address(models.Model):
     """Address Model"""
 
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                verbose_name=gettext_lazy("user"),
+                                related_name='address',
+                                on_delete=models.CASCADE)
     organization = models.ForeignKey(
         Organization,
         on_delete=models.CASCADE,
@@ -74,24 +78,3 @@ class Address(models.Model):
         self.region = self.clean_location(self.region)
         super().save(*args, **kwargs)
 
-
-class Profile(models.Model):
-    """Profile Model"""
-
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        verbose_name=gettext_lazy("user"),
-    )
-
-    address = models.ForeignKey(
-        Address,
-        on_delete=models.CASCADE,
-        verbose_name=gettext_lazy("address"),
-    )
-    created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
-    updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
-
-    class Meta:
-        verbose_name = gettext_lazy("profile")
-        verbose_name_plural = gettext_lazy("profiles")

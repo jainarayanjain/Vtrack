@@ -12,8 +12,11 @@ class NIDType(models.Model):
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
-        verbose_name = gettext_lazy("nidtype")
-        verbose_name_plural = gettext_lazy("nidtypes")
+        verbose_name = gettext_lazy("nid-type")
+        verbose_name_plural = gettext_lazy("nid-types")
+
+    def __str__(self):
+        return self.name
 
 
 class Host(models.Model):
@@ -28,6 +31,9 @@ class Host(models.Model):
         verbose_name = gettext_lazy("host")
         verbose_name_plural = gettext_lazy("hosts")
 
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     """Category Model"""
@@ -37,6 +43,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = gettext_lazy("category")
         verbose_name_plural = gettext_lazy("categories")
+
+    def __str__(self):
+        return self.name + self.visit_purpose
 
 
 class VisitorDetail(models.Model):
@@ -69,17 +78,20 @@ class Valid(models.Model):
     otp = models.CharField(gettext_lazy("otp"), max_length=50, blank=True, null=True)
     is_valid = models.BooleanField(gettext_lazy("is_valid"), default=False, blank=True,
                                    null=True)
-    visitor = models.ForeignKey(
+    visitor = models.OneToOneField(
         VisitorDetail,
         on_delete=models.DO_NOTHING,
-        verbose_name=gettext_lazy("visitor_id")
-        , blank=True, null=True)
+        verbose_name=gettext_lazy("visitor_id"),
+        related_name="valid")
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
         verbose_name = gettext_lazy("valid")
         verbose_name_plural = gettext_lazy("valids")
+
+    def __str__(self):
+        return self.otp
 
 
 class AccessCard(models.Model):
@@ -94,15 +106,22 @@ class AccessCard(models.Model):
         verbose_name = gettext_lazy("accesscard")
         verbose_name_plural = gettext_lazy("accesscards")
 
+    def __str__(self):
+        return self.card_number
+
 
 class Approval(models.Model):
     """Approval Model"""
     visitor = models.ForeignKey(VisitorDetail, on_delete=models.CASCADE,
-                                verbose_name=gettext_lazy("visitor id"))
+                                verbose_name=gettext_lazy("visitor id"),
+                                related_name="approval"
+                                )
     host = models.ForeignKey(Host, on_delete=models.CASCADE,
-                             verbose_name=gettext_lazy("host id"))
+                             verbose_name=gettext_lazy("host id"), blank=True,
+                             null=True)
     access_card = models.ForeignKey(AccessCard, on_delete=models.CASCADE,
-                                    verbose_name=gettext_lazy("access card id"))
+                                    verbose_name=gettext_lazy("access card id"),
+                                    blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
                                  verbose_name=gettext_lazy("category id"))
     is_approved = models.BooleanField(gettext_lazy("is approved"), default=False)
@@ -117,12 +136,15 @@ class Approval(models.Model):
 class Timing(models.Model):
     """Timing Model"""
     check_in = models.DateTimeField(gettext_lazy("check in"))
-    check_out = models.DateTimeField(gettext_lazy("check in"), blank=True, null=True)
+    check_out = models.DateTimeField(gettext_lazy("check out"), blank=True, null=True)
     approval = models.ForeignKey(Approval, on_delete=models.CASCADE,
-                                 verbose_name=gettext_lazy("approval id"))
+                                 verbose_name=gettext_lazy("approval id"),
+                                 related_name="timing")
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
         verbose_name = gettext_lazy("timing")
         verbose_name_plural = gettext_lazy("timings")
+
+

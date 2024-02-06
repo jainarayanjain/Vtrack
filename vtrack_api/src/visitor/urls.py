@@ -19,11 +19,10 @@ router.register(r"access-cards", AccessCardViewSet, basename="accesscard")
 router.register(r"approvals", ApprovalViewSet, basename="approval")
 router.register(r"categories", CategoryViewSet, basename="category")
 router.register(r"hosts", HostViewSet, basename="host")
-router.register(r"nidtypes", NIDTypeViewSet, basename="nidtype")
+router.register(r"nid-types", NIDTypeViewSet, basename="nid-type")
 router.register(r"timings", TimingViewSet, basename="timing")
 router.register(r"valids", ValidViewSet, basename="timing")
-router.register(r"visit", VisitorDetailViewSet, basename="visitor")
-
+router.register(r"visitor-details", VisitorDetailViewSet, basename="visitor-detail")
 
 urlpatterns = []
 urlpatterns += router.urls
