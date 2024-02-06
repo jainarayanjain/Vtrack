@@ -22,20 +22,20 @@ def check_otp(user_input: str, otp) -> bool:
 
 
 def through_email(
-        recipient_list: list[str],
-        otp: str
-        # cc_list: list[str],
+        instance,
+        subject: str,
+        template: str,
 ) -> None:
     """Send Email"""
-    html_file = "approval.html"
-    # kwargs = {"approval_instance": approval_instance, "level": message["level"]}
-    html_message = render_to_string(html_file)
+    html_file = f"{template}.html"
+    kwargs = {"instance": instance}
+    html_message = render_to_string(html_file, kwargs)
+    recipient_list = [instance.email]
     mail = EmailMessage(
-        subject="subject",
+        subject=subject,
         body=html_message,
         from_email=settings.EMAIL_HOST_USER,
-        to=recipient_list,
-        # cc=cc_list,
+        to=recipient_list
     )
     mail.content_subtype = "html"
     mail.send()
