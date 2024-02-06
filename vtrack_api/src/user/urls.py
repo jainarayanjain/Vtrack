@@ -5,14 +5,13 @@ from user.apps import UserConfig
 from user.views import (
     DetailView,
     LoginView,
-    LogoutView,
-    ProfileViewSet,
+    LogoutView
 )
 
 app_name = UserConfig.name
 
 router = routers.DefaultRouter()
-router.register(r"profiles", ProfileViewSet, basename="profile")
+
 
 urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
