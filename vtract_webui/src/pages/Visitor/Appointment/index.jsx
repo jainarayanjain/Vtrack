@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import "../../../assets/main.css";
+import { useCategory } from "../../../hooks";
+import {useAuth} from "../../../hooks";
+import { CancelButton } from "../../../components";
 
 const AppointmentForm = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +17,18 @@ const AppointmentForm = () => {
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const navigate=useNavigate();
+  const Category = useCategory();
+  const Auth=useAuth();
+
+  useEffect(() => {
+    Category.getCatergory();
+  }, []);
+
+  
+  const handleCancel=()=>{
+    Auth.logout();
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,10 +61,10 @@ const AppointmentForm = () => {
     }
 
     // If there are errors, update the state and prevent form submission
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+    // if (Object.keys(newErrors).length > 0) {
+    //   setErrors(newErrors);
+    //   return;
+    // }
 
     // If no errors, proceed to create a payload for the API
     const payload = {
@@ -61,6 +76,9 @@ const AppointmentForm = () => {
       meetingPerson: formData.meetingPerson,
     };
 
+    if(payload!=null){
+      navigate('/visitor/host-details')
+    }
     // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
   };
@@ -68,8 +86,7 @@ const AppointmentForm = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen align-middle">
       <div className="form-shadow p-10 rounded-2xl">
-
-        <div className='flex flex-row justify-between gap-28'>
+        <div className="flex flex-row justify-between gap-28">
           <h1 className="text-2xl font-bold mb-6">Visitor Details Form</h1>
           <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
         </div>
@@ -124,7 +141,7 @@ const AppointmentForm = () => {
             {submitted && errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>
 
-          <div className="relative flex flex-col z-0 w-full mb-5 group">
+          <div className="relative flex flex-col z-0 w-full mb-10 group">
             <label className="text-gray-700">Purpose of Visit:</label>
             <select
               name="purposeOfVisit"
@@ -135,16 +152,16 @@ const AppointmentForm = () => {
               <option value="" disabled>
                 Select purpose
               </option>
-              <option value="Interview">Interview</option>
-              <option value="New Hires/Joinees">New Hires/Joinees</option>
-              <option value="Visitor">Visitor</option>
-              <option value="Guest">Guest</option>
-              <option value="Client">Client</option>
+              {Category?.catergoriesData?.map((item) => (
+                <option key={item.id} value={item.value}>
+                  {item.visit_purpose}
+                </option>
+              ))}
             </select>
             {submitted && errors.purposeOfVisit && <p className="text-red-500">{errors.purposeOfVisit}</p>}
           </div>
 
-          <div className="relative flex flex-col z-0 w-full mb-5 group">
+          {/* <div className="relative flex flex-col z-0 w-full mb-5 group">
             <label className="text-gray-700">Who do you wish to meet:</label>
             <input
               type="text"
@@ -154,7 +171,7 @@ const AppointmentForm = () => {
               className={`border rounded-md p-2 ${errors.meetingPerson ? "border-red-500" : ""}`}
             />
             {submitted && errors.meetingPerson && <p className="text-red-500">{errors.meetingPerson}</p>}
-          </div>
+          </div> */}
 
           <button
             type="submit"
@@ -163,6 +180,8 @@ const AppointmentForm = () => {
             Submit
           </button>
         </form>
+        <CancelButton/>
+        
       </div>
     </div>
   );

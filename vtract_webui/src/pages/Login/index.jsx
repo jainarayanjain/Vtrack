@@ -7,12 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
 import { selectIsLoggedIn, setLoggedIn } from "../../features/authSlice";
 
-const CheckIn = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [otpError, setOtpError] = useState("");
-  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [countdown, setCountdown] = useState(20); // Initial countdown time in seconds
 
@@ -20,11 +19,11 @@ const CheckIn = () => {
   const dispatch = useAppDispatch();
   const selector = useAppSelector(selectIsLoggedIn);
 
-  // useEffect(() => {
-  //   if (selector || localStorage.getItem(LOCAL_STORAGE_KEY) != undefined) {
-  //     navigate("/checkin/photo-interaction");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (selector || localStorage.getItem(LOCAL_STORAGE_KEY) != undefined) {
+      navigate("/checkin/photo-interaction");
+    }
+  }, []);
 
   const handleEmailChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
@@ -39,9 +38,9 @@ const CheckIn = () => {
     // }
   };
 
-  const handleOtpChange = (e) => {
+  const handlePasswordChange = (e) => {
     // const input = e.target.value.replace(/\D/g, ""); // Allow only digits
-    setOtp(e.target.value);
+    setPassword(e.target.value);
 
     // if (!input) {
     //   setOtpError("OTP is required.");
@@ -49,56 +48,27 @@ const CheckIn = () => {
     //   setOtpError("");
     // }
   };
-  const Email_Payload = {
-    email,
-  };
-  const OTP_Payload = {
-    otp,
-    visitor:1
+  const loginPayload = {
+    username: email,
+    password: password,
   };
 
-  const handleSendOtp = async () => {
-    // Simulating OTP sending with a timeout (replace with actual API call)
+  const handleCheckIn = async () => {
+    if (emailError || passwordError) {
+      console.log("Validation failed. Please fix errors.");
+      return;
+    }
     try {
-      const response = await Axios.post(API.V1.VISITOR_DETAILS, Email_Payload);
+      const response = await Axios.post(API.V1.ACCOUNT_LOGIN, loginPayload);
       if (response.status === 401) {
         console.log(response.data, "Invalid credentials");
       }
       const AccessToken = response.data.token;
       console.log(AccessToken, "this is access token--->");
       if (response.status === 201) {
-        console.log("this is send OTP  in");
-      }
-      // setUser(await response.data);
-      // await dispatch(fetchUser());
-      // navigate("/");
-      // setIsLoggedIn(true);
-    } catch (error) {
-      console.log(error, "something went wrong while logging in");
-    }
-    setTimeout(() => {
-      setIsOtpSent(true);
-      setIsButtonDisabled(true); // Disable the button after sending OTP
-      setCountdown(20); // Reset the countdown
-    }, 2000);
-  };
-
-  const handleCheckIn = async () => {
-    // if (emailError || otpError) {
-    //   console.log("Validation failed. Please fix errors.");
-    //   return;
-    // }
-    try {
-      const response = await Axios.post(API.V1.VISITOR_VALIDS, OTP_Payload);
-      if (response.status === 401) {
-        console.log(response.data, "Invalid credentials");
-      }
-      const AccessToken = response.data.token;
-      console.log(AccessToken, "this is access token--->");
-      if (response.status === 200) {
-        // dispatch(setLoggedIn(true));
-        console.log("this is Valid OTP");
-        // localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
+        dispatch(setLoggedIn(true));
+        console.log("this is successfully logged in");
+        localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
         navigate("/checkin/photo-interaction");
       }
       // setUser(await response.data);
@@ -108,7 +78,7 @@ const CheckIn = () => {
     } catch (error) {
       console.log(error, "something went wrong while logging in");
     }
-    console.log("Checking in:", { email, otp });
+    console.log("Checking in:", { email, password });
   };
 
   useEffect(() => {
@@ -132,7 +102,7 @@ const CheckIn = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4">
       <form className="w-full max-w-sm  form-shadow p-20">
-        <h1 className="mb-10 text-xl font-bold">CheckIn Form</h1>
+        <h1 className="mb-10 text-xl font-bold">Login Form</h1>
         <div className="mb-1">
           <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
             Email Address
@@ -150,37 +120,23 @@ const CheckIn = () => {
           />
           {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
         </div>
-        <div className="mb-2">
-          <button
-            className={`${
-              isButtonDisabled
-                ? "text-gray-700 cursor-not-allowed text-sm"
-                : "text-blue-700 hover:underline focus:outline-none text-sm"
-            }`}
-            type="button"
-            onClick={handleSendOtp}
-            disabled={isButtonDisabled}
-          >
-            {isButtonDisabled ? `Resend OTP in ${countdown}s` : "Send OTP"}
-          </button>
-        </div>
         {/* {!isOtpSent ? ( */}
         <div className="mb-6">
           <label htmlFor="otp" className="block text-gray-700 text-sm font-bold mb-2">
-            OTP
+            Password*
           </label>
           <input
             type="text"
-            id="otp"
-            name="otp"
-            value={otp}
-            onChange={handleOtpChange}
+            id="password"
+            name="password"
+            value={password}
+            onChange={handlePasswordChange}
             className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              otpError ? "border-red-500" : ""
+              passwordError ? "border-red-500" : ""
             }`}
             placeholder="Enter OTP"
           />
-          {otpError && <p className="text-red-500 text-xs italic mt-1">{otpError}</p>}
+          {passwordError && <p className="text-red-500 text-xs italic mt-1">{passwordError}</p>}
         </div>
         {/* ) : null} */}
         <div className="flex items-center justify-between flex-row-reverse">
@@ -198,4 +154,4 @@ const CheckIn = () => {
   );
 };
 
-export default CheckIn;
+export default Login;

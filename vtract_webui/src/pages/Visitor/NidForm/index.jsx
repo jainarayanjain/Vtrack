@@ -1,7 +1,7 @@
 // src/components/NidForm.js
 
-import React, { useState, useRef } from "react";
-import { useAppDispatch } from "../../../hooks";
+import React, { useState, useRef, useEffect } from "react";
+import { useAppDispatch, useNidtypes } from "../../../hooks";
 import { setNID } from "../../../features/NidSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +14,11 @@ const NidForm = () => {
   const videoRef = useRef();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const nidTypes = useNidtypes();
+
+  useEffect(() => {
+    nidTypes.getNidtypes();
+  }, []);
 
   const startCamera = async () => {
     try {
@@ -71,6 +76,7 @@ const NidForm = () => {
       nidtype: nidType,
       nidImage: image,
     };
+    console.log(NidData,'this is nidData--->')
     dispatch(setNID(NidData));
     if (nidType != "" && image != null) {
       navigate("/visitor");
@@ -78,11 +84,11 @@ const NidForm = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8 p-4 rounded-lg shadow-md bg-white">
+    <div className=" w-2/3 mx-auto mt-8 p-4 rounded-lg shadow-md bg-white">
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nidType">
-            Select NID Type
+            Select NID Type *
           </label>
           <select
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -93,15 +99,19 @@ const NidForm = () => {
             <option value="" disabled>
               Select NID Type
             </option>
-            <option value="aadhar">Aadhar Card</option>
+            {/* <option value="aadhar">Aadhar Card</option>
             <option value="pan">PAN Card</option>
-            <option value="driving">Driving License</option>
-            {/* Add more options as needed */}
+            <option value="driving">Driving License</option> */}
+            {nidTypes?.nidtypesData?.map((data) => (
+              <option value={data.name} key={data.id}>
+                {data.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
-            Upload Image
+            Upload Image *
           </label>
           {showCamera ? (
             <div className="mb-2">
