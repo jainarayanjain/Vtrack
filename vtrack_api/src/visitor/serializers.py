@@ -59,15 +59,9 @@ class NIDTypeSerializer(serializers.ModelSerializer):
 class TimingSerializer(serializers.ModelSerializer):
     """Timing Serializer"""
 
-    phone_number = serializers.IntegerField(label=gettext_lazy("phone_number"),
-                                            read_only=True)
-
     class Meta:
         model = Timing
         fields = "__all__"
-
-    def validate(self, attrs):
-        breakpoint()
 
 
 class VisitorDetailSerializer(serializers.ModelSerializer):
