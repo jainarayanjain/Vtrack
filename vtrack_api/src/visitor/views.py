@@ -1,10 +1,11 @@
-from rest_framework import viewsets
+from django.utils import timezone
+from rest_framework import generics, viewsets
 
 from visitor.filters import (
     AccessCardFilterSet,
     ApprovalFilterSet,
     CategoryFilterSet, HostFilterSet, NIDTypeFilterSet, TimingFilterSet,
-     ValidFilterSet
+    ValidFilterSet
 )
 from visitor.models import AccessCard, Approval, Category, Host, NIDType, Timing, \
     VisitorDetail, Valid
@@ -75,10 +76,22 @@ class VisitorDetailViewSet(viewsets.ModelViewSet):
     serializer_class = VisitorDetailSerializer
 
 
-
 class ValidViewSet(viewsets.ModelViewSet):
     """ Valid View Set"""
 
     queryset = Valid.objects.all()
     serializer_class = ValidSerializer
 
+
+class CheckoutViewSet(generics.ListAPIView):
+    """Check out View Set"""
+
+    queryset = Timing.objects.all()
+    serializer_class = TimingSerializer
+
+    def get(self, request, *args, **kwargs):
+        instance = Timing.objects.get(
+            approval__visitor__phone=self.request.query_params['phone'])
+        instance.check_out = timezone.now()
+        instance.save()
+        return self.list(request, *args, **kwargs)
