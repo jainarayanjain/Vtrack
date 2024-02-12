@@ -1,3 +1,4 @@
+from django.urls import path
 from rest_framework import routers
 
 from visitor.apps import VisitorConfig
@@ -5,6 +6,7 @@ from visitor.views import (
     AccessCardViewSet,
     ApprovalViewSet,
     CategoryViewSet,
+    CheckoutViewSet,
     HostViewSet,
     NIDTypeViewSet,
     TimingViewSet,
@@ -24,5 +26,7 @@ router.register(r"timings", TimingViewSet, basename="timing")
 router.register(r"valids", ValidViewSet, basename="timing")
 router.register(r"visitor-details", VisitorDetailViewSet, basename="visitor-detail")
 
-urlpatterns = []
+urlpatterns = [
+    path("check-out/", CheckoutViewSet.as_view(), name="check-out")
+]
 urlpatterns += router.urls
