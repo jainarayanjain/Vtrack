@@ -5,6 +5,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { useAppDispatch } from "../../../hooks";
 import { setUserData } from "../../../features/userMediaSlice";
 import { Browser } from "../../../constants";
+import { CancelButton } from "../../../components";
 
 const PageInteraction = () => {
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -133,7 +134,7 @@ const PageInteraction = () => {
             <>
               {showCaptureButton && (
                 <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl .form-shadow left-0 mt-2 ml-2 z-10"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded .form-shadow left-0 mt-2 ml-2 z-10"
                   onClick={handleCapturePhoto}
                 >
                   Capture Photo
@@ -141,7 +142,7 @@ const PageInteraction = () => {
               )}
               {isPhotoCaptured && (
                 <button
-                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold  px-4 rounded-xl mt-2"
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold  px-4 rounded mt-2"
                   onClick={handlePhotoSave}
                 >
                   Save Photo
@@ -151,7 +152,7 @@ const PageInteraction = () => {
             {!showCaptureButton && (
               <>
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl  bottom-0  z-10 mt-2"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  bottom-0  z-10 mt-2"
                   onClick={handleProfilePhotoClick}
                 >
                   {!isPhotoCaptured ? "Click for Profile Photo" : "retake photo"}
@@ -165,7 +166,7 @@ const PageInteraction = () => {
           <label className="block text-xl font-medium text-gray-700 mb-2">Signature</label>
           <SignatureCanvas
             ref={signatureRef}
-            canvasProps={{ className: "border rounded-xl", width: "400%", height: "160%" }}
+            canvasProps={{ className: "border rounded", width: "400%", height: "160%" }}
             onEnd={handleSignatureEnd}
           />
         </div>
@@ -173,13 +174,13 @@ const PageInteraction = () => {
         {signature && (
           <div className="mb-2">
             <button
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold .form-shadow py-2 px-4 rounded-xl"
+              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold .form-shadow py-2 px-4 rounded"
               onClick={handleSignatureClear}
             >
               Clear Signature
             </button>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl ml-2"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
               onClick={handleSignatureSave}
             >
               Save Signature
@@ -190,12 +191,13 @@ const PageInteraction = () => {
       <button
         className={`bg-green-500 ${
           profilePhoto != null && signature != null ? "hover:bg-green-700 bg-green-600 cursor-pointer" : ""
-        } text-white font-bold py-2 px-4 rounded`}
+        } text-white font-bold py-2 px-4 rounded w-full`}
         onClick={handleMedia}
         disabled={profilePhoto == null || signature == null}
       >
-        Check-In/Check-Out
+        Next
       </button>
+      <CancelButton/>
     </div>
     </div>
   );

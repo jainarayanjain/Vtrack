@@ -8,6 +8,7 @@ import PhotoInteraction from "./CheckIn/ProfileInteraction";
 import Visitors from "./Visitor";
 import ServiceProvider from "./Visitor/ServiceProvider";
 import NIDForm from "./Visitor/NidForm";
+import Login from "./Login";
 
 export {
   AppointmentForm,
@@ -20,4 +21,5 @@ export {
   ServiceProvider,
   NIDForm,
   Visitors,
+  Login
 };
