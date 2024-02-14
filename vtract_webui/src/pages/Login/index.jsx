@@ -1,7 +1,7 @@
 // src/components/CheckInPage.js
 import React, { useState, useEffect } from "react";
 import "../../assets/main.css";
-import { API, LOCAL_STORAGE_KEY } from "../../constants";
+import { API, Browser, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
@@ -17,13 +17,13 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const selector = useAppSelector(selectIsLoggedIn);
+  const setLogin = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (selector || localStorage.getItem(LOCAL_STORAGE_KEY) != undefined) {
-      navigate("/checkin/photo-interaction");
-    }
-  }, []);
+  //   useEffect(() => {
+  //     if (selector || localStorage.getItem(LOCAL_STORAGE_KEY) != undefined) {
+  //       navigate("/checkin");
+  //     }
+  //   }, []);
 
   const handleEmailChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
@@ -53,7 +53,9 @@ const Login = () => {
     password: password,
   };
 
-  const handleCheckIn = async () => {
+  const handleLogin = async () => {
+    console.log(setLogin, "this is login-->");
+
     if (emailError || passwordError) {
       console.log("Validation failed. Please fix errors.");
       return;
@@ -69,12 +71,14 @@ const Login = () => {
         dispatch(setLoggedIn(true));
         console.log("this is successfully logged in");
         localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
-        navigate("/checkin/photo-interaction");
+        // setLoggedIn(true);
+        console.log(setLogin, "this is login-->");
+
+        navigate(Browser.HOME);
       }
       // setUser(await response.data);
       // await dispatch(fetchUser());
       // navigate("/");
-      // setIsLoggedIn(true);
     } catch (error) {
       console.log(error, "something went wrong while logging in");
     }
@@ -100,56 +104,61 @@ const Login = () => {
   }, [isButtonDisabled]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-4">
-      <form className="w-full max-w-sm  form-shadow p-20">
-        <h1 className="mb-10 text-xl font-bold">Login Form</h1>
-        <div className="mb-1">
-          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={handleEmailChange}
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              emailError ? "border-red-500" : ""
-            }`}
-            placeholder="Enter your email address"
-          />
-          {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
-        </div>
-        {/* {!isOtpSent ? ( */}
-        <div className="mb-6">
-          <label htmlFor="otp" className="block text-gray-700 text-sm font-bold mb-2">
-            Password*
-          </label>
-          <input
-            type="text"
-            id="password"
-            name="password"
-            value={password}
-            onChange={handlePasswordChange}
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              passwordError ? "border-red-500" : ""
-            }`}
-            placeholder="Enter OTP"
-          />
-          {passwordError && <p className="text-red-500 text-xs italic mt-1">{passwordError}</p>}
-        </div>
-        {/* ) : null} */}
-        <div className="flex items-center justify-between flex-row-reverse">
-          <a
-            className="bg-green-500 hover:bg-green-700 text-sm  text-white font-bold py-3 px-5 rounded-xl focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={handleCheckIn}
-            shadow-lg
-          >
-            Check-In
-          </a>
-        </div>
-      </form>
+    <div className="flex flex-col items-center justify-center h-screen p-8">
+      <div className="flex flex-col md:flex-row form-shadow rounded-2xl p-6 items-center justify-center max-w-screen-md gap-x-5 mx-auto">
+        <img src="./images/tablet_login.svg" className="w-full md:w-1/2 lg:w-7/12 xl:w-3/6" alt="login_image" />
+
+        <form className="w-full max-w-sm md:w-full lg:w-xl">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-6 ">
+            <h1 className="mb-8 md:mb-0 text-2xl font-bold">Login</h1>
+            <img src="images/innova.png" alt="Company Logo" className="h-7 w-auto md:ml-auto" />
+          </div>
+          <div className="mb-2">
+            <label htmlFor="email" className="block text-gray-700 text-base">
+              Username*
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={handleEmailChange}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                emailError ? "border-red-500" : ""
+              }`}
+              placeholder="Enter your email address"
+            />
+            {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="otp" className="block text-gray-700 text-base">
+              Password*
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={handlePasswordChange}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                passwordError ? "border-red-500" : ""
+              }`}
+              placeholder="Enter OTP"
+            />
+            {passwordError && <p className="text-red-500 text-xs italic mt-1">{passwordError}</p>}
+          </div>
+          <div className="flex flex-col md:flex-row items-center md:justify-between w-full">
+            <button
+              className=" flex bg-green-500 hover:bg-green-700 text-sm w-full  text-white font-bold py-3 px-5 rounded focus:outline-none focus:shadow-outline items-center justify-center md:ml-auto"
+              type="button"
+              onClick={handleLogin}
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

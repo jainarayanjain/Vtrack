@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { LOCAL_STORAGE_KEY } from "../constants";
+import { Browser, LOCAL_STORAGE_KEY } from "../constants";
 import { useAppDispatch } from ".";
 import {setLoggedIn} from "../features/authSlice";
 
@@ -10,7 +10,7 @@ export default function useAuth() {
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     dispatch(setLoggedIn(false));
-    navigate('/');
+    navigate(Browser.LOGIN);
 
   };
   return {logout}

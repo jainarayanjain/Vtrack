@@ -9,8 +9,10 @@ import Visitors from "./Visitor";
 import ServiceProvider from "./Visitor/ServiceProvider";
 import NIDForm from "./Visitor/NidForm";
 import Login from "./Login";
+import ApprovalPage from "./ApprovalPage";
 
 export {
+  ApprovalPage,
   AppointmentForm,
   EmployeeVisitor,
   CheckIn,
@@ -21,5 +23,6 @@ export {
   ServiceProvider,
   NIDForm,
   Visitors,
-  Login
+  Login,
+
 };

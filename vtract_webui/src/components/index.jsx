@@ -1,3 +1,5 @@
 import CancelButton from "./CancelButton";
-
-export {CancelButton};
+import CategoryDropdown from "./CategoryDropdown";
+import StepProgressBar from "./Stepbar";
+import Confetti from "./Confetti";
+export { CategoryDropdown, CancelButton, Confetti, StepProgressBar };

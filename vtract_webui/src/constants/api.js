@@ -9,6 +9,7 @@ const API = {
     VISIT_CATEGORIES: "/v1/visitor/categories/",
     VISITOR_DETAILS: "/v1/visitor/visitor-details/",
     VISITOR_VALIDS: "/v1/visitor/valids/",
+    HOST_DETAILS: "/v1/visitor/hosts/",
   },
 };
 export default API;

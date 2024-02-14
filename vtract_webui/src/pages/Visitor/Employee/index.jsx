@@ -3,6 +3,9 @@ import { useNavigate } from "react-router";
 
 import { useAccessCard, useAuth } from "../../../hooks";
 import { CancelButton } from "../../../components";
+import { API, Browser } from "../../../constants";
+import { useAppSelector } from "../../../hooks";
+import Axios from "../../../services/axios";
 
 const EmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +20,10 @@ const EmployeeForm = () => {
   const Auth = useAuth();
   const Access = useAccessCard();
   const navigate = useNavigate();
+
+  const selector = useAppSelector((state) => state.media.userData);
+  const visitorTypeData = useAppSelector((state) => state.visitor);
+  console.log(visitorTypeData);
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -34,7 +41,7 @@ const EmployeeForm = () => {
     Auth.logout();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
 
@@ -52,7 +59,7 @@ const EmployeeForm = () => {
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = "Please enter a valid email address";
     }
-    if (!formData.tempAccessCard.trim() || !/^\d{6}$/.test(formData.tempAccessCard.trim())) {
+    if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
       newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
     }
     // if (!formData.meetingPerson.trim()) {
@@ -67,19 +74,38 @@ const EmployeeForm = () => {
 
     // If no errors, proceed to create a payload for the API
     const payload = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phoneNo: formData.phoneNo,
+      name: formData.firstName + " " + formData.lastName,
+      phone: formData.phoneNo,
       email: formData.email,
       tempAccessCard: formData.tempAccessCard,
+      // photo: selector.userPhoto,
+      // signature: selector.userSignature,
+      // national_id: nidSelector.nidImage,
+      // nid_type: nidSelector.nidType,
       // meetingPerson: formData.meetingPerson,
     };
+    try {
+      const response = await Axios.post(`${API.V1.VISITOR_DETAILS}`, payload);
+      if (response.status === 401) {
+        console.log(response.data, "something went strongly wrong");
+      }
+      const AccessToken = response.data.token;
+      console.log(AccessToken, "this is access token--->");
+      if (response.status === 201) {
+        navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
+      }
+      // setUser(await response.data);
+      // await dispatch(fetchUser());
+      // navigate("/");
+      // setIsLoggedIn(true);
+    } catch (error) {
+      console.log(error, "something went wrong while logging in");
+    }
 
     // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
 
     // Navigate to the appropriate page
-    navigate("/visitor/host-details"); // Adjust the path accordingly
   };
 
   return (
@@ -89,12 +115,12 @@ const EmployeeForm = () => {
           <h1 className="text-2xl font-bold mb-6">Employee Details Form</h1>
           <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
         </div>
-        <form className="max-w-md mx-auto rounded-2xl" onSubmit={handleSubmit}>
+        <form className=" mx-auto rounded-2xl" onSubmit={handleSubmit}>
           {/* Form inputs */}
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex flex-col  md:w-1/2">
-                <label className="text-gray-700">First Name:</label>
+                <label className="text-gray-700">First Name:*</label>
                 <input
                   type="text"
                   name="firstName"
@@ -106,7 +132,7 @@ const EmployeeForm = () => {
               </div>
 
               <div className="flex flex-col  md:w-1/2">
-                <label className="text-gray-700">Last Name:</label>
+                <label className="text-gray-700">Last Name:*</label>
                 <input
                   type="text"
                   name="lastName"
@@ -118,7 +144,7 @@ const EmployeeForm = () => {
               </div>
             </div>
             <div className="flex flex-col">
-              <label className="text-gray-700">Phone No.:</label>
+              <label className="text-gray-700">Phone No.:*</label>
               <input
                 type="text"
                 name="phoneNo"
@@ -129,7 +155,7 @@ const EmployeeForm = () => {
               {errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
             </div>
             <div className="flex flex-col ">
-              <label className="text-gray-700">Email:</label>
+              <label className="text-gray-700">Email:*</label>
               <input
                 type="email"
                 name="email"
@@ -152,44 +178,33 @@ const EmployeeForm = () => {
             </div> */}
 
             <div className="relative z-0 w-full mb-10 group flex flex-col">
-              <label className="text-gray-700">Access Card:</label>
+              <label className="text-gray-700">Access Card:*</label>
               <select
-                name="purposeOfVisit"
+                name="tempAccessCard"
                 value={formData.tempAccessCard}
                 onChange={handleChange}
                 className={`border rounded-md p-2 ${errors.tempAccessCard ? "border-red-500" : ""}`}
               >
                 <option value="" disabled>
-                  Select purpose
+                  Select Access Card*
                 </option>
                 {Access?.access?.map((item) => (
-                  <option value={item.visit_purpose} key={item.id}>
-                    {item.visit_purpose}{" "}
+                  <option value={item.card_number} key={item.id}>
+                    {item.card_number}
                   </option>
                 ))}
               </select>
               {submitted && errors.tempAccessCard && <p className="text-red-500">{errors.tempAccessCard}</p>}
             </div>
-            {/* <div className="flex flex-col mb-10">
-              <label className="text-gray-700">Who do you wish to meet:</label>
-              <input
-                type="text"
-                name="meetingPerson"
-                value={formData.meetingPerson}
-                onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.meetingPerson ? "border-red-500" : ""}`}
-              />
-              {errors.meetingPerson && <p className="text-red-500">{errors.meetingPerson}</p>}
-            </div> */}
           </div>
           <button
             type="submit"
-            className="mx-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4  mb-2 w-full"
           >
             Submit
           </button>
+          <CancelButton />
         </form>
-        <CancelButton />
       </div>
     </div>
   );

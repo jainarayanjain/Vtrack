@@ -11,6 +11,7 @@ import {
   NIDForm,
   HostDetailsForm,
   Login,
+  ApprovalPage,
 } from "./pages";
 import store from "./store/store";
 
@@ -32,7 +33,8 @@ function App() {
             <Route path={Browser.SERVICEPROVIDER} element={<ServiceProvider />}></Route>
             <Route path={Browser.APPOINTMENTVISITOR} element={<AppointmentForm />}></Route>
             <Route path={Browser.NIDTYPE} element={<NIDForm />}></Route>
-            <Route path={Browser.LOGIN} element={<Login />}></Route>
+            <Route path={Browser.LOGIN} element={<Login />}></Route>x
+            <Route path={Browser.APPROVAL} element={<ApprovalPage />}></Route>
           </Routes>
         </BrowserRouter>
       </Provider>

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 // Initial state
 const initialState = {
   userData: {
@@ -10,14 +9,13 @@ const initialState = {
 };
 
 // Create the slice
-const userMediaSlice = createSlice(
-    {
-  name: 'userMedia',
+const userMediaSlice = createSlice({
+  name: "userMedia",
   initialState,
   reducers: {
     setUserData: (state, action) => {
-      const { userPhoto, userSignature } = action.payload;
-      state.userData = { userPhoto, userSignature };
+      state.userData.userPhoto = action.payload.ProfilePhotoBlob;
+      state.userData.userSignature = action.payload.signatureBlob;
     },
     clearUserMedia: (state) => {
       state.userData = {

@@ -2,12 +2,14 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useAppDispatch, useNidtypes } from "../../../hooks";
-import { setNID } from "../../../features/NidSlice";
 import { useNavigate } from "react-router-dom";
+import Axios from "../../../services/axios";
+import { API } from "../../../constants";
 
 const NidForm = () => {
   const [nidType, setNIDType] = useState("");
-  const [image, setImage] = useState(null);
+  const [nidImage, setNidImage] = useState(null);
+  const [nidImageBlob, setNidImageBlob] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
 
@@ -19,6 +21,26 @@ const NidForm = () => {
   useEffect(() => {
     nidTypes.getNidtypes();
   }, []);
+
+  const formData = new FormData();
+
+  const handleBase64InputChange = (base64String) => {
+    // Convert Base64 to binary
+    const binaryString = decodeURIComponent(base64String);
+    // Create an array buffer from the binary string
+    const arrayBuffer = new ArrayBuffer(binaryString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < binaryString.length; i++) {
+      uint8Array[i] = binaryString.charCodeAt(i);
+    }
+
+    // Create a Blob from the array buffer
+    const newBlob = new Blob([arrayBuffer], { type: "image/jpeg" });
+    // Update state with the new Blob object
+    // setNidImageBlob(newBlob);
+    return newBlob;
+    // setProfilePhoto(newBlob);
+  };
 
   const startCamera = async () => {
     try {
@@ -42,8 +64,11 @@ const NidForm = () => {
       canvas.getContext("2d").drawImage(video, 0, 0);
 
       // Convert the canvas content to base64 data URL
+      formData.append("national_id", canvas);
       const dataURL = canvas.toDataURL("image/png");
-      setImage(dataURL);
+      const blobImage = handleBase64InputChange(dataURL);
+      setNidImage(dataURL);
+      setNidImageBlob(blobImage);
 
       // Stop the camera stream
       const stream = video.srcObject;
@@ -58,12 +83,12 @@ const NidForm = () => {
   const handleCaptureImage = () => {
     startCamera();
     setShowCamera(true);
-    setImage(null);
+    setNidImage(null);
   };
 
   const handleRetakePhoto = () => {
     setIsPhotoCaptured(false);
-    setImage(null);
+    setNidImage(null);
 
     startCamera();
     setShowCamera(true);
@@ -71,14 +96,28 @@ const NidForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    formData.append("nid_type", nidType);
+    // formData.append("national_id", nidImageBlob);
     // You can handle the form submission logic here
     const NidData = {
-      nidtype: nidType,
-      nidImage: image,
+      nid_type: nidType,
+      national_id: nidImageBlob,
     };
-    console.log(NidData,'this is nidData--->')
-    dispatch(setNID(NidData));
-    if (nidType != "" && image != null) {
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    try {
+      const response = Axios.patch(`${API.V1.VISITOR_DETAILS}1/`, formData, config);
+      const data = response.data;
+      if (data.status == 200) {
+        navigate("/visitor");
+      }
+    } catch (e) {
+      console.log("something went wrong", e);
+    }
+    if (nidType != "" && nidImage != null) {
       navigate("/visitor");
     }
   };
@@ -103,7 +142,7 @@ const NidForm = () => {
             <option value="pan">PAN Card</option>
             <option value="driving">Driving License</option> */}
             {nidTypes?.nidtypesData?.map((data) => (
-              <option value={data.name} key={data.id}>
+              <option value={data.id} key={data.id}>
                 {data.name}
               </option>
             ))}
@@ -127,7 +166,7 @@ const NidForm = () => {
             </div>
           ) : (
             <div className="relative">
-              {isPhotoCaptured && <img src={image} alt="Captured" className="w-full rounded-md" />}
+              {isPhotoCaptured && <img src={nidImage} alt="Captured" className="w-full rounded-md" />}
               <button
                 type="button"
                 className={`${
@@ -141,19 +180,19 @@ const NidForm = () => {
           )}
         </div>
         {isPhotoCaptured && (
-          <div className="mb-2">
+          <div className="mb-2 flex gap-8">
             <button
               type="button"
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded w-full"
               onClick={handleRetakePhoto}
             >
               Retake Photo
             </button>
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full">
+              Submit
+            </button>
           </div>
         )}
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-          Submit
-        </button>
       </form>
     </div>
   );
