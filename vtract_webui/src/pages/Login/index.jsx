@@ -6,6 +6,8 @@ import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
 import { selectIsLoggedIn, setLoggedIn } from "../../features/authSlice";
+import { NextButton } from "../../components";
+import { MdLogin } from "react-icons/md";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -149,13 +151,14 @@ const Login = () => {
             {passwordError && <p className="text-red-500 text-xs italic mt-1">{passwordError}</p>}
           </div>
           <div className="flex flex-col md:flex-row items-center md:justify-between w-full">
-            <button
+            {/* <button
               className=" flex bg-green-500 hover:bg-green-700 text-sm w-full  text-white font-bold py-3 px-5 rounded focus:outline-none focus:shadow-outline items-center justify-center md:ml-auto"
               type="button"
               onClick={handleLogin}
             >
               Login
-            </button>
+            </button> */}
+            <NextButton name={"Login"} handleButton={handleLogin} icons={<MdLogin />} />
           </div>
         </form>
       </div>

@@ -5,6 +5,10 @@ import { useAppDispatch, useNidtypes } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
 import Axios from "../../../services/axios";
 import { API } from "../../../constants";
+import { MdOutlineCheckCircleOutline } from "react-icons/md";
+import { NextButton } from "../../../components";
+import { FiRepeat } from "react-icons/fi";
+
 
 const NidForm = () => {
   const [nidType, setNIDType] = useState("");
@@ -183,14 +187,13 @@ const NidForm = () => {
           <div className="mb-2 flex gap-8">
             <button
               type="button"
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded w-full"
-              onClick={handleRetakePhoto}
-            >
-              Retake Photo
+              className=" flex items-center gap-1 justify-center bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded w-full"
+                onClick={handleRetakePhoto}
+              >
+                Retake Photo
+                <FiRepeat/>
             </button>
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full">
-              Submit
-            </button>
+            <NextButton name={"Submit"} icons={<MdOutlineCheckCircleOutline />} type={"submit"} />
           </div>
         )}
       </form>

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { useAccessCard, useAuth } from "../../../hooks";
-import { CancelButton } from "../../../components";
+import { CancelButton, NextButton } from "../../../components";
 import { API, Browser } from "../../../constants";
 import { useAppSelector } from "../../../hooks";
 import Axios from "../../../services/axios";
+import { MdOutlineCheckCircleOutline } from "react-icons/md";
 
 const EmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -197,13 +198,16 @@ const EmployeeForm = () => {
               {submitted && errors.tempAccessCard && <p className="text-red-500">{errors.tempAccessCard}</p>}
             </div>
           </div>
-          <button
+          {/* <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4  mb-2 w-full"
           >
             Submit
-          </button>
-          <CancelButton />
+          </button> */}
+          <div className="flex gap-2">
+            <CancelButton />
+            <NextButton name={"Submit"} type={"submit"} icons={<MdOutlineCheckCircleOutline />} />
+          </div>
         </form>
       </div>
     </div>

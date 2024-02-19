@@ -1,7 +1,10 @@
 // pageInteraction.js
 
 import React, { useState, useRef, useEffect } from "react";
+
 import SignatureCanvas from "react-signature-canvas";
+import { GrLinkNext } from "react-icons/gr";
+
 import { useAppDispatch } from "../../../hooks";
 import { setUserData } from "../../../features/userMediaSlice";
 import { API, Browser } from "../../../constants";
@@ -45,6 +48,13 @@ const PageInteraction = () => {
     setProfilePhoto(null);
   };
 
+  function removeImageDataPrefix(encodedString) {
+    if (encodedString.startsWith("data:image/png;base64,")) {
+      return encodedString.slice("data:image/png;base64,".length);
+    } else {
+      return encodedString;
+    }
+  }
   const handleCapturePhoto = async () => {
     const canvas = document.createElement("canvas");
     const video = videoRef.current;
@@ -59,7 +69,8 @@ const PageInteraction = () => {
       // Convert the canvas content to base64 data URL
       const dataURL = canvas.toDataURL("image/png");
       // const profilePhotoBlob = handleBase64InputChange(dataURL);
-      setProfilePhoto(dataURL);
+      const removeDataURL = removeImageDataPrefix(dataURL);
+      setProfilePhoto(removeDataURL);
       setProfilePhotoBlob(blob);
 
       // Stop the camera stream
@@ -107,31 +118,34 @@ const PageInteraction = () => {
   };
 
   const handleSignatureSave = () => {
-    formData.append("signature", signature ? handleBase64InputChange(signature) : null);
+    // formData.append("signature", signature ? handleBase64InputChange(signature) : null);
+    console.log("this is signature saved--->");
     const dataURL = signatureRef.current.toDataURL();
-    setSignature(dataURL);
+    const blobSignature = handleBase64InputChange(dataURL);
+    const removeDataURL = removeImageDataPrefix(dataURL);
+
+    setSignature(removeDataURL);
+    setSignatureBlob(blobSignature);
   };
   const handlePhotoSave = () => {
-    formData.append("photo", profilePhoto ? handleBase64InputChange(profilePhoto) : null);
   };
 
   const handleSignatureEnd = () => {
-    const dataURL = signatureRef.current.toDataURL();
-    const blobSignature = handleBase64InputChange(dataURL);
-    setSignature(dataURL);
-    setSignatureBlob(blobSignature);
+    handleSignatureSave();
   };
 
   // submit the form function.
   const handleMedia = async () => {
     try {
       const formData = new FormData();
-      formData.append("photo", ProfilePhotoBlob);
-      formData.append("signature", signatureBlob);
+      formData.append("photo", profilePhoto);
+      formData.append("signature", signature);
 
       // Convert FormData entries to an array and print
       const formDataArray = Array.from(formData.entries());
-      formDataArray.forEach((pair) => {});
+      formDataArray.forEach((pair) => {
+        console.log(pair, "pair--->");
+      });
 
       // Use FormData directly in Axios.patch and wait for the response
       const config = {
@@ -139,9 +153,11 @@ const PageInteraction = () => {
           "Content-Type": "multipart/form-data",
         },
       };
-      // const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}1/`, formData, config);
-      // const data = response.data;
-      navigate(Browser.NIDTYPE);
+      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}1/`, formData, config);
+      const data = response.data;
+      if (response.status === 201) {
+        navigate(Browser.NIDTYPE);
+      }
 
       // if (data.status === 201) {
       //   console.log("successfully submitted the data--->");
@@ -195,25 +211,25 @@ const PageInteraction = () => {
                 Capture Photo
               </button>
             )}
+            {!showCaptureButton && (
+              <>
+                <button
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded  bottom-0  z-10 mt-2"
+                  onClick={handleProfilePhotoClick}
+                >
+                  {!isPhotoCaptured ? "Click for Profile Photo" : "retake photo"}
+                </button>
+              </>
+            )}
             {isPhotoCaptured && (
               <button
-                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold  px-4 rounded mt-2"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold  px-4 rounded mt-2"
                 onClick={handlePhotoSave}
               >
                 Save Photo
               </button>
             )}
           </>
-          {!showCaptureButton && (
-            <>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  bottom-0  z-10 mt-2"
-                onClick={handleProfilePhotoClick}
-              >
-                {!isPhotoCaptured ? "Click for Profile Photo" : "retake photo"}
-              </button>
-            </>
-          )}
         </div>
 
         <div className="mb-8  ">
@@ -243,16 +259,19 @@ const PageInteraction = () => {
         )}
 
         <div className="flex w-full gap-x-5">
+          <CancelButton />
           <button
             className={`bg-green-500 ${
               profilePhoto != null && signature != null ? "hover:bg-green-700 bg-green-600 cursor-pointer" : ""
-            } text-white font-bold py-2 px-4 rounded w-full`}
+            } text-white font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-1`}
             onClick={handleMedia}
             disabled={profilePhoto == null || signature == null}
           >
             Next
+            <i>
+              <GrLinkNext />
+            </i>
           </button>
-          <CancelButton />
         </div>
       </div>
     </div>

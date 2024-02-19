@@ -8,7 +8,8 @@ import { useAppSelector, useAppDispatch } from "../../hooks/index";
 import { selectIsLoggedIn, setLoggedIn } from "../../features/authSlice";
 import { setVisitorType } from "../../features/VisitorSlice";
 import { useSelector } from "react-redux";
-import { StepProgressBar } from "../../components";
+import { NextButton, StepProgressBar } from "../../components";
+import { MdOutlineCheckCircleOutline } from "react-icons/md";
 
 const CheckIn = () => {
   const [email, setEmail] = useState("");
@@ -59,6 +60,7 @@ const CheckIn = () => {
   const handleSendOtp = async () => {
     // Simulating OTP sending with a timeout (replace with actual API call)
     try {
+      console.log('this is being clicked===>')
       const response = await Axios.post(API.V1.VISITOR_DETAILS, Email_Payload);
       const data = response.data;
       if (response.status === 401) {
@@ -71,21 +73,17 @@ const CheckIn = () => {
         const payload = {
           visitorId: data.id,
         };
+        setTimeout(() => {
+          setIsButtonDisabled(true); // Disable the button after sending OTP
+          setIsOtpSent(true);
+          setCountdown(20); // Reset the countdown
+        }, 1000);
         dispatch(setVisitorType(payload));
         console.log("this is send OTP  in");
       }
-      // setUser(await response.data);
-      // await dispatch(fetchUser());
-      // navigate("/");
-      // setIsLoggedIn(true);
     } catch (error) {
       console.log(error, "something went wrong while logging in");
     }
-    setTimeout(() => {
-      setIsOtpSent(true);
-      setIsButtonDisabled(true); // Disable the button after sending OTP
-      setCountdown(20); // Reset the countdown
-    }, 1000);
   };
 
   const handleCheckIn = async () => {
@@ -135,11 +133,11 @@ const CheckIn = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-8">
-      <StepProgressBar
+      {/* <StepProgressBar
         currentStep={1} // Set currentStep to 1 to show the first step
         completedStep={0} // Set completedStep to 0 initially
         disableNavigation={true}
-      />
+      /> */}
       <div className="flex flex-col md:flex-row form-shadow rounded-2xl p-6 items-center justify-center max-w-screen-md gap-x-5 mx-auto">
         <img src="./images/vtrack-login.jpg" className="w-full md:w-1/2 lg:w-7/12 xl:w-3/6" alt="login_image" />
 
@@ -199,13 +197,7 @@ const CheckIn = () => {
             {otpError && <p className="text-red-500 text-xs italic mt-1">{otpError}</p>}
           </div>
           <div className="flex flex-col md:flex-row items-center md:justify-between w-full">
-            <a
-              className="flex bg-green-500 hover:bg-green-700 text-sm w-full text-white font-bold py-3 px-5 rounded focus:outline-none focus:shadow-outline items-center justify-center md:ml-auto"
-              type="button"
-              onClick={handleCheckIn}
-            >
-              Check-In
-            </a>
+            <NextButton name={"Check-in"} handleButton={handleCheckIn} icons={<MdOutlineCheckCircleOutline />} />
           </div>
         </form>
       </div>

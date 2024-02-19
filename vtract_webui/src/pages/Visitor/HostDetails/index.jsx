@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Axios from "../../../services/axios";
 import { API, Browser } from "../../../constants";
 import { useNavigate } from "react-router-dom";
+import { CancelButton, NextButton } from "../../../components";
+import { MdOutlineCheckCircleOutline } from "react-icons/md";
 
 const HostDetailsForm = () => {
   const navigate = useNavigate();
@@ -85,7 +87,7 @@ const HostDetailsForm = () => {
     try {
       const response = await Axios.post(API.V1.HOST_DETAILS, payload);
       const data = await response.data;
-      console.log(response,'this is host data--->')
+      console.log(response, "this is host data--->");
       if (response.status === 201) {
         navigate(Browser.APPROVAL);
       }
@@ -148,16 +150,8 @@ const HostDetailsForm = () => {
             {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
           </div>
           <div className="flex gap-4">
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full">
-              Submit
-            </button>
-            <a
-              href="/"
-              type="submit"
-              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full text-center"
-            >
-              Cancel
-            </a>
+            <CancelButton />
+            <NextButton name={"Submit"} icons={<MdOutlineCheckCircleOutline />} type={"submit"} />
           </div>
         </form>
       </div>
