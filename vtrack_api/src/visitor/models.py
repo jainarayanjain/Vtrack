@@ -97,8 +97,10 @@ class Valid(models.Model):
 class AccessCard(models.Model):
     """Access Card Model"""
     card_number = models.CharField(gettext_lazy("card number"), max_length=50)
+    is_allocated = models.BooleanField(gettext_lazy("is allocated"), default=False)
     address = models.ForeignKey(Address, on_delete=models.CASCADE,
                                 verbose_name=gettext_lazy("address id"))
+
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
@@ -121,6 +123,7 @@ class Approval(models.Model):
                              null=True)
     access_card = models.ForeignKey(AccessCard, on_delete=models.CASCADE,
                                     verbose_name=gettext_lazy("access card id"),
+                                    related_name="approval_access_card",
                                     blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
                                  verbose_name=gettext_lazy("category id"))
@@ -146,5 +149,3 @@ class Timing(models.Model):
     class Meta:
         verbose_name = gettext_lazy("timing")
         verbose_name_plural = gettext_lazy("timings")
-
-
