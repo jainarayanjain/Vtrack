@@ -8,6 +8,7 @@ from visitor.views import (
     CategoryViewSet,
     CheckoutViewSet,
     HostViewSet,
+    HostApprovalViewSet,
     NIDTypeViewSet,
     TimingViewSet,
     VisitorDetailViewSet,
@@ -27,6 +28,7 @@ router.register(r"valids", ValidViewSet, basename="timing")
 router.register(r"visitor-details", VisitorDetailViewSet, basename="visitor-detail")
 
 urlpatterns = [
-    path("check-out/", CheckoutViewSet.as_view(), name="check-out")
+    path("check-out/", CheckoutViewSet.as_view(), name="check-out"),
+    path("host-approval/<int:pk>/", HostApprovalViewSet.as_view(), name="host-approval")
 ]
 urlpatterns += router.urls
