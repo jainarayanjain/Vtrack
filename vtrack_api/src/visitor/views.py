@@ -1,5 +1,5 @@
 from django.utils import timezone
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, permissions
 
 from visitor.filters import (
     AccessCardFilterSet,
@@ -27,6 +27,13 @@ class AccessCardViewSet(viewsets.ModelViewSet):
     queryset = AccessCard.objects.all()
     serializer_class = AccessCardSerializer
     filterset_class = AccessCardFilterSet
+
+    def get_queryset(self):
+        filter_kwargs = {
+            "is_allocated": False
+        }
+        queryset = super().get_queryset().filter(**filter_kwargs)
+        return queryset
 
 
 class ApprovalViewSet(viewsets.ModelViewSet):
@@ -92,6 +99,18 @@ class CheckoutViewSet(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         instance = Timing.objects.get(
             approval__visitor__phone=self.request.query_params['phone'])
+        access_card_instance = AccessCard.objects.get(
+            approval_access_card__visitor__phone=self.request.query_params['phone'])
+        access_card_instance.is_allocated = False
         instance.check_out = timezone.now()
         instance.save()
+        access_card_instance.save()  # for making the access card available again
         return self.list(request, *args, **kwargs)
+
+
+class HostApprovalViewSet(generics.UpdateAPIView):
+    """Host Approval View Set"""
+
+    queryset = Approval.objects.all()
+    serializer_class = ApprovalSerializer
+    permission_classes = [permissions.AllowAny]
