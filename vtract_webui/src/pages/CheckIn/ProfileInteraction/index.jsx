@@ -153,11 +153,11 @@ const PageInteraction = () => {
           "Content-Type": "multipart/form-data",
         },
       };
-      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}1/`, formData, config);
-      const data = response.data;
-      if (response.status === 201) {
-        navigate(Browser.NIDTYPE);
-      }
+      // const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}1/`, formData, config);
+      // const data = response.data;
+      // if (response.status === 201) {
+      // }
+      navigate(Browser.NIDTYPE);
 
       // if (data.status === 201) {
       //   console.log("successfully submitted the data--->");
