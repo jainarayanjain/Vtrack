@@ -6,20 +6,31 @@
 </head>
 <body>
 
+
+
+
+<!--<form action = "" method = "post">-->
+<!--    {% csrf_token %}-->
+<!--&lt;!&ndash;    <label for="firstname">First name: </label>&ndash;&gt;-->
+<!--&lt;!&ndash;    <input type="text" name="firstname"  required>&ndash;&gt;-->
+<!--    <input type="submit" value=Submit">-->
+<!--</form>-->
 {{instance.name}}
-{{instance.phone}}
-{{instance.photo}}
-{{instance.approval.timing.check_in}}
-<a href='http://127.0.0.1:8001/api/v1/visitor/approvals/{{instance.id}}'>
+
+<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.id}}/?is_approved=True'>
     <button class="GFG">
         YES
     </button>
 </a>
 
-<a href='http://127.0.0.1:8001/api/v1/visitor/approvals/{{instance.id}}'>
+<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.id}}/?is_approved=False'>
     <button class="GFG">
         NO
     </button>
 </a>
 </body>
 </html>
+
+
+psycopg2-binary
+django-extra-fields

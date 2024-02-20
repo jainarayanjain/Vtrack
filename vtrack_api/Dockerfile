@@ -1,6 +1,6 @@
 FROM python:3.10-slim-bullseye
 
-LABEL maintainer="Amogh Madan <amogh.madan@acsicorp.com>"
+LABEL maintainer="Jai Jain <jai.jain@innovasolutions.com>"
 
 WORKDIR /vtrack
 

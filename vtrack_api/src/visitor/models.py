@@ -119,7 +119,9 @@ class Approval(models.Model):
                                 related_name="approval"
                                 )
     host = models.ForeignKey(Host, on_delete=models.CASCADE,
-                             verbose_name=gettext_lazy("host id"), blank=True,
+                             verbose_name=gettext_lazy("host id"),
+                             related_name="approval_host",
+                             blank=True,
                              null=True)
     access_card = models.ForeignKey(AccessCard, on_delete=models.CASCADE,
                                     verbose_name=gettext_lazy("access card id"),

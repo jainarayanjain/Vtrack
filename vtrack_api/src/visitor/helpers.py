@@ -1,7 +1,5 @@
-import math
 import random
 
-from django.apps import apps
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
