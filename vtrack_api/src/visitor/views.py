@@ -1,11 +1,10 @@
 from django.utils import timezone
 from rest_framework import generics, viewsets, permissions
-
+from rest_framework.renderers import TemplateHTMLRenderer
 from visitor.filters import (
     AccessCardFilterSet,
     ApprovalFilterSet,
-    CategoryFilterSet, HostFilterSet, NIDTypeFilterSet, TimingFilterSet,
-    ValidFilterSet
+    CategoryFilterSet, HostFilterSet, NIDTypeFilterSet, TimingFilterSet
 )
 from visitor.models import AccessCard, Approval, Category, Host, NIDType, Timing, \
     VisitorDetail, Valid
@@ -108,9 +107,17 @@ class CheckoutViewSet(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class HostApprovalViewSet(generics.UpdateAPIView):
+class HostApprovalViewSet(generics.RetrieveAPIView):
     """Host Approval View Set"""
 
     queryset = Approval.objects.all()
     serializer_class = ApprovalSerializer
     permission_classes = [permissions.AllowAny]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "success.html"
+
+    def get(self, request, *args, **kwargs):
+        instance = Approval.objects.get(id=kwargs['pk'])
+        instance.is_approved = self.request.query_params['is_approved']
+        instance.save()
+        return super().get(request, *args, **kwargs)
