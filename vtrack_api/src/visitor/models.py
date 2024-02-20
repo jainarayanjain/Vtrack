@@ -128,7 +128,8 @@ class Approval(models.Model):
                                     related_name="approval_access_card",
                                     blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
-                                 verbose_name=gettext_lazy("category id"))
+                                 verbose_name=gettext_lazy("category id"),
+                                 blank=True, null=True)
     is_approved = models.BooleanField(gettext_lazy("is approved"), default=False)
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)

@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Approval Email</title>
 </head>
 <body>
 
-{{instance.name}}
-{{instance.photo}}
+{{instance.visitor.name}}
+{{instance.visitor.photo}}
 
-<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.approval.first().host.id}}/?is_approved=True'>
+<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.id}}/?is_approved=True'>
     <button class="GFG">
         YES
     </button>
 </a>
-
-<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.approval.first().host.id}}/?is_approved=False'>
+<br>
+<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.id}}/?is_approved=False'>
     <button class="GFG">
         NO
     </button>
