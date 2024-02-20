@@ -28,7 +28,7 @@ class ApprovalSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """for updating access card is allocated field"""
-        instance = AccessCard.objects.get(id=validated_data['access_card'])
+        instance = AccessCard.objects.get(id=validated_data['access_card'].id)
         instance.is_allocated = True
         instance.save()
         return super().create(validated_data)
@@ -75,9 +75,9 @@ class TimingSerializer(serializers.ModelSerializer):
 
 class VisitorDetailSerializer(serializers.ModelSerializer):
     """Visitor Serializer"""
-    photo = Base64ImageField(label=gettext_lazy("photo"))
-    signature = Base64ImageField(label=gettext_lazy("signature"))
-    national_id = Base64ImageField(label=gettext_lazy("national_id"))
+    photo = Base64ImageField(label=gettext_lazy("photo"), required=False)
+    signature = Base64ImageField(label=gettext_lazy("signature"), required=False)
+    national_id = Base64ImageField(label=gettext_lazy("national_id"), required=False)
 
     class Meta:
         model = VisitorDetail

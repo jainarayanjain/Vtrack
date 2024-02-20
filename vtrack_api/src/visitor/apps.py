@@ -7,6 +7,6 @@ class VisitorConfig(AppConfig):
 
     def ready(self):
         from visitor.signals import visitor_signal
-        from visitor.receivers import host_post_save, visitor_post_save
+        from visitor.receivers import approval_post_save, visitor_post_save
 
-        visitor_signal.connect(host_post_save, visitor_post_save)
+        visitor_signal.connect(approval_post_save, visitor_post_save)

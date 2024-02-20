@@ -4,8 +4,6 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
-from visitor.models import VisitorDetail
-
 
 def generate_otp(length: int = 4) -> str:
     """Generates otp"""
@@ -28,10 +26,9 @@ def through_email(
 ) -> None:
     """Send Email"""
     html_file = f"{template}.html"
-    visitor_instance = VisitorDetail.objects.get(approval__host__id=instance.id)
-    kwargs = {"instance": visitor_instance}
+    kwargs = {"instance": instance}
     html_message = render_to_string(html_file, kwargs)
-    recipient_list = [instance.email]
+    recipient_list = [instance.host.email]
     mail = EmailMessage(
         subject=subject,
         body=html_message,
