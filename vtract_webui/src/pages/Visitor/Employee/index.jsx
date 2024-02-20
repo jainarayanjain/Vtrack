@@ -13,7 +13,7 @@ const EmployeeForm = () => {
     firstName: "",
     lastName: "",
     phoneNo: "",
-    email: "",
+    // email: "",
     tempAccessCard: "",
     meetingPerson: "",
   });
@@ -24,7 +24,8 @@ const EmployeeForm = () => {
 
   const selector = useAppSelector((state) => state.media.userData);
   const visitorTypeData = useAppSelector((state) => state.visitor);
-  console.log(visitorTypeData);
+  const userData = useAppSelector((state) => state.auth);
+  
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -57,9 +58,6 @@ const EmployeeForm = () => {
     if (!formData.phoneNo.trim() || !/^\d{10}$/.test(formData.phoneNo.trim())) {
       newErrors.phoneNo = "Please enter a valid 10-digit phone number";
     }
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = "Please enter a valid email address";
-    }
     if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
       newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
     }
@@ -68,16 +66,16 @@ const EmployeeForm = () => {
     // }
 
     // If there are errors, update the state and prevent form submission
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+    // if (Object.keys(newErrors).length > 0) {
+    //   setErrors(newErrors);
+    //   return;
+    // }
 
     // If no errors, proceed to create a payload for the API
     const payload = {
       name: formData.firstName + " " + formData.lastName,
       phone: formData.phoneNo,
-      email: formData.email,
+      // email: formData.email,
       tempAccessCard: formData.tempAccessCard,
       // photo: selector.userPhoto,
       // signature: selector.userSignature,
@@ -86,13 +84,12 @@ const EmployeeForm = () => {
       // meetingPerson: formData.meetingPerson,
     };
     try {
-      const response = await Axios.post(`${API.V1.VISITOR_DETAILS}`, payload);
+      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
       if (response.status === 401) {
         console.log(response.data, "something went strongly wrong");
       }
       const AccessToken = response.data.token;
-      console.log(AccessToken, "this is access token--->");
-      if (response.status === 201) {
+      if (response.status === 200) {
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
       // setUser(await response.data);
@@ -155,7 +152,7 @@ const EmployeeForm = () => {
               />
               {errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
             </div>
-            <div className="flex flex-col ">
+            {/* <div className="flex flex-col ">
               <label className="text-gray-700">Email:*</label>
               <input
                 type="email"
@@ -165,7 +162,7 @@ const EmployeeForm = () => {
                 className={`border rounded-md p-2 ${errors.email ? "border-red-500" : ""}`}
               />
               {errors.email && <p className="text-red-500">{errors.email}</p>}
-            </div>
+            </div> */}
             {/* <div className="flex flex-col mb-10">
               <label className="text-gray-700">Temp Access Card:</label>
               <input
@@ -190,7 +187,7 @@ const EmployeeForm = () => {
                   Select Access Card*
                 </option>
                 {Access?.access?.map((item) => (
-                  <option value={item.card_number} key={item.id}>
+                  <option value={item.id} key={item.id}>
                     {item.card_number}
                   </option>
                 ))}

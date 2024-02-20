@@ -1,7 +1,7 @@
 // src/components/NidForm.js
 
 import React, { useState, useRef, useEffect } from "react";
-import { useAppDispatch, useNidtypes } from "../../../hooks";
+import { useAppDispatch, useAppSelector, useNidtypes } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
 import Axios from "../../../services/axios";
 import { API } from "../../../constants";
@@ -21,6 +21,7 @@ const NidForm = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const nidTypes = useNidtypes();
+  const userData=useAppSelector(state=>state.auth);
 
   useEffect(() => {
     nidTypes.getNidtypes();
@@ -113,7 +114,7 @@ const NidForm = () => {
       },
     };
     try {
-      const response = Axios.patch(`${API.V1.VISITOR_DETAILS}1/`, formData, config);
+      const response = Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, formData, config);
       const data = response.data;
       if (data.status == 200) {
         navigate("/visitor");

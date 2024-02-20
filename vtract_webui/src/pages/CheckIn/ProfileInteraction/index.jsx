@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { GrLinkNext } from "react-icons/gr";
 
-import { useAppDispatch } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { setUserData } from "../../../features/userMediaSlice";
 import { API, Browser } from "../../../constants";
 import { CancelButton } from "../../../components";
@@ -18,12 +18,14 @@ const PageInteraction = () => {
   const [signature, setSignature] = useState(null);
   const [showCaptureButton, setShowCaptureButton] = useState(false);
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
-  const [ProfilePhotoBlob, setProfilePhotoBlob] = useState(null);
+  const [ProfilePhotoRaw, setProfilePhotoRaw] = useState(null);
   const [signatureBlob, setSignatureBlob] = useState(null);
 
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+  const userData=useAppSelector(state=>state.auth);
+  console.log(userData,'this is userData--->photo')
 
   const videoRef = useRef(null);
   const signatureRef = useRef(null);
@@ -71,7 +73,6 @@ const PageInteraction = () => {
       // const profilePhotoBlob = handleBase64InputChange(dataURL);
       const removeDataURL = removeImageDataPrefix(dataURL);
       setProfilePhoto(removeDataURL);
-      setProfilePhotoBlob(blob);
 
       // Stop the camera stream
       const stream = video.srcObject;
@@ -112,7 +113,6 @@ const PageInteraction = () => {
     // Create a Blob from the array buffer
     const newBlob = new Blob([arrayBuffer], { type: "image/jpeg" });
     // Update state with the new Blob object
-    setProfilePhotoBlob(newBlob);
     return newBlob;
     // setProfilePhoto(newBlob);
   };
@@ -153,11 +153,11 @@ const PageInteraction = () => {
           "Content-Type": "multipart/form-data",
         },
       };
-      // const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}1/`, formData, config);
-      // const data = response.data;
-      // if (response.status === 201) {
-      // }
-      navigate(Browser.NIDTYPE);
+      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, formData, config);
+      const data = response.data;
+      if (response.status === 200) {
+        navigate(Browser.NIDTYPE);
+      }
 
       // if (data.status === 201) {
       //   console.log("successfully submitted the data--->");
@@ -188,7 +188,7 @@ const PageInteraction = () => {
 
         <div className="flex object-cover items-center rounded-full h-52 w-52 overflow-hidden justify-center ">
           {profilePhoto ? (
-            <img src={profilePhoto} alt="Profile" className="object-cover w-full h-full" />
+            <img src={ProfilePhotoRaw} alt="Profile" className="object-cover w-full h-full" />
           ) : (
             <div>
               {!showCaptureButton && (

@@ -5,7 +5,7 @@ import { API, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
-import { selectIsLoggedIn, setLoggedIn } from "../../features/authSlice";
+import {  setLoggedIn } from "../../features/authSlice";
 import { setVisitorType } from "../../features/VisitorSlice";
 import { useSelector } from "react-redux";
 import { NextButton, StepProgressBar } from "../../components";
@@ -22,9 +22,8 @@ const CheckIn = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector((state) => state.auth);
+  const userData = useAppSelector((state) => state.auth);
   const visitorTypeData = useSelector((state) => state.visitor);
-  console.log(visitorTypeData, "this is visitoryTyper--->");
 
   const handleEmailChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
@@ -73,6 +72,7 @@ const CheckIn = () => {
         const payload = {
           visitorId: data.id,
         };
+        dispatch(setLoggedIn({isLoggedIn:true,userId:response.data.id}))
         setTimeout(() => {
           setIsButtonDisabled(true); // Disable the button after sending OTP
           setIsOtpSent(true);

@@ -5,7 +5,7 @@ import { API, Browser, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
-import { selectIsLoggedIn, setLoggedIn } from "../../features/authSlice";
+import {  setLoggedIn } from "../../features/authSlice";
 import { NextButton } from "../../components";
 import { MdLogin } from "react-icons/md";
 
@@ -70,7 +70,7 @@ const Login = () => {
       const AccessToken = response.data.token;
       console.log(AccessToken, "this is access token--->");
       if (response.status === 201) {
-        dispatch(setLoggedIn(true));
+        dispatch(setLoggedIn({isLoggedIn:true}));
         console.log("this is successfully logged in");
         localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
         // setLoggedIn(true);

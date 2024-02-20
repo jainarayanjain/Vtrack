@@ -5,7 +5,7 @@ import Lottie from "lottie-react";
 import animation from "../../assets/waiting.json";
 
 const ApprovalPage = () => {
-  const [isApproved, setIsApproved] = useState(true);
+  const [isApproved, setIsApproved] = useState(null);
   const [responseReceived, setResponseReceived] = useState(false);
 
   // Function to make the API call for approval status
