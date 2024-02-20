@@ -18,7 +18,7 @@ services:
       
   webui:
     build: ./vtract_webui
-    command: bash -c "npm i vite && npm run build && npm run"
+    command: bash -c "npm i vite && npm run build && npm run dev"
     container_name: "vTrack-Frontend"
     environment:
       NODE_ENV: ${NODE_ENV:-local}
