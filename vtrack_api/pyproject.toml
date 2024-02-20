@@ -3,13 +3,8 @@ name = "vtrack-api"
 version = "0.1.0"
 description = ""
 authors = [
-    "Abhishek Vaish <abhishek.vaish@acsicorp.com>",
-    "Amogh Madan <amogh.madan@acsicorp.com>",
-    "Ayushi Agrawal <ayushi.agrawal@acsicorp.com>",
-    "Harsh Nohwar <harsh.nohwar@acsicorp.com>",
-    "Jai Jain <jai.jain@acsicorp.com>",
-    "Raghav Upadhyay <raghav.upadhyay@acsicorp.com>",
-    "Saumya Tiwari <saumya.tiwari@acsicorp.com>"
+    "Jai Jain <jai.jain@innovasolutions.com>",
+    "Sumit Sharma <sumit.sharma@innovasolutions.com"
 ]
 readme = "README.md"
 packages = []
@@ -23,6 +18,7 @@ django-guardian = "^2.4.0"
 pillow = "^9.5.0"
 drf-yasg = "^1.21.5"
 mysqlclient = "^2.1.1"
+drf-extra-fields = "^3.7.0"
 
 
 [tool.poetry.group.dev.dependencies]
