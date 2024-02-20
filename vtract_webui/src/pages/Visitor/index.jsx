@@ -1,10 +1,22 @@
 // VisitorsPage.js
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../assets/main.css";
+import { useAppDispatch } from "../../hooks";
+import { setVisitorType } from "../../features/VisitorSlice";
 
 const Visitors = () => {
+  const dispatch= useAppDispatch();
+
+  const handleVisitorType = (visitorType) => {
+    const payload={
+      visitorType,
+      visitorId:null
+    }
+    dispatch(setVisitorType(payload));
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen align-middle form-shadow">
       <div className="form-shadow p-10 rounded-xl">
@@ -13,6 +25,7 @@ const Visitors = () => {
         <div className="flex gap-4 flex-col">
           <Link
             to="/visitor/employee"
+            onClick={() => handleVisitorType("employee")}
             className=" border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Employee
@@ -20,6 +33,7 @@ const Visitors = () => {
           </Link>
           <Link
             to="/visitor/appointment-visitor"
+            onClick={() => handleVisitorType("appointment-visitor")}
             className="border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Guest
@@ -27,6 +41,7 @@ const Visitors = () => {
           </Link>
           <Link
             to="/visitor/appointment-visitor"
+            onClick={() => handleVisitorType("interview")}
             className="border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Interview
@@ -34,6 +49,7 @@ const Visitors = () => {
           </Link>
           <Link
             to="/visitor/appointment-visitor"
+            onClick={() => handleVisitorType("appointment-visitor")}
             className="border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             New Hires/ New Joinee
@@ -41,6 +57,7 @@ const Visitors = () => {
           </Link>
           <Link
             to="/service-provider"
+            onClick={() => handleVisitorType("service provider")}
             className="border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Service Provider
@@ -48,6 +65,7 @@ const Visitors = () => {
           </Link>
           <Link
             to="/visitor/appointment-visitor"
+            onClick={() => handleVisitorType("appointment-visitor")}
             className="border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Visitor
@@ -55,13 +73,12 @@ const Visitors = () => {
           </Link>
           <Link
             to="/visitor/appointment-visitor"
+            onClick={() => handleVisitorType("appointment-visitor")}
             className="border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Client
             <span class="material-symbols-outlined">arrow_right_alt</span>
           </Link>
-
-          {/* Add links for other types of visitors */}
         </div>
       </div>
     </div>

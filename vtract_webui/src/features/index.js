@@ -1,5 +1,5 @@
 import authSlice from "./authSlice";
 import userMediaSlice from "./userMediaSlice";
-import NidSlice from "./NidSlice";
+import VisitorSlice from "./VisitorSlice";
 
-export { authSlice, NidSlice, userMediaSlice };
+export { authSlice, VisitorSlice, userMediaSlice };

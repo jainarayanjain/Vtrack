@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCategory } from "../../../hooks";
-import { CancelButton } from "../../../components";
+import { CancelButton, CategoryDropdown } from "../../../components";
 
 const ServiceProvider = () => {
   const [formData, setFormData] = useState({
@@ -170,44 +170,13 @@ const ServiceProvider = () => {
             />
             {submitted && errors.companyEmail && <p className="text-red-500">{errors.companyEmail}</p>}
           </div>
-
-          <div className="relative z-0 w-full mb-10 group flex flex-col">
-            <label className="text-gray-700">Purpose of Visit:</label>
-            <select
-              name="purposeOfVisit"
-              value={formData.purposeOfVisit}
-              onChange={handleChange}
-              className={`border rounded-md p-2 ${errors.purposeOfVisit ? "border-red-500" : ""}`}
-            >
-              <option value="" disabled>
-                Select purpose
-              </option>
-              {Category?.catergoriesData?.map((item) => (
-                <option value={item.visit_purpose} key={item.id}>
-                  {item.visit_purpose}{" "}
-                </option>
-              ))}
-            </select>
-            {submitted && errors.purposeOfVisit && <p className="text-red-500">{errors.purposeOfVisit}</p>}
-          </div>
-
-          {/* <div className="relative z-0 w-full mb-2 group flex flex-col">
-          <label className="text-gray-700">Who do you wish to meet:</label>
-          <input
-            type="text"
-            name="meetingPerson"
-            value={formData.meetingPerson}
-            onChange={handleChange}
-            className={`border rounded-md p-2 ${errors.meetingPerson ? "border-red-500" : ""}`}
-          />
-          {errors.meetingPerson && <p className="text-red-500">{errors.meetingPerson}</p>}
-        </div> */}
+          <CategoryDropdown formData={formData} errors={errors} handleChange={handleChange} submitted={submitted} />
         </div>
 
         {/* ... Other form fields ... */}
 
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 w-full "
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-2 w-full "
           onClick={handleSubmit}
         >
           Submit

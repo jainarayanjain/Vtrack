@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import "../../../assets/main.css";
-import { useCategory } from "../../../hooks";
-import {useAuth} from "../../../hooks";
-import { CancelButton } from "../../../components";
+import { useCategory, useRecordSubmit } from "../../../hooks";
+import { useAuth } from "../../../hooks";
+import { CancelButton, CategoryDropdown } from "../../../components";
+import { useSelector } from "react-redux";
+import { Browser } from "../../../constants";
 
 const AppointmentForm = () => {
   const [formData, setFormData] = useState({
@@ -17,18 +19,18 @@ const AppointmentForm = () => {
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const Category = useCategory();
-  const Auth=useAuth();
+  const Auth = useAuth();
+  const VisitorRecord = useRecordSubmit();
+  const photoData = useSelector((state) => state.media.userData);
+  const visitorTypeData = useSelector((state) => state.visitor);
 
-  useEffect(() => {
-    Category.getCatergory();
-  }, []);
+  console.log(visitorTypeData, "visitordata----->");
 
-  
-  const handleCancel=()=>{
+  const handleCancel = () => {
     Auth.logout();
-  }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,9 +58,6 @@ const AppointmentForm = () => {
     if (!formData.purposeOfVisit.trim()) {
       newErrors.purposeOfVisit = "Purpose of Visit is required";
     }
-    if (!formData.meetingPerson.trim()) {
-      newErrors.meetingPerson = "Meeting Person is required";
-    }
 
     // If there are errors, update the state and prevent form submission
     // if (Object.keys(newErrors).length > 0) {
@@ -68,16 +67,17 @@ const AppointmentForm = () => {
 
     // If no errors, proceed to create a payload for the API
     const payload = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phoneNo: formData.phoneNo,
+      name: formData.firstName + " " + formData.lastName,
+      phone: formData.phoneNo,
       email: formData.email,
       purposeOfVisit: formData.purposeOfVisit,
-      meetingPerson: formData.meetingPerson,
     };
+    console.log(payload, "this is payload");
 
-    if(payload!=null){
-      navigate('/visitor/host-details')
+    if (payload != null) {
+      VisitorRecord.submitRecord(payload);
+
+      navigate(Browser.HOSTDETAIL);
     }
     // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
@@ -93,7 +93,7 @@ const AppointmentForm = () => {
         <form className="max-w-md mx-auto rounded-2xl" onSubmit={handleSubmit}>
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex flex-col mb-4 md:w-1/2">
-              <label className="text-gray-700">First Name:</label>
+              <label className="text-gray-700">First Name:*</label>
               <input
                 type="text"
                 name="firstName"
@@ -105,7 +105,7 @@ const AppointmentForm = () => {
             </div>
 
             <div className="flex flex-col mb-4 md:w-1/2">
-              <label className="text-gray-700">Last Name:</label>
+              <label className="text-gray-700">Last Name:*</label>
               <input
                 type="text"
                 name="lastName"
@@ -118,7 +118,7 @@ const AppointmentForm = () => {
           </div>
 
           <div className="relative flex flex-col z-0 w-full mb-5 group">
-            <label className="text-gray-700">Phone Number:</label>
+            <label className="text-gray-700">Phone Number:*</label>
             <input
               type="text"
               name="phoneNo"
@@ -130,7 +130,7 @@ const AppointmentForm = () => {
           </div>
 
           <div className="relative flex flex-col z-0 w-full mb-5 group">
-            <label className="text-gray-700">Email:</label>
+            <label className="text-gray-700">Email:*</label>
             <input
               type="email"
               name="email"
@@ -141,47 +141,16 @@ const AppointmentForm = () => {
             {submitted && errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>
 
-          <div className="relative flex flex-col z-0 w-full mb-10 group">
-            <label className="text-gray-700">Purpose of Visit:</label>
-            <select
-              name="purposeOfVisit"
-              value={formData.purposeOfVisit}
-              onChange={handleChange}
-              className={`border rounded-md p-2 ${errors.purposeOfVisit ? "border-red-500" : ""}`}
-            >
-              <option value="" disabled>
-                Select purpose
-              </option>
-              {Category?.catergoriesData?.map((item) => (
-                <option key={item.id} value={item.value}>
-                  {item.visit_purpose}
-                </option>
-              ))}
-            </select>
-            {submitted && errors.purposeOfVisit && <p className="text-red-500">{errors.purposeOfVisit}</p>}
-          </div>
-
-          {/* <div className="relative flex flex-col z-0 w-full mb-5 group">
-            <label className="text-gray-700">Who do you wish to meet:</label>
-            <input
-              type="text"
-              name="meetingPerson"
-              value={formData.meetingPerson}
-              onChange={handleChange}
-              className={`border rounded-md p-2 ${errors.meetingPerson ? "border-red-500" : ""}`}
-            />
-            {submitted && errors.meetingPerson && <p className="text-red-500">{errors.meetingPerson}</p>}
-          </div> */}
+          <CategoryDropdown formData={formData} errors={errors} handleChange={handleChange} submitted={submitted} />
 
           <button
             type="submit"
-            className=" mx-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-2 w-full"
           >
             Submit
           </button>
         </form>
-        <CancelButton/>
-        
+        <CancelButton />
       </div>
     </div>
   );
