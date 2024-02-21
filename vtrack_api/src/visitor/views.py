@@ -100,10 +100,12 @@ class CheckoutViewSet(generics.ListAPIView):
             approval__visitor__phone=self.request.query_params['phone'])
         access_card_instance = AccessCard.objects.get(
             approval_access_card__visitor__phone=self.request.query_params['phone'])
+        valid_instance = Valid.objects.get(visitor__phone=self.request.query_params['phone']).delete()
         access_card_instance.is_allocated = False
         instance.check_out = timezone.now()
         instance.save()
         access_card_instance.save()  # for making the access card available again
+        valid_instance.save()
         return self.list(request, *args, **kwargs)
 
 
@@ -120,4 +122,5 @@ class HostApprovalViewSet(generics.RetrieveAPIView):
         instance = Approval.objects.get(id=kwargs['pk'])
         instance.is_approved = self.request.query_params['is_approved']
         instance.save()
+        Timing.objects.create(approval=instance, check_in=timezone.now())
         return super().get(request, *args, **kwargs)

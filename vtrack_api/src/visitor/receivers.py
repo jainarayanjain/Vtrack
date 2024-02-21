@@ -14,7 +14,7 @@ def visitor_post_save(sender, instance, created, **kwargs):
         template = "otp"
         valid = Valid(visitor=instance, otp=otp)
         valid.save()
-        through_email(instance, subject, template)
+        through_email(instance, subject, template, [instance.email])
 
 
 @receiver(post_save, sender=Approval)
@@ -23,4 +23,4 @@ def approval_post_save(sender, instance, created, **kwargs):
     if created:
         subject = "Request for approval"
         template = "approval"
-        through_email(instance, subject, template)
+        through_email(instance, subject, template, [instance.host.email])
