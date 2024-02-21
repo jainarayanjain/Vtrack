@@ -69,8 +69,11 @@ class VisitorDetail(models.Model):
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
-        verbose_name = gettext_lazy("visitordetail")
-        verbose_name_plural = gettext_lazy("visitordetails")
+        verbose_name = gettext_lazy("visitor-detail")
+        verbose_name_plural = gettext_lazy("visitor-details")
+
+    def __str__(self):
+        return str(self.name) + '-' + str(self.email)
 
 
 class Valid(models.Model):
@@ -138,6 +141,9 @@ class Approval(models.Model):
         verbose_name = gettext_lazy("approval")
         verbose_name_plural = gettext_lazy("approvals")
 
+    def __str__(self):
+        return 'Approval' + '-' + str(self.id)
+
 
 class Timing(models.Model):
     """Timing Model"""
@@ -152,3 +158,6 @@ class Timing(models.Model):
     class Meta:
         verbose_name = gettext_lazy("timing")
         verbose_name_plural = gettext_lazy("timings")
+
+    def __str__(self):
+        return str(self.approval.id)

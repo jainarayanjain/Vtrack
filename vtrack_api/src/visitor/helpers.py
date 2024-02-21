@@ -23,12 +23,13 @@ def through_email(
         instance,
         subject: str,
         template: str,
+        recipient_list: list,
 ) -> None:
     """Send Email"""
     html_file = f"{template}.html"
     kwargs = {"instance": instance}
     html_message = render_to_string(html_file, kwargs)
-    recipient_list = [instance.host.email]
+    recipient_list = recipient_list
     mail = EmailMessage(
         subject=subject,
         body=html_message,
