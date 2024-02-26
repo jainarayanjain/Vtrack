@@ -21,6 +21,6 @@ def visitor_post_save(sender, instance, created, **kwargs):
 def approval_post_save(sender, instance, created, **kwargs):
     """Approval Post Save: Requesting for approval via email"""
     if created:
-        subject = "Request for approval"
+        subject = "Visitor Information"
         template = "approval"
         through_email(instance, subject, template, [instance.host.email])
