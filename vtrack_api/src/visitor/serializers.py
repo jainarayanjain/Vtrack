@@ -1,6 +1,6 @@
-from django.utils import timezone
 from django.utils.translation import gettext_lazy
 from rest_framework import serializers
+
 from drf_extra_fields.fields import Base64ImageField
 
 from config.models import Item
@@ -49,13 +49,6 @@ class HostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Host
         fields = "__all__"
-
-    def update(self, instance, validated_data):
-        """Check in logic """
-        if validated_data["is_approved"]:
-            t = Timing(approval=instance.approval, check_in=timezone.now())
-            t.save()
-        return super().update(instance, validated_data)
 
 
 class NIDTypeSerializer(serializers.ModelSerializer):
