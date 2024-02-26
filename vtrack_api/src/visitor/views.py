@@ -98,14 +98,15 @@ class CheckoutViewSet(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         instance = Timing.objects.get(
             approval__visitor__phone=self.request.query_params['phone'])
-        access_card_instance = AccessCard.objects.get(
-            approval_access_card__visitor__phone=self.request.query_params['phone'])
-        valid_instance = Valid.objects.get(visitor__phone=self.request.query_params['phone']).delete()
-        access_card_instance.is_allocated = False
+        if instance.approval.access_card is not None:
+            access_card_instance = AccessCard.objects.get(
+                approval_access_card__visitor__phone=self.request.query_params['phone'])
+            access_card_instance.is_allocated = False
+            access_card_instance.save()  # for making the access card available again
+        Valid.objects.get(
+            visitor__phone=self.request.query_params['phone']).delete()
         instance.check_out = timezone.now()
         instance.save()
-        access_card_instance.save()  # for making the access card available again
-        valid_instance.save()
         return self.list(request, *args, **kwargs)
 
 

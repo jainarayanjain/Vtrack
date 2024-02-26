@@ -1,24 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <title>Approval Email</title>
 </head>
 <body>
+<H1>Some visitor wants to meet you</H1>
+<p>The details of the visitor are:-</p>
 
-{{instance.visitor.name}}
-{{instance.visitor.photo}}
-
-<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.id}}/?is_approved=True'>
-    <button class="GFG">
-        YES
-    </button>
-</a>
-<br>
-<a href='http://127.0.0.1:8000/api/v1/visitor/host-approval/{{instance.id}}/?is_approved=False'>
-    <button class="GFG">
-        NO
-    </button>
-</a>
+Name: {{instance.visitor.name}}
+Phone:{{instance.visitor.phone}}
 </body>
 </html>
