@@ -28,9 +28,10 @@ class ApprovalSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """for updating access card is allocated field"""
-        instance = AccessCard.objects.get(id=validated_data['access_card'].id)
-        instance.is_allocated = True
-        instance.save()
+        if 'access_card' in validated_data:
+            instance = AccessCard.objects.get(id=validated_data['access_card'].id)
+            instance.is_allocated = True
+            instance.save()
         return super().create(validated_data)
 
 
