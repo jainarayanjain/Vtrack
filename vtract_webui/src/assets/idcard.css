@@ -1,19 +1,10 @@
-/* for custom css */
-
-.form-shadow {
-  /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-   */
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-
-.font-size {
-  font-size: 4rem;
-}
-
 body {
     background-color: transparent;
     font-family:'verdana';
 }
+
+
+
 .id-card-holder {
     width: 225px;
     padding: 4px;
@@ -92,8 +83,9 @@ p {
     height: 6px;
     display: block;
     margin: 0px auto;
-    position: relative;
-    top: 6px;
+    position: absolute;
+    top: 407px;
+    left: 413px;
     border-radius: 4px;
 }
 .id-card-tag-strip {
@@ -135,27 +127,6 @@ p {
     border-top: 100px solid white;
     margin: -10px auto -30px auto;
     position: relative;
-    top: -130px;
+    bottom: 413px;
     left: -50px;
 }
-
-
-
-/* ////////-------------------- step bar styles=------------------------////////////////// */
-
-
-/*
-  Component styles
-*/
-
-/*
-  Pen styles (ignore these styles)
-*/
-.container {
-  margin: 0 auto;
-  max-width: 1000px;
-  min-width: 320px;
-  padding: 100px 24px;
-  width: 100%;
-}
-

@@ -14,8 +14,8 @@ const userMediaSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action) => {
-      state.userData.userPhoto = action.payload.ProfilePhotoBlob;
-      state.userData.userSignature = action.payload.signatureBlob;
+      state.userData.userPhoto = action.payload.profilePhoto;
+      state.userData.userSignature = action.payload.signature;
     },
     clearUserMedia: (state) => {
       state.userData = {

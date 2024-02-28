@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/main.css";
-import { useCategory, useRecordSubmit } from "../../../hooks";
+import { useAppDispatch, useCategory, useRecordSubmit } from "../../../hooks";
 import { useAuth } from "../../../hooks";
 import { CancelButton, CategoryDropdown } from "../../../components";
 import { useSelector } from "react-redux";
-import { Browser } from "../../../constants";
+import { API, Browser } from "../../../constants";
+import { setAccessCardId } from "../../../features/VisitorSlice";
+import Axios from "../../../services/axios";
 
 const AppointmentForm = () => {
   const [formData, setFormData] = useState({
@@ -23,21 +25,23 @@ const AppointmentForm = () => {
   const Category = useCategory();
   const Auth = useAuth();
   const VisitorRecord = useRecordSubmit();
+  const dispatch=useAppDispatch();
   const photoData = useSelector((state) => state.media.userData);
   const visitorTypeData = useSelector((state) => state.visitor);
+  const userData = useSelector((state) => state.auth);
 
-  console.log(visitorTypeData, "visitordata----->");
 
-  const handleCancel = () => {
-    Auth.logout();
-  };
+ 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if(e.target.name==="purposeOfVisit"){
+      dispatch(setAccessCardId({categoryId:e.target.value}))
+    }
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
 
@@ -73,6 +77,23 @@ const AppointmentForm = () => {
       purposeOfVisit: formData.purposeOfVisit,
     };
     console.log(payload, "this is payload");
+
+    try {
+      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
+      if (response.status === 401) {
+        console.log(response.data, "something went strongly wrong");
+      }
+      const AccessToken = response.data.token;
+      if (response.status === 200) {
+        navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
+      }
+      // setUser(await response.data);
+      // await dispatch(fetchUser());
+      // navigate("/");
+      // setIsLoggedIn(true);
+    } catch (error) {
+      console.log(error, "something went wrong while logging in");
+    }
 
     if (payload != null) {
       VisitorRecord.submitRecord(payload);

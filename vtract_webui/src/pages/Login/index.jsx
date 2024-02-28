@@ -5,7 +5,7 @@ import { API, Browser, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
-import { selectIsLoggedIn, setLoggedIn } from "../../features/authSlice";
+import {  setLoggedIn } from "../../features/authSlice";
 import { NextButton } from "../../components";
 import { MdLogin } from "react-icons/md";
 
@@ -20,12 +20,6 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const setLogin = useAppSelector((state) => state.auth);
-
-  //   useEffect(() => {
-  //     if (selector || localStorage.getItem(LOCAL_STORAGE_KEY) != undefined) {
-  //       navigate("/checkin");
-  //     }
-  //   }, []);
 
   const handleEmailChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
@@ -70,7 +64,7 @@ const Login = () => {
       const AccessToken = response.data.token;
       console.log(AccessToken, "this is access token--->");
       if (response.status === 201) {
-        dispatch(setLoggedIn(true));
+        dispatch(setLoggedIn({isLoggedIn:true}));
         console.log("this is successfully logged in");
         localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
         // setLoggedIn(true);
@@ -128,7 +122,7 @@ const Login = () => {
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                 emailError ? "border-red-500" : ""
               }`}
-              placeholder="Enter your email address"
+              placeholder="Enter your user name"
             />
             {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
           </div>
@@ -158,7 +152,7 @@ const Login = () => {
             >
               Login
             </button> */}
-            <NextButton name={"Login"} handleButton={handleLogin} icons={<MdLogin />} />
+            <NextButton type={"submit"} name={"Login"} handleButton={handleLogin} icons={<MdLogin />} />
           </div>
         </form>
       </div>

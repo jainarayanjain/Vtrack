@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useCategory } from "../../../hooks";
+import { useAppDispatch, useAppSelector, useCategory } from "../../../hooks";
 import { CancelButton, CategoryDropdown } from "../../../components";
+import { setAccessCardId } from "../../../features/VisitorSlice";
+import Axios from "../../../services/axios";
+import { API, Browser } from "../../../constants";
+import { useNavigate } from "react-router-dom";
 
 const ServiceProvider = () => {
   const [formData, setFormData] = useState({
@@ -16,12 +20,19 @@ const ServiceProvider = () => {
   const [submitted, setSubmitted] = useState(false);
   const Category = useCategory();
 
+  const dispatch = useAppDispatch();
+  const userData=useAppSelector(state=>state.auth)
+  const navigate=useNavigate();
+
   useEffect(() => {
     Category.getCatergory();
   }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "purposeOfVisit") {
+      dispatch(setAccessCardId({ categoryId: e.target.value }));
+    }
 
     // Clear validation errors only if the user is typing
     if (submitted) {
@@ -55,7 +66,7 @@ const ServiceProvider = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log("this is working handleSubmit--->");
     // Basic validation
     const newErrors = {};
@@ -98,6 +109,25 @@ const ServiceProvider = () => {
       purposeOfVisit: formData.purposeOfVisit,
       meetingPerson: formData.meetingPerson,
     };
+    try {
+      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
+      if (response.status === 401) {
+        console.log(response.data, "something went strongly wrong");
+      }
+      const AccessToken = response.data.token;
+      if (response.status === 200) {
+        navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
+      }
+      // setUser(await response.data);
+      // await dispatch(fetchUser());
+      // navigate("/");
+      // setIsLoggedIn(true);
+    } catch (error) {
+      console.log(error, "something went wrong while logging in");
+    }
+
+    // Now you can use the 'payload' to send data to your API
+    console.log("API Payload:", payload);
 
     // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
@@ -125,7 +155,7 @@ const ServiceProvider = () => {
         <div className=" flex flex-col md:flex-col gap-4">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex flex-col mb-2 md:w-1/2">
-              <label className="text-gray-700">First Name:</label>
+              <label className="text-gray-700">First Name:*</label>
               <input
                 type="text"
                 name="firstName"
@@ -137,7 +167,7 @@ const ServiceProvider = () => {
             </div>
 
             <div className="flex flex-col mb-2 md:w-1/2">
-              <label className="text-gray-700">Last Name:</label>
+              <label className="text-gray-700">Last Name:*</label>
               <input
                 type="text"
                 name="lastName"
@@ -149,7 +179,7 @@ const ServiceProvider = () => {
             </div>
           </div>
           <div className="relative z-0 w-full mb-2 group flex flex-col">
-            <label className="text-gray-700">Phone Number:</label>
+            <label className="text-gray-700">Phone Number*:</label>
             <input
               type="text"
               name="phoneNumber"
@@ -160,7 +190,7 @@ const ServiceProvider = () => {
             {submitted && errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
           </div>
           <div className="relative z-0 w-full mb-2 group flex flex-col">
-            <label className="text-gray-700">Company Email:</label>
+            <label className="text-gray-700">Company Name:*</label>
             <input
               type="email"
               name="companyEmail"
@@ -172,8 +202,6 @@ const ServiceProvider = () => {
           </div>
           <CategoryDropdown formData={formData} errors={errors} handleChange={handleChange} submitted={submitted} />
         </div>
-
-        {/* ... Other form fields ... */}
 
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-2 w-full "
