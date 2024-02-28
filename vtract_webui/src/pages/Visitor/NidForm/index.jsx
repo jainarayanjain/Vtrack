@@ -13,7 +13,7 @@ import { FiRepeat } from "react-icons/fi";
 const NidForm = () => {
   const [nidType, setNIDType] = useState("");
   const [nidImage, setNidImage] = useState(null);
-  const [nidImageBlob, setNidImageBlob] = useState(null);
+  const [nidImageRaw, setNidImageRaw] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
 
@@ -58,6 +58,13 @@ const NidForm = () => {
       console.error("Error accessing camera:", error);
     }
   };
+  function removeImageDataPrefix(encodedString) {
+    if (encodedString.startsWith("data:image/png;base64,")) {
+      return encodedString.slice("data:image/png;base64,".length);
+    } else {
+      return encodedString;
+    }
+  }
 
   const handleCapturePhoto = () => {
     const canvas = document.createElement("canvas");
@@ -71,9 +78,10 @@ const NidForm = () => {
       // Convert the canvas content to base64 data URL
       formData.append("national_id", canvas);
       const dataURL = canvas.toDataURL("image/png");
-      const blobImage = handleBase64InputChange(dataURL);
       setNidImage(dataURL);
-      setNidImageBlob(blobImage);
+      const nationalId_raw = removeImageDataPrefix(dataURL);
+      const blobImage = handleBase64InputChange(dataURL);
+      setNidImageRaw(nationalId_raw);
 
       // Stop the camera stream
       const stream = video.srcObject;
@@ -101,12 +109,14 @@ const NidForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigate("/visitor");
+
     formData.append("nid_type", nidType);
     // formData.append("national_id", nidImageBlob);
     // You can handle the form submission logic here
     const NidData = {
       nid_type: nidType,
-      national_id: nidImageBlob,
+      national_id: nidImageRaw,
     };
     const config = {
       headers: {
@@ -166,7 +176,7 @@ const NidForm = () => {
                 className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                 onClick={handleCapturePhoto}
               >
-                Capture Photo
+                Clear here
               </button>
             </div>
           ) : (

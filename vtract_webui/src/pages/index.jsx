@@ -10,6 +10,8 @@ import ServiceProvider from "./Visitor/ServiceProvider";
 import NIDForm from "./Visitor/NidForm";
 import Login from "./Login";
 import ApprovalPage from "./ApprovalPage";
+import Myform from "./MyForm";
+import IdCard from "./Idcard";
 
 export {
   ApprovalPage,
@@ -24,5 +26,6 @@ export {
   NIDForm,
   Visitors,
   Login,
-
+  Myform,
+  IdCard,
 };

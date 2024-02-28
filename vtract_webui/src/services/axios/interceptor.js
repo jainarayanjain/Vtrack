@@ -58,9 +58,9 @@
           return Promise.reject(error);
       }
     } catch (e) {
-      if (JSON.parse(import.meta.env.VITE_PUBLIC_DEBUG || "false")) {
-        console.error(`[response error] [${JSON.stringify(e)}]`);
-      }
+      // if (JSON.parse(import.meta.env.VITE_PUBLIC_DEBUG || "false")) {
+      //   console.error(`[response error] [${JSON.stringify(e)}]`);
+      // }
     }
     if (JSON.parse(import.meta.env.VITE_PUBLIC_DEBUG || "false")) {
       console.error(`[response error] [${JSON.stringify(error)}]`);

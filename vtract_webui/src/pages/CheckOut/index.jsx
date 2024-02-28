@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 
-import '../../assets/main.css'
+import "../../assets/main.css";
+import { CancelButton, NextButton } from "../../components";
+import { MdOutlineCheckCircleOutline } from "react-icons/md";
+import Axios from "../../services/axios";
+import { API, Browser } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errors, setErrors] = useState({});
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setPhoneNumber(e.target.value);
     setErrors({}); // Reset errors when the user starts typing
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     // Basic validation
     const newErrors = {};
     const phoneRegex = /^[0-9]{10}$/;
@@ -26,36 +34,63 @@ const Checkout = () => {
       return;
     }
 
+    try {
+      const response = await Axios.get(`${API.V1.ACCOUNT_CHECKOUT}?phone=${phoneNumber}`);
+      const data = response.data;
+      console.log(data);
+      if (response.status === 200) {
+        navigate(Browser.HOME);
+      }
+    } catch (error) {
+      console.log("something went wrong", error);
+    }
+
     // If no errors, proceed with form submission or other actions
     console.log("Phone Number:", phoneNumber);
   };
 
   return (
-    <div className="flex flex-col  items-center justify-center h-screen  ">
-      <div className=" form-shadow p-20 rounded-lg">
-        <h1 className="text-2xl font-bold mb-4 ">Checkout</h1>
+    <>
+      <div className="flex flex-col items-center justify-center h-screen align-middle p-6 ">
+        <div className=" bg-white form-shadow p-10 rounded-2xl">
+          <div className="flex justify-between gap-28">
+            <h1 className="font-bold text-xl mb-6">Checkout</h1>
+            <img className="h-7 w-auto md:ml-auto" src="/images/innova.png" alt="company_logo" />
+          </div>
+          <form onSubmit={handleSubmit} className="max-w-md mx-auto rounded-2xl">
+            <div className="flex flex-col my-24">
+              <label className="text-gray-700 mb-1">Phone Number*:</label>
+              <input
+                type="tel"
+                name="phoneNumber"
+                value={phoneNumber}
+                onChange={handleChange}
+                className={`border rounded-md p-2 ${errors.phoneNumber ? "border-red-500" : ""}`}
+                placeholder="Enter your phone number"
+              />
+              {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
+            </div>
 
-        <div className="flex flex-col my-52">
-          <label className="text-gray-700">Phone Number:</label>
-          <input
-            type="tel"
-            name="phoneNumber"
-            value={phoneNumber}
-            onChange={handleChange}
-            className={`border rounded-md p-2 ${errors.phoneNumber ? "border-red-500" : ""}`}
-            placeholder="Enter your phone number"
-          />
-          {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
+            {/* <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full rounded mt-4"
+              onClick={handleSubmit}
+            >
+              Checkout
+            </button> */}
+
+            <div className="flex gap-4">
+              <CancelButton />
+              <NextButton
+                name={"Submit"}
+                icons={<MdOutlineCheckCircleOutline />}
+                type={"submit"}
+                handleButton={handleSubmit}
+              />
+            </div>
+          </form>
         </div>
-
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full rounded mt-4"
-          onClick={handleSubmit}
-        >
-          Checkout
-        </button>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-import { useAccessCard, useAuth } from "../../../hooks";
+import { useAccessCard, useAppDispatch, useAuth } from "../../../hooks";
 import { CancelButton, NextButton } from "../../../components";
 import { API, Browser } from "../../../constants";
 import { useAppSelector } from "../../../hooks";
 import Axios from "../../../services/axios";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
+import { setAccessCardId } from "../../../features/VisitorSlice";
 
 const EmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ const EmployeeForm = () => {
   const selector = useAppSelector((state) => state.media.userData);
   const visitorTypeData = useAppSelector((state) => state.visitor);
   const userData = useAppSelector((state) => state.auth);
-  
+  const dispatch = useAppDispatch();
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -75,13 +76,7 @@ const EmployeeForm = () => {
     const payload = {
       name: formData.firstName + " " + formData.lastName,
       phone: formData.phoneNo,
-      // email: formData.email,
-      tempAccessCard: formData.tempAccessCard,
-      // photo: selector.userPhoto,
-      // signature: selector.userSignature,
-      // national_id: nidSelector.nidImage,
-      // nid_type: nidSelector.nidType,
-      // meetingPerson: formData.meetingPerson,
+      access_card: formData.tempAccessCard,
     };
     try {
       const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
@@ -90,6 +85,7 @@ const EmployeeForm = () => {
       }
       const AccessToken = response.data.token;
       if (response.status === 200) {
+        dispatch(setAccessCardId({ accessCardId: formData.tempAccessCard }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
       // setUser(await response.data);
@@ -107,17 +103,17 @@ const EmployeeForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen align-middle">
-      <div className="form-shadow p-10 rounded-2xl">
-        <div className="flex flex-row justify-between gap-28">
-          <h1 className="text-2xl font-bold mb-6">Employee Details Form</h1>
-          <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
+    <div className="flex flex-col items-center justify-center min-h-screen align-middle">
+      <div className="form-shadow p-10 rounded-2xl w-full  lg:w-1/2 xl:w-1/2">
+        <div className="flex flex-row justify-between gap-6 md:gap-28">
+          <h1 className="text-xl md:text-2xl font-bold mb-6">Employee Details Form</h1>
+          <img src="../images/innova.png" alt="Company Logo" className="h-7 w-auto" />
         </div>
-        <form className=" mx-auto rounded-2xl" onSubmit={handleSubmit}>
+        <form className="mx-auto rounded-2xl" onSubmit={handleSubmit}>
           {/* Form inputs */}
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex flex-col  md:w-1/2">
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex flex-col lg:w-1/2">
                 <label className="text-gray-700">First Name:*</label>
                 <input
                   type="text"
@@ -129,7 +125,7 @@ const EmployeeForm = () => {
                 {errors.firstName && <p className="text-red-500">{errors.firstName}</p>}
               </div>
 
-              <div className="flex flex-col  md:w-1/2">
+              <div className="flex flex-col lg:w-1/2">
                 <label className="text-gray-700">Last Name:*</label>
                 <input
                   type="text"
@@ -152,28 +148,6 @@ const EmployeeForm = () => {
               />
               {errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
             </div>
-            {/* <div className="flex flex-col ">
-              <label className="text-gray-700">Email:*</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.email ? "border-red-500" : ""}`}
-              />
-              {errors.email && <p className="text-red-500">{errors.email}</p>}
-            </div> */}
-            {/* <div className="flex flex-col mb-10">
-              <label className="text-gray-700">Temp Access Card:</label>
-              <input
-                type="text"
-                name="tempAccessCard"
-                value={formData.tempAccessCard}
-                onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.tempAccessCard ? "border-red-500" : ""}`}
-              />
-              {errors.tempAccessCard && <p className="text-red-500">{errors.tempAccessCard}</p>}
-            </div> */}
 
             <div className="relative z-0 w-full mb-10 group flex flex-col">
               <label className="text-gray-700">Access Card:*</label>
@@ -195,12 +169,7 @@ const EmployeeForm = () => {
               {submitted && errors.tempAccessCard && <p className="text-red-500">{errors.tempAccessCard}</p>}
             </div>
           </div>
-          {/* <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4  mb-2 w-full"
-          >
-            Submit
-          </button> */}
+
           <div className="flex gap-2">
             <CancelButton />
             <NextButton name={"Submit"} type={"submit"} icons={<MdOutlineCheckCircleOutline />} />

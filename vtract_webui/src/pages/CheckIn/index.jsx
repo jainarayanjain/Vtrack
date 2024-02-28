@@ -5,7 +5,7 @@ import { API, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
-import {  setLoggedIn } from "../../features/authSlice";
+import { setLoggedIn } from "../../features/authSlice";
 import { setVisitorType } from "../../features/VisitorSlice";
 import { useSelector } from "react-redux";
 import { NextButton, StepProgressBar } from "../../components";
@@ -53,13 +53,12 @@ const CheckIn = () => {
   };
   const OTP_Payload = {
     otp,
-    visitor: visitorTypeData.visitorData.visitorId,
+    // visitor: visitorTypeData.visitorData.visitorId,
   };
 
   const handleSendOtp = async () => {
-    // Simulating OTP sending with a timeout (replace with actual API call)
     try {
-      console.log('this is being clicked===>')
+      console.log("this is being clicked===>");
       const response = await Axios.post(API.V1.VISITOR_DETAILS, Email_Payload);
       const data = response.data;
       if (response.status === 401) {
@@ -72,7 +71,7 @@ const CheckIn = () => {
         const payload = {
           visitorId: data.id,
         };
-        dispatch(setLoggedIn({isLoggedIn:true,userId:response.data.id}))
+        dispatch(setLoggedIn({ isLoggedIn: true, userId: response.data.id }));
         setTimeout(() => {
           setIsButtonDisabled(true); // Disable the button after sending OTP
           setIsOtpSent(true);
@@ -87,28 +86,29 @@ const CheckIn = () => {
   };
 
   const handleCheckIn = async () => {
+    console.log("this is being called--->");
     // if (emailError || otpError) {
     //   console.log("Validation failed. Please fix errors.");
     //   return;
     // }
     try {
-      const response = await Axios.post(API.V1.VISITOR_VALIDS, OTP_Payload);
-      if (response.status === 401) {
-        console.log(response.data, "Invalid credentials");
+      const response = await Axios.patch(
+        `${API.V1.VISITOR_VALIDS}${visitorTypeData.visitorData.visitorId}/`,
+        OTP_Payload
+      );
+
+      console.log({response},'this is resonse--->')
+      const data = await response.data;
+      if (response.status === 400) {
+        console.log("Invalid credentials---------->");
       }
       const AccessToken = response.data.token;
-      console.log(AccessToken, "this is access token--->");
-      if (response.status === 201) {
-        // dispatch(setLoggedIn(true));
-        console.log("this is Valid OTP");
+      if (response.status === 200) {
         navigate("/checkin/photo-interaction");
       }
-      // setUser(await response.data);
-      // await dispatch(fetchUser());
-      // navigate("/");
-      // setIsLoggedIn(true);
+     
     } catch (error) {
-      console.log(error, "something went wrong while logging in");
+      console.log( "something went wrong while logging in");
     }
     console.log("Checking in:", { email, otp });
   };
@@ -133,17 +133,12 @@ const CheckIn = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-8">
-      {/* <StepProgressBar
-        currentStep={1} // Set currentStep to 1 to show the first step
-        completedStep={0} // Set completedStep to 0 initially
-        disableNavigation={true}
-      /> */}
-      <div className="flex flex-col md:flex-row form-shadow rounded-2xl p-6 items-center justify-center max-w-screen-md gap-x-5 mx-auto">
-        <img src="./images/vtrack-login.jpg" className="w-full md:w-1/2 lg:w-7/12 xl:w-3/6" alt="login_image" />
+      <div className="flex flex-col form-shadow rounded-2xl p-6 items-center justify-center max-w-screen-md gap-x-5 mx-auto w-full h-full">
+        <img src="./images/vtrack-login.jpg" className="w-full md:w-full lg:w-9/12 xl:w-3/6 h-2/5" alt="login_image" />
 
-        <form className="w-full max-w-sm md:w-full lg:w-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-            <h1 className="mb-8 md:mb-0 text-xl font-bold">CheckIn</h1>
+        <form className="w-full max-w-lg md:w-full lg:w-xl h-1/2">
+          <div className="flex flex-col justify-between items-center mb-4">
+            <h1 className="mb-8 text-xl font-bold">CheckIn</h1>
             <img src="images/innova.png" alt="Company Logo" className="h-7 w-auto md:ml-auto" />
           </div>
           <div className="mb-1">
@@ -196,7 +191,7 @@ const CheckIn = () => {
             />
             {otpError && <p className="text-red-500 text-xs italic mt-1">{otpError}</p>}
           </div>
-          <div className="flex flex-col md:flex-row items-center md:justify-between w-full">
+          <div className="flex flex-col items-center justify-between w-full">
             <NextButton name={"Check-in"} handleButton={handleCheckIn} icons={<MdOutlineCheckCircleOutline />} />
           </div>
         </form>

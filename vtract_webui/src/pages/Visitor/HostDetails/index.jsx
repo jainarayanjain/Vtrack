@@ -6,6 +6,9 @@ import { API, Browser } from "../../../constants";
 import { useNavigate } from "react-router-dom";
 import { CancelButton, NextButton } from "../../../components";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { setAccessCardId, setHostDetails, setVisitorType } from "../../../features/VisitorSlice";
+import { setLoggedIn } from "../../../features/authSlice";
 
 const HostDetailsForm = () => {
   const navigate = useNavigate();
@@ -15,6 +18,11 @@ const HostDetailsForm = () => {
     phone: "",
   });
 
+  const dispatch = useAppDispatch();
+  const userData = useAppSelector((state) => state.auth);
+  const visitorData = useAppSelector((state) => state.visitor);
+  console.log(visitorData, "this is visitor Data-->");
+  console.log(userData, "this is userData--->");
   const [errors, setErrors] = useState({});
 
   const { name, email, phone } = formData;
@@ -74,10 +82,6 @@ const HostDetailsForm = () => {
       return;
     }
 
-    // If no errors, proceed to handle the form submission logic here
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Phone:", phone);
     const payload = {
       name,
       email,
@@ -89,7 +93,33 @@ const HostDetailsForm = () => {
       const data = await response.data;
       console.log(response, "this is host data--->");
       if (response.status === 201) {
-        navigate(Browser.APPROVAL);
+        // dispatch(setHostDetails({ hostName: formData.name }));
+        const approvalPayload = {
+          access_card: visitorData?.AccessCardId,
+          category: visitorData?.CategoryId,
+          visitor: userData.userId,
+          host: data.id,
+        };
+
+        const responseApproval = await Axios.post(API.V1.VISITOR_APPROVALS, approvalPayload);
+        if (responseApproval.status === 201) {
+          dispatch(setAccessCardId({ approvalId: response.data.id }));
+          dispatch(setLoggedIn({isApproved:true}));
+
+          const currentDate = new Date();
+          const isoTimestamp = currentDate.toISOString();
+
+          const timingPayload = {
+            approval: responseApproval.data.id,
+            check_in: isoTimestamp,
+          };
+          const responseTiming = await Axios.post(API.V1.TIMING_DETAILS, timingPayload);
+          if (responseTiming.status === 201) {
+            // navigate(Browser.APPROVAL);
+            // navigate(Browser.APPROVAL);
+            navigate(Browser.IDCARD)
+          }
+        }
       }
     } catch (e) {
       console.log("something went wrong", e);

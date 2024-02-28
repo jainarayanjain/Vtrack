@@ -1,11 +1,15 @@
 import React from "react";
 import { useAuth } from "../../hooks";
 import { MdOutlineCancel } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { Browser } from "../../constants";
 
 
 const CancelButton = () => {
+  const navigate=useNavigate();
   const Auth = useAuth();
   const handleCancel = () => {
+    navigate(Browser.HOME)
     Auth.logout();
   };
 

@@ -21,12 +21,6 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const setLogin = useAppSelector((state) => state.auth);
 
-  //   useEffect(() => {
-  //     if (selector || localStorage.getItem(LOCAL_STORAGE_KEY) != undefined) {
-  //       navigate("/checkin");
-  //     }
-  //   }, []);
-
   const handleEmailChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
     setEmail(input);
@@ -128,7 +122,7 @@ const Login = () => {
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                 emailError ? "border-red-500" : ""
               }`}
-              placeholder="Enter your email address"
+              placeholder="Enter your user name"
             />
             {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
           </div>
@@ -158,7 +152,7 @@ const Login = () => {
             >
               Login
             </button> */}
-            <NextButton name={"Login"} handleButton={handleLogin} icons={<MdLogin />} />
+            <NextButton type={"submit"} name={"Login"} handleButton={handleLogin} icons={<MdLogin />} />
           </div>
         </form>
       </div>

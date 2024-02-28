@@ -11,6 +11,7 @@ const Browser = {
   APPOINTMENTVISITOR: "/visitor/appointment-visitor",
   APPROVAL:"/approval",
   LOGIN: "/login",
+  IDCARD: "/idcard",
   
 };
 
