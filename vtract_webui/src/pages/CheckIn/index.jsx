@@ -10,6 +10,7 @@ import { setVisitorType } from "../../features/VisitorSlice";
 import { useSelector } from "react-redux";
 import { NextButton, StepProgressBar } from "../../components";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const CheckIn = () => {
   const [email, setEmail] = useState("");
@@ -19,6 +20,7 @@ const CheckIn = () => {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [countdown, setCountdown] = useState(20); // Initial countdown time in seconds
+  const [responseReceived, setResponseReceived] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -63,14 +65,15 @@ const CheckIn = () => {
       const data = response.data;
       if (response.status === 401) {
         console.log(response.data, "Invalid credentials");
+        toast.error("something went wrong while sending OTP");
       }
       const AccessToken = response.data.token;
-      console.log(AccessToken, "this is access token--->");
       if (response.status === 201) {
-        console.log(response.data);
         const payload = {
           visitorId: data.id,
         };
+        toast.success("OTP sent successfully! check your mail");
+        setResponseReceived(true);
         dispatch(setLoggedIn({ isLoggedIn: true, userId: response.data.id }));
         setTimeout(() => {
           setIsButtonDisabled(true); // Disable the button after sending OTP
@@ -85,33 +88,28 @@ const CheckIn = () => {
     }
   };
 
-  const handleCheckIn = async () => {
-    console.log("this is being called--->");
-    // if (emailError || otpError) {
-    //   console.log("Validation failed. Please fix errors.");
-    //   return;
-    // }
-    try {
-      const response = await Axios.patch(
-        `${API.V1.VISITOR_VALIDS}${visitorTypeData.visitorData.visitorId}/`,
-        OTP_Payload
-      );
-
-      console.log({response},'this is resonse--->')
-      const data = await response.data;
-      if (response.status === 400) {
-        console.log("Invalid credentials---------->");
-      }
-      const AccessToken = response.data.token;
-      if (response.status === 200) {
-        navigate("/checkin/photo-interaction");
-      }
-     
-    } catch (error) {
-      console.log( "something went wrong while logging in");
-    }
-    console.log("Checking in:", { email, otp });
+  const handleCheckIn = () => {
+    console.log("Before Axios request");
+  
+    Axios.patch(`${API.V1.VISITOR_VALIDS}${visitorTypeData.visitorData.visitorId}/`, OTP_Payload)
+      .then(response => {
+        console.log(response, "this is response--->");
+  
+        if (response.status === 400) {
+          toast.error("Validation failed. Please fix errors");
+        } else if (response.status === 200) {
+          const data = response.data;
+          console.log(data, "this is data ");
+          navigate("/checkin/photo-interaction");
+        }
+      })
+      .catch(error => {
+        toast.error("Invalid OTP");
+        console.error("Error in Axios request:", error);
+        console.log("something went wrong while logging in");
+      });
   };
+  
 
   useEffect(() => {
     let timer;
@@ -184,6 +182,7 @@ const CheckIn = () => {
               name="otp"
               value={otp}
               onChange={handleOtpChange}
+              // disabled={visitorTypeData.visitorData.visitorId!=null? false: true}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                 otpError ? "border-red-500" : ""
               }`}

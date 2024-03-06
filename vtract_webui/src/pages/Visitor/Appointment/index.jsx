@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "../../../assets/main.css";
 import { useAppDispatch, useCategory, useRecordSubmit } from "../../../hooks";
 import { useAuth } from "../../../hooks";
-import { CancelButton, CategoryDropdown } from "../../../components";
+import { CancelButton, CategoryDropdown, NextButton } from "../../../components";
 import { useSelector } from "react-redux";
 import { API, Browser } from "../../../constants";
 import { setAccessCardId } from "../../../features/VisitorSlice";
 import Axios from "../../../services/axios";
+import { toast } from "react-toastify";
+import { setVisitorType } from "../../../features/VisitorSlice";
 
 const AppointmentForm = () => {
   const [formData, setFormData] = useState({
@@ -21,22 +23,22 @@ const AppointmentForm = () => {
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+
   const navigate = useNavigate();
+
   const Category = useCategory();
   const Auth = useAuth();
   const VisitorRecord = useRecordSubmit();
-  const dispatch=useAppDispatch();
+
+  const dispatch = useAppDispatch();
   const photoData = useSelector((state) => state.media.userData);
   const visitorTypeData = useSelector((state) => state.visitor);
   const userData = useSelector((state) => state.auth);
 
-
- 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if(e.target.name==="purposeOfVisit"){
-      dispatch(setAccessCardId({categoryId:e.target.value}))
+    if (e.target.name === "purposeOfVisit") {
+      dispatch(setAccessCardId({ categoryId: e.target.value }));
     }
     setErrors({ ...errors, [e.target.name]: "" });
   };
@@ -71,7 +73,7 @@ const AppointmentForm = () => {
 
     // If no errors, proceed to create a payload for the API
     const payload = {
-      name: formData.firstName + " " + formData.lastName,
+      name: formData.firstName + "" + formData.lastName,
       phone: formData.phoneNo,
       email: formData.email,
       purposeOfVisit: formData.purposeOfVisit,
@@ -82,9 +84,10 @@ const AppointmentForm = () => {
       const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
       if (response.status === 401) {
         console.log(response.data, "something went strongly wrong");
+        toast.error("something went wrong.");
       }
-      const AccessToken = response.data.token;
       if (response.status === 200) {
+        dispatch(setVisitorType({ visitorName: payload.name }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
       // setUser(await response.data);
@@ -98,7 +101,7 @@ const AppointmentForm = () => {
     if (payload != null) {
       VisitorRecord.submitRecord(payload);
 
-      navigate(Browser.HOSTDETAIL);
+      // navigate(Browser.HOSTDETAIL);
     }
     // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
@@ -170,8 +173,9 @@ const AppointmentForm = () => {
           >
             Submit
           </button>
+          {/* <NextButton type={"submit"} name="next" /> */}
+          <CancelButton />
         </form>
-        <CancelButton />
       </div>
     </div>
   );

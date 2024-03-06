@@ -2,6 +2,7 @@ import React from "react";
 import { useAppSelector } from "../../hooks";
 import { NextButton } from "../../components";
 import { useNavigate } from "react-router-dom";
+import { Browser } from "../../constants";
 
 function IdCard() {
   const userMedia = useAppSelector((state) => state.media);
@@ -11,8 +12,7 @@ function IdCard() {
 
   const handleHomeButtonClick = () => {
     // Handle logic for the Home button click
-    console.log("Home button clicked");
-    navigate("/");
+    navigate(Browser.HOME);
   };
 
   const handlePrintButtonClick = () => {
@@ -41,11 +41,11 @@ function IdCard() {
           <div className="flex flex-row items-center ">
             <img src={userMedia.userData.userPhoto} alt="" className="w-32 md:w-48" />
             <div className="ml-5">
-              <h1 className="text-lg md:text-xl font-semibold  text-black-600 ">Sumit Sharma</h1>
+              <h1 className="text-lg md:text-xl font-semibold  text-black-600 ">{visitorData.visitorData.visitorName}</h1>
               <p className="text-sm md:text-lg font-semibold  text-black-600">103795</p>
               <p className="text-sm md:text-lg font-semibold  text-black-600">26/02/2024 - 18:06:05</p>
               <p className="test-sm md:text-lg font-semibold  text-black-600">
-                Host: <span className="test-xs md:text-lg text-black-400">Host Name</span>
+                Host: <span className="test-xs md:text-lg text-black-400">{visitorData.HostData?.hostName}</span>
               </p>
             </div>
           </div>

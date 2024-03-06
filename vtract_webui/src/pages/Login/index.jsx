@@ -5,14 +5,15 @@ import { API, Browser, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
-import {  setLoggedIn } from "../../features/authSlice";
+import { setLoggedIn } from "../../features/authSlice";
 import { NextButton } from "../../components";
 import { MdLogin } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [countdown, setCountdown] = useState(20); // Initial countdown time in seconds
@@ -21,64 +22,58 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const setLogin = useAppSelector((state) => state.auth);
 
-  const handleEmailChange = (e) => {
+  const handleUserNameChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
-    setEmail(input);
-
-    // Simple email validation (replace with a more robust solution if needed)
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // if (!emailRegex.test(input)) {
-    //   setEmailError('Please enter a valid email address.');
-    // } else {
-    //   setEmailError('');
-    // }
+    setUsername(input);
   };
 
   const handlePasswordChange = (e) => {
     // const input = e.target.value.replace(/\D/g, ""); // Allow only digits
     setPassword(e.target.value);
-
-    // if (!input) {
-    //   setOtpError("OTP is required.");
-    // } else {
-    //   setOtpError("");
-    // }
   };
   const loginPayload = {
-    username: email,
+    username: username,
     password: password,
   };
 
-  const handleLogin = async () => {
-    console.log(setLogin, "this is login-->");
-
-    if (emailError || passwordError) {
-      console.log("Validation failed. Please fix errors.");
-      return;
-    }
+  const clearWaitingQueue = () => {
+    // Easy, right 😎
+    toast.clearWaitingQueue();
+  };
+  const handleLogin = async (event) => {
+    event.preventDefault();
     try {
       const response = await Axios.post(API.V1.ACCOUNT_LOGIN, loginPayload);
-      if (response.status === 401) {
+      if (response.status === 400) {
         console.log(response.data, "Invalid credentials");
+        toast.error("Invalid Credentials", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       }
       const AccessToken = response.data.token;
       console.log(AccessToken, "this is access token--->");
       if (response.status === 201) {
-        dispatch(setLoggedIn({isLoggedIn:true}));
+        dispatch(setLoggedIn({ isLoggedIn: true }));
         console.log("this is successfully logged in");
         localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
-        // setLoggedIn(true);
-        console.log(setLogin, "this is login-->");
-
         navigate(Browser.HOME);
       }
-      // setUser(await response.data);
-      // await dispatch(fetchUser());
-      // navigate("/");
     } catch (error) {
       console.log(error, "something went wrong while logging in");
+      toast.error("Something went wrong while logging in", {
+        position: "top-right",
+      });
+    } finally {
+      clearWaitingQueue();
     }
-    console.log("Checking in:", { email, password });
   };
 
   useEffect(() => {
@@ -104,27 +99,24 @@ const Login = () => {
       <div className="flex flex-col md:flex-row form-shadow rounded-2xl p-6 items-center justify-center max-w-screen-md gap-x-5 mx-auto">
         <img src="./images/tablet_login.svg" className="w-full md:w-1/2 lg:w-7/12 xl:w-3/6" alt="login_image" />
 
-        <form className="w-full max-w-sm md:w-full lg:w-xl">
+        <form className="w-full max-w-sm md:w-full lg:w-xl" onSubmit={handleLogin}>
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 ">
             <h1 className="mb-8 md:mb-0 text-2xl font-bold">Login</h1>
             <img src="images/innova.png" alt="Company Logo" className="h-7 w-auto md:ml-auto" />
           </div>
           <div className="mb-2">
-            <label htmlFor="email" className="block text-gray-700 text-base">
+            <label htmlFor="username" className="block text-gray-700 text-base">
               Username*
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleEmailChange}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                emailError ? "border-red-500" : ""
-              }`}
+              type="text"
+              id="username"
+              name="username"
+              value={username}
+              onChange={handleUserNameChange}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
               placeholder="Enter your user name"
             />
-            {emailError && <p className="text-red-500 text-xs italic mt-1">{emailError}</p>}
           </div>
 
           <div className="mb-6">
@@ -137,21 +129,15 @@ const Login = () => {
               name="password"
               value={password}
               onChange={handlePasswordChange}
+              autoComplete="true"
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                 passwordError ? "border-red-500" : ""
               }`}
-              placeholder="Enter OTP"
+              placeholder="Enter password"
             />
             {passwordError && <p className="text-red-500 text-xs italic mt-1">{passwordError}</p>}
           </div>
           <div className="flex flex-col md:flex-row items-center md:justify-between w-full">
-            {/* <button
-              className=" flex bg-green-500 hover:bg-green-700 text-sm w-full  text-white font-bold py-3 px-5 rounded focus:outline-none focus:shadow-outline items-center justify-center md:ml-auto"
-              type="button"
-              onClick={handleLogin}
-            >
-              Login
-            </button> */}
             <NextButton type={"submit"} name={"Login"} handleButton={handleLogin} icons={<MdLogin />} />
           </div>
         </form>

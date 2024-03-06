@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Axios from "../../../services/axios";
 import { API, Browser } from "../../../constants";
 import { useNavigate } from "react-router-dom";
-import { CancelButton, NextButton } from "../../../components";
+import { CancelButton, Loader, NextButton } from "../../../components";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { setAccessCardId, setHostDetails, setVisitorType } from "../../../features/VisitorSlice";
@@ -21,6 +21,7 @@ const HostDetailsForm = () => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
   const visitorData = useAppSelector((state) => state.visitor);
+  const [isLoading, setIsLoading] = useState(false);
   console.log(visitorData, "this is visitor Data-->");
   console.log(userData, "this is userData--->");
   const [errors, setErrors] = useState({});
@@ -55,6 +56,7 @@ const HostDetailsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const newErrors = {};
 
@@ -93,18 +95,18 @@ const HostDetailsForm = () => {
       const data = await response.data;
       console.log(response, "this is host data--->");
       if (response.status === 201) {
-        // dispatch(setHostDetails({ hostName: formData.name }));
+        dispatch(setHostDetails({ hostName: formData.name }));
         const approvalPayload = {
           access_card: visitorData?.AccessCardId,
           category: visitorData?.CategoryId,
-          visitor: userData.userId,
+          visitor: userData.userId, 
           host: data.id,
         };
 
         const responseApproval = await Axios.post(API.V1.VISITOR_APPROVALS, approvalPayload);
         if (responseApproval.status === 201) {
           dispatch(setAccessCardId({ approvalId: response.data.id }));
-          dispatch(setLoggedIn({isApproved:true}));
+          dispatch(setLoggedIn({ isApproved: true }));
 
           const currentDate = new Date();
           const isoTimestamp = currentDate.toISOString();
@@ -117,17 +119,27 @@ const HostDetailsForm = () => {
           if (responseTiming.status === 201) {
             // navigate(Browser.APPROVAL);
             // navigate(Browser.APPROVAL);
-            navigate(Browser.IDCARD)
+            navigate(Browser.IDCARD);
           }
         }
       }
+      setIsLoading(false);
     } catch (e) {
+      setIsLoading(false);
       console.log("something went wrong", e);
     }
   };
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen align-middle p-6 ">
+    <div className=" relative flex flex-col items-center justify-center h-screen align-middle p-6 ">
+      {isLoading && (
+        <div className="fixed inset-0 z-50 bg-opacity-75 bg-gray-600 backdrop-blur-md flex items-center justify-center">
+          <Loader />
+        </div>
+      )}
       <div className=" bg-white form-shadow p-10 rounded-2xl">
         <div className="flex justify-between gap-28">
           <h1 className="font-bold text-xl mb-6">Host Detail Form</h1>

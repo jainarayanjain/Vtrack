@@ -8,6 +8,7 @@ import { useAppSelector } from "../../../hooks";
 import Axios from "../../../services/axios";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import { setAccessCardId } from "../../../features/VisitorSlice";
+import { setVisitorType } from "../../../features/VisitorSlice";
 
 const EmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -85,6 +86,7 @@ const EmployeeForm = () => {
       }
       const AccessToken = response.data.token;
       if (response.status === 200) {
+        dispatch(setVisitorType({visitorName:payload.name}))
         dispatch(setAccessCardId({ accessCardId: formData.tempAccessCard }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }

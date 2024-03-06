@@ -4,6 +4,7 @@ const initialState = {
   visitorData: {
     visitorType: null,
     visitorId: null,
+    visitorName:null,
   },
   AccessCardId: null,
   CategoryId: null,
@@ -21,6 +22,7 @@ const VisitorSlice = createSlice(
       setVisitorType: (state, action) => {
         state.visitorData.visitorType = action.payload.visitorType;
         state.visitorData.visitorId = action.payload.visitorId;
+        state.visitorData.visitorName = action.payload.visitorName;
       },
       setAccessCardId: (state, action) => {
         state.AccessCardId = action.payload.accessCardId;
@@ -33,7 +35,6 @@ const VisitorSlice = createSlice(
       ressetVisitorType: (state) => initialState.visitorType,
     },
   },
-  console.log("this is being called-->")
 );
 
 export const { setVisitorType, ressetVisitorType, setAccessCardId,setHostDetails } = VisitorSlice.actions;
