@@ -55,8 +55,10 @@ class VisitorDetail(models.Model):
     email = models.EmailField(gettext_lazy("email"), unique=True)
     phone = models.BigIntegerField(gettext_lazy("phone number"), blank=True, null=True,
                                    unique=True)
-    photo = models.ImageField(gettext_lazy("photo"), blank=True, null=True)
-    signature = models.ImageField(gettext_lazy("signature"), blank=True, null=True)
+    photo = models.ImageField(gettext_lazy("photo"), blank=True, null=True,
+                              upload_to='visitor_photos')
+    signature = models.ImageField(gettext_lazy("signature"), blank=True, null=True,
+                                  upload_to='signatures')
     company = models.CharField(gettext_lazy("company"), max_length=50, blank=True,
                                null=True)
     nid_type = models.ForeignKey(
@@ -65,7 +67,8 @@ class VisitorDetail(models.Model):
         related_name="nid_type",
         verbose_name=gettext_lazy("national identity type"),
         blank=True, null=True)
-    national_id = models.ImageField(gettext_lazy("national id"), blank=True, null=True)
+    national_id = models.ImageField(gettext_lazy("national id"), blank=True, null=True,
+                                    upload_to='national_ids')
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
