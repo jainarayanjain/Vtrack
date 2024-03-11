@@ -1,5 +1,5 @@
 const Browser = {
-  HOME: "/",
+  HOME: "/home-tab",
   CHECKIN: "/checkin",
   CHECKOUT: "/checkout",
   PHOTOINTERACTION: "/checkin/photo-interaction",
@@ -10,7 +10,7 @@ const Browser = {
   SERVICEPROVIDER: "/service-provider",
   APPOINTMENTVISITOR: "/visitor/appointment-visitor",
   APPROVAL:"/approval",
-  LOGIN: "/login",
+  LOGIN: "/",
   IDCARD: "/idcard",
   
 };

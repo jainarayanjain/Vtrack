@@ -5,6 +5,7 @@ import { setAccessCardId } from "../../../features/VisitorSlice";
 import Axios from "../../../services/axios";
 import { API, Browser } from "../../../constants";
 import { useNavigate } from "react-router-dom";
+import { setVisitorType } from "../../../features/VisitorSlice";
 
 const ServiceProvider = () => {
   const [formData, setFormData] = useState({
@@ -21,8 +22,8 @@ const ServiceProvider = () => {
   const Category = useCategory();
 
   const dispatch = useAppDispatch();
-  const userData=useAppSelector(state=>state.auth)
-  const navigate=useNavigate();
+  const userData = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     Category.getCatergory();
@@ -116,6 +117,7 @@ const ServiceProvider = () => {
       }
       const AccessToken = response.data.token;
       if (response.status === 200) {
+        dispatch(setVisitorType({ visitorName: payload.firstName + "" + payload.lastName }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
       // setUser(await response.data);

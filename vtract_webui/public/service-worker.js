@@ -1,13 +1,13 @@
 // service-worker.js
-import { CACHE_STORAGE_KEY } from "../src/constants";
+// import { CACHE_STORAGE_KEY } from "../src/constants";
 // Define the cache name and version
-const cacheName = CACHE_STORAGE_KEY;
+const cacheName = "X-VTRACK-CACHE";
 
 // List of files to cache
 const filesToCache = [
   '/',
-  '/index.html',
-  '/manifest.json',
+  './index.html',
+  './manifest.json',
   // Add other static assets like images, stylesheets, and scripts
 ];
 

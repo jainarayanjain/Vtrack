@@ -13,8 +13,9 @@ import {
   Login,
   ApprovalPage,
   Myform,
-  IdCard
+  IdCard,
 } from "./pages";
+
 // import store from "./store/store";
 import { store, persistor } from "./store/store";
 
@@ -22,7 +23,9 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 function App() {
+  
   return (
     <>
       <Provider store={store}>
@@ -44,6 +47,7 @@ function App() {
               <Route path={Browser.IDCARD} element={<IdCard />}></Route>
             </Routes>
           </BrowserRouter>
+          <ToastContainer limit={1} />
         </PersistGate>
       </Provider>
     </>

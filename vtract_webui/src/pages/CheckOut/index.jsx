@@ -6,12 +6,15 @@ import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import Axios from "../../services/axios";
 import { API, Browser } from "../../constants";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks";
 
 const Checkout = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
+
+  const { logout } = useAuth();
 
   const handleChange = (e) => {
     setPhoneNumber(e.target.value);
@@ -39,6 +42,7 @@ const Checkout = () => {
       const data = response.data;
       console.log(data);
       if (response.status === 200) {
+        logout();
         navigate(Browser.HOME);
       }
     } catch (error) {

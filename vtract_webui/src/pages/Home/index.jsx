@@ -6,7 +6,7 @@ import { HiOutlineLogout } from "react-icons/hi";
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-4 gap-2 font-roboto border-2 border-black">
+    <div className="flex flex-col items-center justify-center h-screen p-4 gap-2 font-roboto">
       <div className=" p-10 form-shadow rounded-xl md:flex-row ">
         <div className="flex flex-row justify-end">
           <img src="images/innova.png" alt="Company Logo" className="h-10 w-auto mb-5 ml-86" />
@@ -28,7 +28,7 @@ const Home = () => {
                 <span className="text-white text-2xl font-bold ml-2 mb-1 drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)]">
                   Check In
                 </span>
-                <span className="text-white  font-bold ml-2">Entering the premises?</span>
+                {/* <span className="text-white  font-bold ml-2">Entering the premises?</span> */}
               </div>
             </div>
           </a>
@@ -41,7 +41,7 @@ const Home = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-white  text-2xl font-bold ml-2 mb-1">Check Out</span>
-                <span className="text-white font-bold ml-2">Leaving the premises?</span>
+                {/* <span className="text-white font-bold ml-2">Leaving the premises?</span> */}
               </div>
             </div>
           </a>
