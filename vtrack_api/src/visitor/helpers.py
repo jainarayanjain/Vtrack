@@ -1,8 +1,13 @@
+import os
+from pathlib import Path, PurePath
 import random
 
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 def generate_otp(length: int = 4) -> str:

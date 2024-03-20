@@ -45,17 +45,20 @@ class Category(models.Model):
         verbose_name_plural = gettext_lazy("categories")
 
     def __str__(self):
-        return self.name + self.visit_purpose
+        return str(self.name + ' - ' + self.visit_purpose)
 
 
 class VisitorDetail(models.Model):
     """Visitor Model"""
 
     name = models.CharField(gettext_lazy("name"), max_length=50, blank=True, null=True)
-    email = models.EmailField(gettext_lazy("email"))
-    phone = models.BigIntegerField(gettext_lazy("phone number"), blank=True, null=True)
-    photo = models.ImageField(gettext_lazy("photo"), blank=True, null=True)
-    signature = models.ImageField(gettext_lazy("signature"), blank=True, null=True)
+    email = models.EmailField(gettext_lazy("email"), unique=True)
+    phone = models.BigIntegerField(gettext_lazy("phone number"), blank=True, null=True,
+                                   unique=True)
+    photo = models.ImageField(gettext_lazy("photo"), blank=True, null=True,
+                              upload_to='visitor_photos')
+    signature = models.ImageField(gettext_lazy("signature"), blank=True, null=True,
+                                  upload_to='signatures')
     company = models.CharField(gettext_lazy("company"), max_length=50, blank=True,
                                null=True)
     nid_type = models.ForeignKey(
@@ -64,7 +67,8 @@ class VisitorDetail(models.Model):
         related_name="nid_type",
         verbose_name=gettext_lazy("national identity type"),
         blank=True, null=True)
-    national_id = models.ImageField(gettext_lazy("national id"), blank=True, null=True)
+    national_id = models.ImageField(gettext_lazy("national id"), blank=True, null=True,
+                                    upload_to='national_ids')
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
@@ -73,7 +77,7 @@ class VisitorDetail(models.Model):
         verbose_name_plural = gettext_lazy("visitor-details")
 
     def __str__(self):
-        return str(self.name) + '-' + str(self.email)
+        return str(self.id) + '- ' + str(self.name)
 
 
 class Valid(models.Model):
@@ -94,7 +98,7 @@ class Valid(models.Model):
         verbose_name_plural = gettext_lazy("valids")
 
     def __str__(self):
-        return self.otp
+        return self.otp + ' - ' + str(self.visitor)
 
 
 class AccessCard(models.Model):
@@ -112,7 +116,7 @@ class AccessCard(models.Model):
         verbose_name_plural = gettext_lazy("accesscards")
 
     def __str__(self):
-        return self.card_number
+        return self.card_number + '-' + self.address
 
 
 class Approval(models.Model):
@@ -149,9 +153,9 @@ class Timing(models.Model):
     """Timing Model"""
     check_in = models.DateTimeField(gettext_lazy("check in"))
     check_out = models.DateTimeField(gettext_lazy("check out"), blank=True, null=True)
-    approval = models.ForeignKey(Approval, on_delete=models.CASCADE,
-                                 verbose_name=gettext_lazy("approval id"),
-                                 related_name="timing")
+    approval = models.OneToOneField(Approval, on_delete=models.CASCADE,
+                                    verbose_name=gettext_lazy("approval id"),
+                                    related_name="timing")
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
