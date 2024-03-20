@@ -33,6 +33,7 @@ const AppointmentForm = () => {
   const dispatch = useAppDispatch();
   const photoData = useSelector((state) => state.media.userData);
   const visitorTypeData = useSelector((state) => state.visitor);
+  console.log(visitorTypeData,'this is visitorType DAta-->')
   const userData = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
@@ -87,7 +88,7 @@ const AppointmentForm = () => {
         toast.error("something went wrong.");
       }
       if (response.status === 200) {
-        dispatch(setVisitorType({ visitorName: payload.name }));
+        dispatch(setVisitorType({ visitorName: payload.name, visitorType:visitorTypeData.visitorData.visitorType }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
       // setUser(await response.data);

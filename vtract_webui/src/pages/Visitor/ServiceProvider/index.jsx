@@ -23,6 +23,7 @@ const ServiceProvider = () => {
 
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
+  const visitorTypeData=useAppSelector(state=>state.visitor)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -117,7 +118,9 @@ const ServiceProvider = () => {
       }
       const AccessToken = response.data.token;
       if (response.status === 200) {
-        dispatch(setVisitorType({ visitorName: payload.firstName + "" + payload.lastName }));
+        // dispatch(setVisitorType({ visitorName: payload.firstName + "" + payload.lastName }));
+        dispatch(setVisitorType({ visitorName: payload.name, visitorType:visitorTypeData.visitorData.visitorType }));
+
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
       // setUser(await response.data);

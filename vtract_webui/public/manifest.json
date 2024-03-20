@@ -1,7 +1,7 @@
 {
   "name": "Vtrack",
-  "short_name": "ShortName",
-  "description": "Your app description",
+  "short_name": "Vtrack",
+  "description": "visitor management system",
   "start_url": "/login",
   "display": "standalone",
   "background_color": "#ffffff",

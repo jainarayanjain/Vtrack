@@ -93,13 +93,12 @@ const HostDetailsForm = () => {
     try {
       const response = await Axios.post(API.V1.HOST_DETAILS, payload);
       const data = await response.data;
-      console.log(response, "this is host data--->");
       if (response.status === 201) {
         dispatch(setHostDetails({ hostName: formData.name }));
         const approvalPayload = {
           access_card: visitorData?.AccessCardId,
           category: visitorData?.CategoryId,
-          visitor: userData.userId, 
+          visitor: userData.userId,
           host: data.id,
         };
 
@@ -117,8 +116,6 @@ const HostDetailsForm = () => {
           };
           const responseTiming = await Axios.post(API.V1.TIMING_DETAILS, timingPayload);
           if (responseTiming.status === 201) {
-            // navigate(Browser.APPROVAL);
-            // navigate(Browser.APPROVAL);
             navigate(Browser.IDCARD);
           }
         }
@@ -129,9 +126,9 @@ const HostDetailsForm = () => {
       console.log("something went wrong", e);
     }
   };
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className=" relative flex flex-col items-center justify-center h-screen align-middle p-6 ">

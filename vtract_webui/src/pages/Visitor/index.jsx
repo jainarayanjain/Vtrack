@@ -14,6 +14,7 @@ const Visitors = () => {
       visitorType,
       visitorId: null,
     };
+    console.log(visitorType,"VISITORTYPEDATA-->")
     dispatch(setVisitorType({visitorType: visitorType }));
   };
 
@@ -33,7 +34,7 @@ const Visitors = () => {
           </Link>
           <Link
             to="/visitor/appointment-visitor"
-            onClick={() => handleVisitorType("appointment-visitor")}
+            onClick={() => handleVisitorType("guest")}
             className="md:h-16 h-12 text-xl md:text-2xl items-center border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Guest

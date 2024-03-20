@@ -26,6 +26,7 @@ const EmployeeForm = () => {
 
   const selector = useAppSelector((state) => state.media.userData);
   const visitorTypeData = useAppSelector((state) => state.visitor);
+  console.log(visitorTypeData, 'VISITOR_TYPE_DATA'); 
   const userData = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
@@ -86,7 +87,7 @@ const EmployeeForm = () => {
       }
       const AccessToken = response.data.token;
       if (response.status === 200) {
-        dispatch(setVisitorType({visitorName:payload.name}))
+        dispatch(setVisitorType({visitorName:payload.name, visitorType:visitorTypeData.visitorData.visitorType}))
         dispatch(setAccessCardId({ accessCardId: formData.tempAccessCard }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
