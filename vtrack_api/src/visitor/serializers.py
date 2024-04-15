@@ -7,15 +7,22 @@ from config.models import Item
 from visitor.helpers import check_otp
 from visitor.models import (
     AccessCard, Approval, Category, Host, NIDType, Timing,
-    Valid, VisitorDetail,
+    Valid, VisitorDetail, PurposeOfVisit
 )
-
 
 class AccessCardSerializer(serializers.ModelSerializer):
     """AccessCard Serializer"""
 
     class Meta:
         model = AccessCard
+        fields = "__all__"
+
+
+class PurposeOfVisitSerializer(serializers.ModelSerializer):
+    """Purpose of Visit Serializer"""
+
+    class Meta:
+        model = PurposeOfVisit
         fields = "__all__"
 
 

@@ -38,14 +38,28 @@ class Host(models.Model):
 class Category(models.Model):
     """Category Model"""
     name = models.CharField(gettext_lazy("name"), max_length=50)
-    visit_purpose = models.CharField(gettext_lazy("visit purpose"), max_length=100)
 
     class Meta:
         verbose_name = gettext_lazy("category")
         verbose_name_plural = gettext_lazy("categories")
 
     def __str__(self):
-        return str(self.name + ' - ' + self.visit_purpose)
+        return str(self.name)
+
+
+class PurposeOfVisit(models.Model):
+    """PurposeOfVisit"""
+    name = models.CharField(gettext_lazy("name"), max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 verbose_name=gettext_lazy("category_id"),
+                                 blank=True, null=True)
+
+    class Meta:
+        verbose_name = gettext_lazy("purpose of visit")
+        verbose_name_plural = gettext_lazy("purpose of visits")
+
+    def __str__(self):
+        return str(self.category.name) + '- ' + str(self.name)
 
 
 class VisitorDetail(models.Model):
@@ -105,6 +119,9 @@ class AccessCard(models.Model):
     """Access Card Model"""
     card_number = models.CharField(gettext_lazy("card number"), max_length=50)
     is_allocated = models.BooleanField(gettext_lazy("is allocated"), default=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 verbose_name=gettext_lazy("category_id"),
+                                 blank=True, null=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE,
                                 verbose_name=gettext_lazy("address id"))
 
@@ -116,7 +133,7 @@ class AccessCard(models.Model):
         verbose_name_plural = gettext_lazy("accesscards")
 
     def __str__(self):
-        return self.card_number + '-' + self.address
+        return str(self.card_number)
 
 
 class Approval(models.Model):
@@ -134,10 +151,10 @@ class Approval(models.Model):
                                     verbose_name=gettext_lazy("access card id"),
                                     related_name="approval_access_card",
                                     blank=True, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,
-                                 verbose_name=gettext_lazy("category id"),
-                                 blank=True, null=True)
-    is_approved = models.BooleanField(gettext_lazy("is approved"), default=False)
+    purpose_of_visit = models.ForeignKey(PurposeOfVisit, on_delete=models.CASCADE,
+                                         verbose_name=gettext_lazy(
+                                             "purpose_of_visit id"),
+                                         blank=True, null=True)
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 

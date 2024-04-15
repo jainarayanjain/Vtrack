@@ -1,13 +1,13 @@
 from django.utils import timezone
-from rest_framework import generics, viewsets, permissions
+from rest_framework import generics, viewsets
 from rest_framework.renderers import TemplateHTMLRenderer
 from visitor.filters import (
     AccessCardFilterSet,
     ApprovalFilterSet,
     CategoryFilterSet, HostFilterSet, NIDTypeFilterSet, TimingFilterSet
 )
-from visitor.models import AccessCard, Approval, Category, Host, NIDType, Timing, \
-    VisitorDetail, Valid
+from visitor.models import AccessCard, Approval, Category, Host, NIDType, \
+    PurposeOfVisit, Timing,VisitorDetail, Valid
 from visitor.serializers import (
     AccessCardSerializer,
     ApprovalSerializer,
@@ -16,7 +16,8 @@ from visitor.serializers import (
     NIDTypeSerializer,
     TimingSerializer,
     VisitorDetailSerializer,
-    ValidSerializer
+    ValidSerializer,
+    PurposeOfVisitSerializer
 )
 
 
@@ -29,7 +30,22 @@ class AccessCardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         filter_kwargs = {
-            "is_allocated": False
+            "is_allocated": False,
+            "category_id": self.request.query_params['category']
+        }
+        queryset = super().get_queryset().filter(**filter_kwargs)
+        return queryset
+
+
+class PurposeOfVisitViewSet(viewsets.ModelViewSet):
+    """ PurposeOfVisit View Set"""
+
+    queryset = PurposeOfVisit.objects.all()
+    serializer_class = PurposeOfVisitSerializer
+
+    def get_queryset(self):
+        filter_kwargs = {
+            "category_id": self.request.query_params['category']
         }
         queryset = super().get_queryset().filter(**filter_kwargs)
         return queryset
@@ -110,18 +126,18 @@ class CheckoutViewSet(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class HostApprovalViewSet(generics.RetrieveAPIView):
-    """Host Approval View Set"""
-
-    queryset = Approval.objects.all()
-    serializer_class = ApprovalSerializer
-    permission_classes = [permissions.AllowAny]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "success.html"
-
-    def get(self, request, *args, **kwargs):
-        instance = Approval.objects.get(id=kwargs['pk'])
-        instance.is_approved = self.request.query_params['is_approved']
-        instance.save()
-        Timing.objects.create(approval=instance, check_in=timezone.now())
-        return super().get(request, *args, **kwargs)
+# class HostApprovalViewSet(generics.RetrieveAPIView):
+#     """Host Approval View Set"""
+#
+#     queryset = Approval.objects.all()
+#     serializer_class = ApprovalSerializer
+#     permission_classes = [permissions.AllowAny]
+#     renderer_classes = [TemplateHTMLRenderer]
+#     template_name = "success.html"
+#
+#     def get(self, request, *args, **kwargs):
+#         instance = Approval.objects.get(id=kwargs['pk'])
+#         instance.is_approved = self.request.query_params['is_approved']
+#         instance.save()
+#         Timing.objects.create(approval=instance, check_in=timezone.now())
+#         return super().get(request, *args, **kwargs)
