@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/main.css";
-import { useAppDispatch, useCategory, useRecordSubmit } from "../../../hooks";
+import { useAccessCard, useAppDispatch, useCategory, useRecordSubmit } from "../../../hooks";
 import { useAuth } from "../../../hooks";
-import { CancelButton, CategoryDropdown, NextButton } from "../../../components";
+import { AccessCardSelect, CancelButton, CategoryDropdown, NextButton } from "../../../components";
 import { useSelector } from "react-redux";
 import { API, Browser } from "../../../constants";
 import { setAccessCardId } from "../../../features/VisitorSlice";
@@ -19,21 +19,20 @@ const AppointmentForm = () => {
     email: "",
     purposeOfVisit: "",
     meetingPerson: "",
+    tempAccessCard: "",
   });
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
   const navigate = useNavigate();
+  const Access = useAccessCard();
 
-  const Category = useCategory();
-  const Auth = useAuth();
   const VisitorRecord = useRecordSubmit();
 
   const dispatch = useAppDispatch();
   const photoData = useSelector((state) => state.media.userData);
   const visitorTypeData = useSelector((state) => state.visitor);
-  console.log(visitorTypeData,'this is visitorType DAta-->')
   const userData = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
@@ -43,6 +42,10 @@ const AppointmentForm = () => {
     }
     setErrors({ ...errors, [e.target.name]: "" });
   };
+
+  useEffect(() => {
+    Access.getAccessCard();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,6 +68,9 @@ const AppointmentForm = () => {
     if (!formData.purposeOfVisit.trim()) {
       newErrors.purposeOfVisit = "Purpose of Visit is required";
     }
+    if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
+      newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
+    }
 
     // If there are errors, update the state and prevent form submission
     // if (Object.keys(newErrors).length > 0) {
@@ -78,6 +84,7 @@ const AppointmentForm = () => {
       phone: formData.phoneNo,
       email: formData.email,
       purposeOfVisit: formData.purposeOfVisit,
+      access_card: formData.tempAccessCard,
     };
     console.log(payload, "this is payload");
 
@@ -88,7 +95,7 @@ const AppointmentForm = () => {
         toast.error("something went wrong.");
       }
       if (response.status === 200) {
-        dispatch(setVisitorType({ visitorName: payload.name, visitorType:visitorTypeData.visitorData.visitorType }));
+        dispatch(setVisitorType({ visitorName: payload.name, visitorType: visitorTypeData.visitorData.visitorType }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
       // setUser(await response.data);
@@ -165,6 +172,13 @@ const AppointmentForm = () => {
             />
             {submitted && errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>
+
+          <AccessCardSelect
+            value={formData.tempAccessCard}
+            onChange={handleChange}
+            options={Access?.access || []}
+            error={submitted && errors.tempAccessCard ? errors.tempAccessCard : ""}
+          />
 
           <CategoryDropdown formData={formData} errors={errors} handleChange={handleChange} submitted={submitted} />
 

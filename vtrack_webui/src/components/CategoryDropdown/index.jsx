@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useCategory } from "../../hooks";
-import { useAppSelector } from "../../hooks";
 
 const CategoryDropdown = ({ formData, errors, handleChange, submitted }) => {
   const Category = useCategory();
-  const selector = useAppSelector((state) => state.visitor.visitorData);
-  const [filteredCategories, setFilteredCategories] = useState([]);
 
   useEffect(() => {
     Category.getCatergory();
   }, []);
-
-  useEffect(() => {
-    // Filter categories based on your condition
-    const filteredData = filterDataByCategory(Category?.catergoriesData, selector.visitorType);
-    setFilteredCategories(filteredData);
-  }, [selector, Category?.catergoriesData]);
-
-  // Function to filter data based on the category
-  const filterDataByCategory = (categoriesData, visitorType) => {
-    // if (!categoriesData || !selector) return [];
-    const category = visitorType; // Replace with the actual button content
-    return categoriesData.filter((item) => item.name?.toLowerCase() === category?.toLowerCase());
-  };
 
   return (
     <>
@@ -37,8 +21,8 @@ const CategoryDropdown = ({ formData, errors, handleChange, submitted }) => {
           <option value="" disabled>
             Select purpose
           </option>
-          {filteredCategories.length !== 0 ? (
-            filteredCategories.map((item) => (
+          {Category.catergoriesData.length !== 0 ? (
+            Category.catergoriesData.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.visit_purpose}
               </option>

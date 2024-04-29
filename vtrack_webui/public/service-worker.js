@@ -1,34 +1,29 @@
-// service-worker.js
-// import { CACHE_STORAGE_KEY } from "../src/constants";
-// Define the cache name and version
-const cacheName = "X-VTRACK-CACHE";
+const cacheVersion = 'v1';
+const cacheName = `X-VTRACK-CACHE-${cacheVersion}`;
 
-// List of files to cache
 const filesToCache = [
   '/',
-  './index.html',
-  './manifest.json',
+  '/index.html',
+  '/manifest.json',
   // Add other static assets like images, stylesheets, and scripts
 ];
 
-// Install event
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(cacheName).then((cache) => {
-      // Cache static assets
       return cache.addAll(filesToCache);
+    }).catch((error) => {
+      console.error('Cache installation failed:', error);
     })
   );
 });
 
-// Activate event
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((name) => {
           if (name !== cacheName) {
-            // Delete outdated caches
             return caches.delete(name);
           }
         })
@@ -37,12 +32,17 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Return cached response if found, otherwise fetch from the network
-      return response || fetch(event.request);
-    })
-  );
-});
+// self.addEventListener('fetch', (event) => {
+//   event.respondWith(
+//     caches.match(event.request).then((response) => {
+//       return response || fetch(event.request).then((fetchResponse) => {
+//         return caches.open(cacheName).then((cache) => {
+//           cache.put(event.request, fetchResponse.clone());
+//           return fetchResponse;
+//         });
+//       }).catch((error) => {
+//         console.error('Fetch failed:', error);
+//       });
+//     })
+//   );
+// });

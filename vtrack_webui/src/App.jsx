@@ -5,7 +5,7 @@ import {
   CheckOut,
   PhotoInteraction,
   Visitors,
-  EmployeeVisitor,
+  EmployeeForm,
   ServiceProvider,
   AppointmentForm,
   NIDForm,
@@ -38,7 +38,7 @@ function App() {
               <Route path={Browser.CHECKOUT} element={<CheckOut />}></Route>
               <Route path={Browser.PHOTOINTERACTION} element={<PhotoInteraction />}></Route>
               <Route path={Browser.VISITORTYPE} element={<Visitors />}></Route>
-              <Route path={Browser.EMPLOYEEVISITOR} element={<EmployeeVisitor />}></Route>
+              <Route path={Browser.EMPLOYEEVISITOR} element={<EmployeeForm />}></Route>
               <Route path={Browser.SERVICEPROVIDER} element={<ServiceProvider />}></Route>
               <Route path={Browser.APPOINTMENTVISITOR} element={<AppointmentForm />}></Route>
               <Route path={Browser.NIDTYPE} element={<NIDForm />}></Route>

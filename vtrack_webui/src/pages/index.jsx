@@ -1,5 +1,6 @@
 import AppointmentForm from "./Visitor/Appointment";
-import EmployeeVisitor from "./Visitor/Employee";
+// import EmployeeVisitor from "./Visitor/Employee";
+import EmployeeForm from "./Visitor/Employee";
 import CheckIn from "./CheckIn";
 import CheckOut from "./CheckOut";
 import Home from "./Home";
@@ -16,7 +17,7 @@ import IdCard from "./Idcard";
 export {
   ApprovalPage,
   AppointmentForm,
-  EmployeeVisitor,
+  EmployeeForm,
   CheckIn,
   CheckOut,
   Home,

@@ -17,7 +17,7 @@ const Home = () => {
           </h1>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-5">
-          <a href="/checkin" className="flex flex-col items-center space-x-2">
+          <a href="/checkout" className="flex flex-col items-center space-x-2">
             <div className="bg-[#20b2aa] hover:bg-[#49aea9] border  p-4 flex items-center  rounded-xl ">
               <div className="border-white  p-3 text-white">
                 <i className="font-size">
@@ -26,13 +26,13 @@ const Home = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-white text-2xl font-bold ml-2 mb-1 drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)]">
-                  Check In
+                  Check Out
                 </span>
                 {/* <span className="text-white  font-bold ml-2">Entering the premises?</span> */}
               </div>
             </div>
           </a>
-          <a href="/checkout" className="flex flex-col items-center space-x-2">
+          <a href="/checkin" className="flex flex-col items-center space-x-2">
             <div className="bg-[#3E8EDE]  hover:bg-[#45a0fb] border rounded-xl p-4 flex items-center">
               <div className="border-white  p-3 text-white ">
                 <i className="font-size">
@@ -40,7 +40,7 @@ const Home = () => {
                 </i>
               </div>
               <div className="flex flex-col">
-                <span className="text-white  text-2xl font-bold ml-2 mb-1">Check Out</span>
+                <span className="text-white  text-2xl font-bold ml-2 mb-1">Check In</span>
                 {/* <span className="text-white font-bold ml-2">Leaving the premises?</span> */}
               </div>
             </div>

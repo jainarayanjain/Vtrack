@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
 import { useAccessCard, useAppDispatch, useAuth } from "../../../hooks";
@@ -9,13 +9,13 @@ import Axios from "../../../services/axios";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import { setAccessCardId } from "../../../features/VisitorSlice";
 import { setVisitorType } from "../../../features/VisitorSlice";
+import {AccessCardSelect} from "../../../components";
 
 const EmployeeForm = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     phoneNo: "",
-    // email: "",
     tempAccessCard: "",
     meetingPerson: "",
   });
@@ -26,7 +26,6 @@ const EmployeeForm = () => {
 
   const selector = useAppSelector((state) => state.media.userData);
   const visitorTypeData = useAppSelector((state) => state.visitor);
-  console.log(visitorTypeData, 'VISITOR_TYPE_DATA'); 
   const userData = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
@@ -42,9 +41,6 @@ const EmployeeForm = () => {
     Access.getAccessCard();
   }, []);
 
-  const handleCancel = () => {
-    Auth.logout();
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,20 +57,15 @@ const EmployeeForm = () => {
     if (!formData.phoneNo.trim() || !/^\d{10}$/.test(formData.phoneNo.trim())) {
       newErrors.phoneNo = "Please enter a valid 10-digit phone number";
     }
-    if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
-      newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
+    // if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
+    //   newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
+    // }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
-    // if (!formData.meetingPerson.trim()) {
-    //   newErrors.meetingPerson = "Meeting Person is required";
-    // }
 
-    // If there are errors, update the state and prevent form submission
-    // if (Object.keys(newErrors).length > 0) {
-    //   setErrors(newErrors);
-    //   return;
-    // }
-
-    // If no errors, proceed to create a payload for the API
     const payload = {
       name: formData.firstName + " " + formData.lastName,
       phone: formData.phoneNo,
@@ -87,33 +78,25 @@ const EmployeeForm = () => {
       }
       const AccessToken = response.data.token;
       if (response.status === 200) {
-        dispatch(setVisitorType({visitorName:payload.name, visitorType:visitorTypeData.visitorData.visitorType}))
+        dispatch(setVisitorType({ visitorName: payload.name, visitorType: visitorTypeData.visitorData.visitorType }));
         dispatch(setAccessCardId({ accessCardId: formData.tempAccessCard }));
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
-      // setUser(await response.data);
-      // await dispatch(fetchUser());
-      // navigate("/");
-      // setIsLoggedIn(true);
     } catch (error) {
       console.log(error, "something went wrong while logging in");
     }
 
-    // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
-
-    // Navigate to the appropriate page
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen align-middle">
-      <div className="form-shadow p-10 rounded-2xl w-full  lg:w-1/2 xl:w-1/2">
+      <div className="form-shadow p-10 rounded-2xl w-full lg:w-1/2 xl:w-1/2">
         <div className="flex flex-row justify-between gap-6 md:gap-28">
           <h1 className="text-xl md:text-2xl font-bold mb-6">Employee Details Form</h1>
           <img src="../images/innova.png" alt="Company Logo" className="h-7 w-auto" />
         </div>
         <form className="mx-auto rounded-2xl" onSubmit={handleSubmit}>
-          {/* Form inputs */}
           <div className="flex flex-col gap-4">
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="flex flex-col lg:w-1/2">
@@ -151,26 +134,14 @@ const EmployeeForm = () => {
               />
               {errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
             </div>
-
-            <div className="relative z-0 w-full mb-10 group flex flex-col">
-              <label className="text-gray-700">Access Card:*</label>
-              <select
-                name="tempAccessCard"
-                value={formData.tempAccessCard}
-                onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.tempAccessCard ? "border-red-500" : ""}`}
-              >
-                <option value="" disabled>
-                  Select Access Card*
-                </option>
-                {Access?.access?.map((item) => (
-                  <option value={item.id} key={item.id}>
-                    {item.card_number}
-                  </option>
-                ))}
-              </select>
-              {submitted && errors.tempAccessCard && <p className="text-red-500">{errors.tempAccessCard}</p>}
-            </div>
+            
+            {/* Use AccessCardSelect component here */}
+            <AccessCardSelect
+              value={formData.tempAccessCard}
+              onChange={handleChange}
+              options={Access?.access || []}
+              error={submitted && errors.tempAccessCard ? errors.tempAccessCard : ""}
+            />
           </div>
 
           <div className="flex gap-2">
