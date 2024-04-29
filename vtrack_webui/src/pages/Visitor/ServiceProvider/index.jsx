@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector, useCategory } from "../../../hooks";
-import { CancelButton, CategoryDropdown } from "../../../components";
+import { useAccessCard, useAppDispatch, useAppSelector, useCategory } from "../../../hooks";
+import { AccessCardSelect, CancelButton, CategoryDropdown } from "../../../components";
 import { setAccessCardId } from "../../../features/VisitorSlice";
 import Axios from "../../../services/axios";
 import { API, Browser } from "../../../constants";
@@ -15,20 +15,25 @@ const ServiceProvider = () => {
     companyEmail: "",
     purposeOfVisit: "",
     meetingPerson: "",
+    tempAccessCard: "",
+
   });
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const Category = useCategory();
+  const Access = useAccessCard();
 
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
-  const visitorTypeData=useAppSelector(state=>state.visitor)
+  const visitorTypeData = useAppSelector((state) => state.visitor);
   const navigate = useNavigate();
 
   useEffect(() => {
     Category.getCatergory();
+    Access.getAccessCard();
   }, []);
+ 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -94,6 +99,10 @@ const ServiceProvider = () => {
     if (!formData.meetingPerson.trim()) {
       newErrors.meetingPerson = "Meeting Person is required";
     }
+    if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
+      newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
+    }
+
 
     // If there are errors, update the state and prevent form submission
     // if (Object.keys(newErrors).length > 0) {
@@ -110,6 +119,8 @@ const ServiceProvider = () => {
       companyEmail: formData.companyEmail,
       purposeOfVisit: formData.purposeOfVisit,
       meetingPerson: formData.meetingPerson,
+      access_card: formData.tempAccessCard,
+
     };
     try {
       const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
@@ -119,7 +130,7 @@ const ServiceProvider = () => {
       const AccessToken = response.data.token;
       if (response.status === 200) {
         // dispatch(setVisitorType({ visitorName: payload.firstName + "" + payload.lastName }));
-        dispatch(setVisitorType({ visitorName: payload.name, visitorType:visitorTypeData.visitorData.visitorType }));
+        dispatch(setVisitorType({ visitorName: payload.name, visitorType: visitorTypeData.visitorData.visitorType }));
 
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
@@ -137,15 +148,6 @@ const ServiceProvider = () => {
     // Now you can use the 'payload' to send data to your API
     console.log("API Payload:", payload);
 
-    // Reset form and errors after successful submission
-    // setFormData({
-    //   firstName: "",
-    //   lastName: "",
-    //   phoneNumber: "",
-    //   companyEmail: "",
-    //   purposeOfVisit: "",
-    //   meetingPerson: "",
-    // });
     setErrors({});
     setSubmitted(true);
   };
@@ -205,6 +207,12 @@ const ServiceProvider = () => {
             />
             {submitted && errors.companyEmail && <p className="text-red-500">{errors.companyEmail}</p>}
           </div>
+          <AccessCardSelect
+            value={formData.tempAccessCard}
+            onChange={handleChange}
+            options={Access?.access || []}
+            error={submitted && errors.tempAccessCard ? errors.tempAccessCard : ""}
+          />
           <CategoryDropdown formData={formData} errors={errors} handleChange={handleChange} submitted={submitted} />
         </div>
 

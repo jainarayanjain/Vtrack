@@ -17,17 +17,17 @@ services:
       - ./vtrack_api:/vtrack
       
   webui:
-    build: ./vtract_webui
-    command: bash -c "npm i vite && npm run build && npm run dev"
+    build: ./vtrack_webui
+    command: bash -c "npm i && npm run dev"
     container_name: "vTrack-Frontend"
     environment:
       NODE_ENV: ${NODE_ENV:-local}
     image: vtrack:webui
     ports:
-      - "3000:3000"
+      - "4000:4000"
     restart: always
     volumes:
-      - ./vtract_webui:/vtrack
+      - ./vtrack_webui:/vtrack
     depends_on:
       - api
 
@@ -40,6 +40,6 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - ./vtrack_api/static:/static
       - ./vtrack_api/media:/media
-      - ./vtrack_webui/.next:/.next
+      - ./vtrack_webui/dist:/dist
     depends_on:
       - webui
