@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from visitor.models import Approval, Valid, VisitorDetail
-from visitor.helpers import generate_otp, through_email, through_email_with_image
+from visitor.helpers import generate_otp, through_email
 
 
 @receiver(post_save, sender=VisitorDetail)
@@ -23,4 +23,4 @@ def approval_post_save(sender, instance, created, **kwargs):
     if created:
         subject = "Visitor Information"
         template = "approval"
-        through_email_with_image(instance, subject, template, [instance.host.email])
+        # through_email_with_image(instance, subject, template, [instance.host.email])
