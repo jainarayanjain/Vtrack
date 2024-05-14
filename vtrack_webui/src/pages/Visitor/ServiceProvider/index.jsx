@@ -116,7 +116,7 @@ const ServiceProvider = () => {
       firstName: formData.firstName,
       lastName: formData.lastName,
       phoneNumber: formData.phoneNumber,
-      companyEmail: formData.companyEmail,
+      // companyEmail: formData.companyEmail,
       purposeOfVisit: formData.purposeOfVisit,
       meetingPerson: formData.meetingPerson,
       access_card: formData.tempAccessCard,
@@ -196,7 +196,7 @@ const ServiceProvider = () => {
             />
             {submitted && errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
           </div>
-          <div className="relative z-0 w-full mb-2 group flex flex-col">
+          {/* <div className="relative z-0 w-full mb-2 group flex flex-col">
             <label className="text-gray-700">Company Name:*</label>
             <input
               type="email"
@@ -206,7 +206,7 @@ const ServiceProvider = () => {
               className={`border rounded-md p-2 ${errors.companyEmail ? "border-red-500" : ""}`}
             />
             {submitted && errors.companyEmail && <p className="text-red-500">{errors.companyEmail}</p>}
-          </div>
+          </div> */}
           <AccessCardSelect
             value={formData.tempAccessCard}
             onChange={handleChange}
