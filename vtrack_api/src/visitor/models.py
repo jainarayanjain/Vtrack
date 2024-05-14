@@ -66,9 +66,8 @@ class VisitorDetail(models.Model):
     """Visitor Model"""
 
     name = models.CharField(gettext_lazy("name"), max_length=50, blank=True, null=True)
-    email = models.EmailField(gettext_lazy("email"), unique=True)
-    phone = models.BigIntegerField(gettext_lazy("phone number"), blank=True, null=True,
-                                   unique=True)
+    email = models.EmailField(gettext_lazy("email"))
+    phone = models.BigIntegerField(gettext_lazy("phone number"), blank=True, null=True)
     photo = models.ImageField(gettext_lazy("photo"), blank=True, null=True,
                               upload_to='visitor_photos')
     signature = models.ImageField(gettext_lazy("signature"), blank=True, null=True,
