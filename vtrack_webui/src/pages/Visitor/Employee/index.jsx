@@ -49,6 +49,7 @@ const EmployeeForm = () => {
     // Basic validation
     const newErrors = {};
     if (!formData.firstName.trim()) {
+      console.log('this is being called,', formData.firstName)
       newErrors.firstName = "First Name is required";
     }
     if (!formData.lastName.trim()) {
@@ -57,9 +58,9 @@ const EmployeeForm = () => {
     if (!formData.phoneNo.trim() || !/^\d{10}$/.test(formData.phoneNo.trim())) {
       newErrors.phoneNo = "Please enter a valid 10-digit phone number";
     }
-    // if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
-    //   newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
-    // }
+    if (!formData.tempAccessCard.trim() ) {
+      newErrors.tempAccessCard = "Temp Access Card not selected";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -108,7 +109,7 @@ const EmployeeForm = () => {
                   onChange={handleChange}
                   className={`border rounded-md p-2 ${errors.firstName ? "border-red-500" : ""}`}
                 />
-                {errors.firstName && <p className="text-red-500">{errors.firstName}</p>}
+                {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
               </div>
 
               <div className="flex flex-col lg:w-1/2">
@@ -120,7 +121,7 @@ const EmployeeForm = () => {
                   onChange={handleChange}
                   className={`border rounded-md p-2 ${errors.lastName ? "border-red-500" : ""}`}
                 />
-                {errors.lastName && <p className="text-red-500">{errors.lastName}</p>}
+                {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
               </div>
             </div>
             <div className="flex flex-col">
@@ -132,7 +133,7 @@ const EmployeeForm = () => {
                 onChange={handleChange}
                 className={`border rounded-md p-2 ${errors.phoneNo ? "border-red-500" : ""}`}
               />
-              {errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
+              {errors.phoneNo && <p className=" text-sm text-red-500">{errors.phoneNo}</p>}
             </div>
             
             {/* Use AccessCardSelect component here */}

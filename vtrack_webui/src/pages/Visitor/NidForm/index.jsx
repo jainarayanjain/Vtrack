@@ -112,7 +112,7 @@ const NidForm = () => {
     navigate("/visitor");
 
     formData.append("nid_type", nidType);
-    // formData.append("national_id", nidImageBlob);
+    formData.append("national_id", nidImageRaw);
     // You can handle the form submission logic here
     const NidData = {
       nid_type: nidType,

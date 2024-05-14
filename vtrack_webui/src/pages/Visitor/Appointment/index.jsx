@@ -16,7 +16,7 @@ const AppointmentForm = () => {
     firstName: "",
     lastName: "",
     phoneNo: "",
-    email: "",
+    // email: "",
     purposeOfVisit: "",
     meetingPerson: "",
     tempAccessCard: "",
@@ -62,21 +62,21 @@ const AppointmentForm = () => {
     if (!formData.phoneNo.trim() || !/^\d{10}$/.test(formData.phoneNo.trim())) {
       newErrors.phoneNo = "Please enter a valid 10-digit phone number";
     }
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = "Please enter a valid email address";
-    }
+    // if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    //   newErrors.email = "Please enter a valid email address";
+    // }
     if (!formData.purposeOfVisit.trim()) {
       newErrors.purposeOfVisit = "Purpose of Visit is required";
     }
-    if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
-      newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
+    if (!formData.tempAccessCard.trim()) {
+      newErrors.tempAccessCard = "Temp Access Card  must be Selected";
     }
 
     // If there are errors, update the state and prevent form submission
-    // if (Object.keys(newErrors).length > 0) {
-    //   setErrors(newErrors);
-    //   return;
-    // }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
     // If no errors, proceed to create a payload for the API
     const payload = {
@@ -161,7 +161,7 @@ const AppointmentForm = () => {
             {submitted && errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
           </div>
 
-          <div className="relative flex flex-col z-0 w-full mb-5 group">
+          {/* <div className="relative flex flex-col z-0 w-full mb-5 group">
             <label className="text-gray-700">Email:*</label>
             <input
               type="email"
@@ -171,7 +171,7 @@ const AppointmentForm = () => {
               className={`border rounded-md p-2 ${errors.email ? "border-red-500" : ""}`}
             />
             {submitted && errors.email && <p className="text-red-500">{errors.email}</p>}
-          </div>
+          </div> */}
 
           <AccessCardSelect
             value={formData.tempAccessCard}

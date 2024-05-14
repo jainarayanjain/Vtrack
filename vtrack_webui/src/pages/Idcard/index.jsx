@@ -20,11 +20,11 @@ function IdCard() {
     navigate("/");
   };
 
-  function capitalizeWords(str) {
-    return str.replace(/\b\w/g, function (char) {
-      return char.toUpperCase();
-    });
-  }
+  // function capitalizeWords(str) {
+  //   return str.replace(/\b\w/g, function (char) {
+  //     return char.toUpperCase();
+  //   });
+  // }
 
   function getCurrentTimestamp() {
     // Create a new Date object to get the current date and time
@@ -66,8 +66,8 @@ function IdCard() {
           className="rotate-180 h-60 md:h-80 flex items-center px-2 justify-center rounded-r-xl bg-black text-white"
           style={{ writingMode: "vertical-rl" }}
         >
-          <p className=" bg-black text-white text-base md:text-2xl">
-            {capitalizeWords(visitorData.visitorData.visitorType)}
+          <p className=" bg-black text-white text-base md:text-2xl w-8">
+            {/* {visitorData.visitorData.visitorName} */}
           </p>
         </div>
         <div className="w-full p-4 h-full">
