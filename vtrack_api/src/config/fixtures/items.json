@@ -1,0 +1,16 @@
+[
+  {
+    "pk": 1,
+    "model": "config.item",
+    "fields": {
+      "app": "visitor",
+      "section": "valid",
+      "sub_section": "otp",
+      "description": "This is for those who does not have email ID",
+      "key": "universal_otp",
+      "value": 9999,
+      "created": "2024-03-07 13:39:00+00:00",
+      "updated": "2024-03-07 13:39:00+00:00"
+    }
+  }
+]
