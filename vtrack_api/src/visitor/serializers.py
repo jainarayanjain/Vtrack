@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy
 from rest_framework import serializers
 
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework.exceptions import ValidationError
 
 from config.models import Item
 from visitor.helpers import check_otp
@@ -9,6 +10,7 @@ from visitor.models import (
     AccessCard, Approval, Category, Host, NIDType, Timing,
     Valid, VisitorDetail, PurposeOfVisit
 )
+
 
 class AccessCardSerializer(serializers.ModelSerializer):
     """AccessCard Serializer"""
@@ -79,6 +81,13 @@ class VisitorDetailSerializer(serializers.ModelSerializer):
     photo = Base64ImageField(label=gettext_lazy("photo"), required=False)
     signature = Base64ImageField(label=gettext_lazy("signature"), required=False)
     national_id = Base64ImageField(label=gettext_lazy("national_id"), required=False)
+
+    def create(self, validated_data):
+        t = Timing.objects.filter(approval__visitor__email=validated_data['email'])
+        if not t.exists():  # new user
+            return super().create(validated_data)
+        elif t[0].check_out is None:
+            raise ValidationError("user is already inside")
 
     class Meta:
         model = VisitorDetail
