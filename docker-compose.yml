@@ -3,7 +3,7 @@ version: "3"
 services:
   api:
     build: ./vtrack_api
-    command: gunicorn vtrack.wsgi:application --chdir=/vtrack/src -b=0.0.0.0:8000 -w=4 -t=10
+    command: gunicorn vtrack.wsgi:application -e VTRACK_ENV=${VTRACK_ENV:-development} --chdir=/vtrack/src -b=0.0.0.0:8000 -w=4 -t=10
     container_name: "vTrack-Backend"
     environment:
       VTRACK_ENV: ${VTRACK_ENV:-development}
@@ -35,11 +35,11 @@ services:
     image: nginx:latest
     container_name: "vTrack-Nginx"
     ports:
-      - "8080:80"
+      - "8181:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./vtrack_api/static:/static
-      - ./vtrack_api/media:/media
+      # - ./vtrack_api/media:/media
       - ./vtrack_webui/dist:/dist
     depends_on:
-      - webui
+      - api

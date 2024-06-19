@@ -14,14 +14,14 @@ export default defineConfig({
   base: "/",
   plugins: [react()],
   preview: {
-    // port: 4000,
+    port: 4000,
     strictPort: false,
   },
   server: {
-    // port: 8000,
+    port: 8000,
     strictPort: false,
     host: true,
-    origin: "http://192.168.61.10:8080/api",
+    origin: "http://127.0.0.1:8000/api",
   },
 });
 

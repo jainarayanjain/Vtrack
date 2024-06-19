@@ -14,6 +14,7 @@ from ast import literal_eval
 from pathlib import Path
 import configparser
 import os
+import json
 
 # Environment from Environment Variable
 ENVIRONMENT_VARIABLE = "VTRACK_ENV"
@@ -80,6 +81,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "config.middlewares.ErrorLoggingMiddleware"
 ]
 
 ROOT_URLCONF = "vtrack.urls"
@@ -154,7 +156,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 MEDIA_URL = "media/"
 
 # Default primary key field type
@@ -162,6 +164,30 @@ MEDIA_URL = "media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Default data upload max memory size
+# https://docs.djangoproject.com/en/3.2/ref/settings/#data-upload-max-memory-size
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 75
+
+# Default file upload max memory size
+# https://docs.djangoproject.com/en/3.2/ref/settings/#file-upload-max-memory-size
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE
+
+# Default X-Forwarded Host
+# https://docs.djangoproject.com/en/3.2/ref/settings/#use-x-forwarded-host
+
+USE_X_FORWARDED_HOST = True
+
+# Default X-Forwarded PORT
+# https://docs.djangoproject.com/en/3.2/ref/settings/#use-x-forwarded-port
+
+USE_X_FORWARDED_PORT = True
+
+# Forward http to https
+# https://docs.djangoproject.com/en/3.2/ref/settings/#secure-proxy-ssl-header
+
+SECURE_PROXY_SSL_HEADER = literal_eval(CNF.get("DEFAULT", "SECURE_PROXY_SSL_HEADER"))
 
 # Logging
 # https://docs.djangoproject.com/en/3.2/topics/logging/
@@ -197,6 +223,9 @@ LOGGING = {
         }
     },
 }
+
+CSRF_TRUSTED_ORIGINS = ['127.0.0.1:8181']
+
 
 # REST Framework
 # https://www.django-rest-framework.org/api-guide/settings/
