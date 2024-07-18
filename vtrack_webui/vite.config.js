@@ -21,7 +21,7 @@ export default defineConfig({
     port: 8000,
     strictPort: false,
     host: true,
-    origin: "http://127.0.0.1:8000/api",
+    origin: "http://10.118.81.212:8000/api",
   },
 });
 
