@@ -7,7 +7,7 @@ from visitor.filters import (
     CategoryFilterSet, HostFilterSet, NIDTypeFilterSet, TimingFilterSet
 )
 from visitor.models import AccessCard, Approval, Category, Host, NIDType, \
-    PurposeOfVisit, Timing,VisitorDetail, Valid
+    PurposeOfVisit, Timing, VisitorDetail, Valid
 from visitor.serializers import (
     AccessCardSerializer,
     ApprovalSerializer,
@@ -31,7 +31,8 @@ class AccessCardViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         filter_kwargs = {
             "is_allocated": False,
-            "category_id": self.request.query_params['category']
+            "category_id": self.request.query_params['category'],
+            "address_id": self.request.query_params['address']
         }
         queryset = super().get_queryset().filter(**filter_kwargs)
         return queryset
@@ -124,7 +125,6 @@ class CheckoutViewSet(generics.ListAPIView):
         instance.check_out = timezone.now()
         instance.save()
         return self.list(request, *args, **kwargs)
-
 
 # class HostApprovalViewSet(generics.RetrieveAPIView):
 #     """Host Approval View Set"""

@@ -1,0 +1,65 @@
+[
+  {
+    "pk": 1,
+    "model": "visitor.category",
+    "fields": {
+      "name": "Employee",
+      "created": "2024-07-07 18:39:00+00:00",
+      "updated": "2023-07-07 18:39:00+00:00"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "visitor.category",
+    "fields": {
+      "name": "Guest",
+      "created": "2024-07-07 18:39:00+00:00",
+      "updated": "2023-07-07 18:39:00+00:00"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "visitor.category",
+    "fields": {
+      "name": "Interview",
+      "created": "2024-07-07 18:39:00+00:00",
+      "updated": "2023-07-07 18:39:00+00:00"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "visitor.category",
+    "fields": {
+      "name": "NewHires/New Joinee",
+      "created": "2024-07-07 18:39:00+00:00",
+      "updated": "2023-07-07 18:39:00+00:00"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "visitor.category",
+    "fields": {
+      "name": "Service Provider",
+      "created": "2024-07-07 18:39:00+00:00",
+      "updated": "2023-07-07 18:39:00+00:00"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "visitor.category",
+    "fields": {
+      "name": "Visitor",
+      "created": "2024-07-07 18:39:00+00:00",
+      "updated": "2023-07-07 18:39:00+00:00"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "visitor.category",
+    "fields": {
+      "name": "Client",
+      "created": "2024-07-07 18:39:00+00:00",
+      "updated": "2023-07-07 18:39:00+00:00"
+    }
+  }
+]

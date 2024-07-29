@@ -38,6 +38,8 @@ class Host(models.Model):
 class Category(models.Model):
     """Category Model"""
     name = models.CharField(gettext_lazy("name"), max_length=50)
+    created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
+    updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
         verbose_name = gettext_lazy("category")
@@ -53,6 +55,8 @@ class PurposeOfVisit(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE,
                                  verbose_name=gettext_lazy("category_id"),
                                  blank=True, null=True)
+    created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
+    updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
     class Meta:
         verbose_name = gettext_lazy("purpose of visit")
