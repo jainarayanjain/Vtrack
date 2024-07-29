@@ -60,11 +60,9 @@ const CheckIn = () => {
 
   const handleSendOtp = async () => {
     try {
-      console.log("this is being clicked===>");
       const response = await Axios.post(API.V1.VISITOR_DETAILS, Email_Payload);
       const data = response.data;
       if (response.status === 401) {
-        console.log(response.data, "Invalid credentials");
         toast.error("something went wrong while sending OTP");
       }
       const AccessToken = response.data.token;
@@ -81,7 +79,6 @@ const CheckIn = () => {
           setCountdown(20); // Reset the countdown
         }, 1000);
         dispatch(setVisitorType(payload));
-        console.log("this is send OTP  in");
       }
     } catch (error) {
       console.log(error, "something went wrong while logging in");
@@ -89,7 +86,6 @@ const CheckIn = () => {
   };
 
   const handleCheckIn = () => {
-    console.log("Before Axios request");
   
     Axios.patch(`${API.V1.VISITOR_VALIDS}${visitorTypeData.visitorData.visitorId}/`, OTP_Payload)
       .then(response => {

@@ -45,7 +45,6 @@ const Login = () => {
     try {
       const response = await Axios.post(API.V1.ACCOUNT_LOGIN, loginPayload);
       if (response.status === 400) {
-        console.log(response.data, "Invalid credentials");
         toast.error("Invalid Credentials", {
           position: "top-right",
           autoClose: 5000,
