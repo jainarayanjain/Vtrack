@@ -11,7 +11,6 @@ export default function useAuth() {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn); // Replace with your actual selector
 
   const logout = () => {
-    console.log("this is being called--->");
     dispatch(resetState());
     // localStorage.clear();
     localStorage.removeItem("persist:root");

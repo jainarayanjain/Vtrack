@@ -10,8 +10,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     image: vtrack:api
-    # ports:
-    #   - "8000:8000"
+    ports:
+      - "8000:8000"
     restart: always
     volumes:
       - ./vtrack_api:/vtrack

@@ -40,7 +40,6 @@ const Checkout = () => {
     try {
       const response = await Axios.get(`${API.V1.ACCOUNT_CHECKOUT}?phone=${phoneNumber}`);
       const data = response.data;
-      console.log(data);
       if (response.status === 200) {
         logout();
         navigate(Browser.HOME);

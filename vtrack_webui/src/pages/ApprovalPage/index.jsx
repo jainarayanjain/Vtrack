@@ -18,7 +18,6 @@ const ApprovalPage = () => {
 
   const navigate = useNavigate();
 
-  console.log(approvalData, "this is approval data");
 
   // Function to make the API call for approval status
   const checkApprovalStatus = async () => {

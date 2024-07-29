@@ -7,11 +7,12 @@ import React from "react";
 export default function useAccessCard() {
   const [access, setAccess] = React.useState();
   const categoryId = useSelector(state=>state.visitor.visitorData);
-  console.log(categoryId,'this is access cardId-->');
+  const userData = useAppSelector((state) => state.auth);
+
 
   const getAccessCard = async () => {
     try {
-      const response = await Axios.get(`${API.V1.ACCESS_CARD}?category=${categoryId.visitorType}`);
+      const response = await Axios.get(`${API.V1.ACCESS_CARD}?category=${categoryId.visitorType}&address=${userData.userId}`);
       const data = await response.data;
       setAccess(data);
     } catch (e) {
