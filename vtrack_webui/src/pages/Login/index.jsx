@@ -5,7 +5,7 @@ import { API, Browser, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
-import { setLoggedIn } from "../../features/authSlice";
+import { setAdminUserId, setLoggedIn } from "../../features/authSlice";
 import { NextButton } from "../../components";
 import { MdLogin } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,7 +20,8 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const setLogin = useAppSelector((state) => state.auth);
+  const setLogin = useAppSelector((state) => state.setAdminUserId);
+  console.log(setLogin,'this is login data')
 
   const handleUserNameChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
@@ -58,10 +59,12 @@ const Login = () => {
         });
       }
       const AccessToken = response.data.token;
-      const adminUserId= response.data.address_id;
-      console.log(AccessToken, "this is access token--->");
+      console.log(response.data.address_id,'this is response data-->');
+      const addressId= await response.data.address_id;
+      console.log(AccessToken,addressId, "this is access token--->");
       if (response.status === 201) {
-        dispatch(setLoggedIn({ isLoggedIn: true, adminUserid: adminUserId}));
+        dispatch(setLoggedIn({ isLoggedIn: true}));
+        dispatch(setAdminUserId({ adminUserId: addressId}))
         console.log("this is successfully logged in");
         localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
         navigate(Browser.HOME);

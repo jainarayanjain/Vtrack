@@ -9,16 +9,18 @@ const initialState = {
 
 const userAuthSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState, 
   reducers: {
     setLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
       state.userId = action.payload.userId;
-      state.adminUserId = action.payload.adminUserId;
       state.isApproved = action.payload.isApproved;
+    },
+    setAdminUserId: (state, action) => {
+      state.adminUserId = action.payload.adminUserId;
     },
   },
 });
 
-export const { setLoggedIn, setLoggedOut } = userAuthSlice.actions;
+export const { setLoggedIn, setLoggedOut,setAdminUserId } = userAuthSlice.actions;
 export default userAuthSlice.reducer;

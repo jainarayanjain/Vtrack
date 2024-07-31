@@ -8,6 +8,7 @@ export default function useAccessCard() {
   const [access, setAccess] = React.useState();
   const categoryId = useSelector(state=>state.visitor.visitorData);
   const userData = useAppSelector((state) => state.auth);
+  console.log(userData,'this is userDAta--->')
 
 
   const getAccessCard = async () => {
