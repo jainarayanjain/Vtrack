@@ -37,6 +37,9 @@ class AddressSerializer(serializers.ModelSerializer):
 class TokenSerializer(serializers.ModelSerializer):
     """Token Serializer: Use to create token and validate user details"""
 
+    def get_address_id(self, obj):
+        return obj.user.address.id
+
     username = serializers.CharField(label=gettext_lazy("Username"), write_only=True)
     password = serializers.CharField(
         label=gettext_lazy("Password"),
@@ -47,10 +50,11 @@ class TokenSerializer(serializers.ModelSerializer):
     token = serializers.CharField(
         label=gettext_lazy("Token"), source="key", read_only=True
     )
+    address_id = serializers.SerializerMethodField(method_name="get_address_id")
 
     class Meta:
         model = Token
-        fields = ["username", "password", "token"]
+        fields = ["username", "password", "token", "address_id"]
 
     def validate(self, attrs):
         username = attrs.pop("username")
@@ -86,12 +90,19 @@ class TokenSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     """User Serializer"""
 
+    def get_address_id(self, obj):
+        return obj.address.id
+
+    address_id = serializers.SerializerMethodField(method_name="get_address_id")
+
     class Meta:
         model = get_user_model()
         fields = [
+            "id",
             "first_name",
             "last_name",
             "username",
             "email",
             "date_joined",
+            "address_id"
         ]
