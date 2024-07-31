@@ -12,7 +12,7 @@ export default function useAccessCard() {
 
   const getAccessCard = async () => {
     try {
-      const response = await Axios.get(`${API.V1.ACCESS_CARD}?category=${categoryId.visitorType}&address=${userData.userId}`);
+      const response = await Axios.get(`${API.V1.ACCESS_CARD}?category=${categoryId.visitorType}&address=${userData.adminUserId}`);
       const data = await response.data;
       setAccess(data);
     } catch (e) {

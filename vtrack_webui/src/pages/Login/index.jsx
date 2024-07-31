@@ -58,9 +58,10 @@ const Login = () => {
         });
       }
       const AccessToken = response.data.token;
+      const adminUserId= response.data.address_id;
       console.log(AccessToken, "this is access token--->");
       if (response.status === 201) {
-        dispatch(setLoggedIn({ isLoggedIn: true }));
+        dispatch(setLoggedIn({ isLoggedIn: true, adminUserid: adminUserId}));
         console.log("this is successfully logged in");
         localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
         navigate(Browser.HOME);
