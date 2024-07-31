@@ -28,7 +28,6 @@ const Home = () => {
                 <span className="text-white text-2xl font-bold ml-2 mb-1 drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)]">
                   Check Out
                 </span>
-                {/* <span className="text-white  font-bold ml-2">Entering the premises?</span> */}
               </div>
             </div>
           </a>
@@ -41,7 +40,6 @@ const Home = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-white  text-2xl font-bold ml-2 mb-1">Check In</span>
-                {/* <span className="text-white font-bold ml-2">Leaving the premises?</span> */}
               </div>
             </div>
           </a>

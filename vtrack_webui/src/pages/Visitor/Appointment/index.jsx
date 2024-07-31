@@ -86,12 +86,10 @@ const AppointmentForm = () => {
       purposeOfVisit: formData.purposeOfVisit,
       access_card: formData.tempAccessCard,
     };
-    console.log(payload, "this is payload");
 
     try {
       const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
       if (response.status === 401) {
-        console.log(response.data, "something went strongly wrong");
         toast.error("something went wrong.");
       }
       if (response.status === 200) {

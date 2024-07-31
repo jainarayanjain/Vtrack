@@ -1,6 +1,5 @@
 import React from "react";
 import { useAppSelector } from "../../hooks";
-import { NextButton } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { Browser } from "../../constants";
 
@@ -16,15 +15,8 @@ function IdCard() {
 
   const handlePrintButtonClick = () => {
     // Handle logic for the Print button click
-    console.log("Print button clicked");
     navigate("/");
   };
-
-  // function capitalizeWords(str) {
-  //   return str.replace(/\b\w/g, function (char) {
-  //     return char.toUpperCase();
-  //   });
-  // }
 
   function getCurrentTimestamp() {
     // Create a new Date object to get the current date and time
@@ -84,11 +76,9 @@ function IdCard() {
               <h1 className="text-lg md:text-xl font-semibold  text-black-600 ">
                 {visitorData.visitorData.visitorName}
               </h1>
-              {/* <p className="text-sm md:text-lg font-semibold  text-black-600">103795</p> */}
-              {/* <p className="text-sm md:text-lg font-semibold  text-black-600">20/03/2024 - 12:06:05</p> */}
               <p className="text-sm md:text-lg font-semibold  text-black-600">{getCurrentTimestamp()}</p>
-              <p className="test-sm md:text-lg font-semibold  text-black-600">
-                Host: <span className="test-xs md:text-lg text-black-400">{visitorData.HostData?.hostName}</span>
+              <p className="text-sm md:text-lg font-semibold  text-black-600">
+                Host: <span className="test-sm md:text-lg text-black-400">{visitorData.HostData?.hostName}</span>
               </p>
             </div>
           </div>

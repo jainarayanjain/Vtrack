@@ -153,9 +153,6 @@ const NidForm = () => {
             <option value="" disabled>
               Select NID Type
             </option>
-            {/* <option value="aadhar">Aadhar Card</option>
-            <option value="pan">PAN Card</option>
-            <option value="driving">Driving License</option> */}
             {nidTypes?.nidtypesData?.map((data) => (
               <option value={data.id} key={data.id}>
                 {data.name}

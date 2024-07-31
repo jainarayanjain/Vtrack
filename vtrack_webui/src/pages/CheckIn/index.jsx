@@ -41,21 +41,14 @@ const CheckIn = () => {
   };
 
   const handleOtpChange = (e) => {
-    // const input = e.target.value.replace(/\D/g, ""); // Allow only digits
     setOtp(e.target.value);
 
-    // if (!input) {
-    //   setOtpError("OTP is required.");
-    // } else {
-    //   setOtpError("");
-    // }
   };
   const Email_Payload = {
     email,
   };
   const OTP_Payload = {
     otp,
-    // visitor: visitorTypeData.visitorData.visitorId,
   };
 
   const handleSendOtp = async () => {
@@ -89,20 +82,17 @@ const CheckIn = () => {
   
     Axios.patch(`${API.V1.VISITOR_VALIDS}${visitorTypeData.visitorData.visitorId}/`, OTP_Payload)
       .then(response => {
-        console.log(response, "this is response--->");
   
         if (response.status === 400) {
           toast.error("Validation failed. Please fix errors");
         } else if (response.status === 200) {
           const data = response.data;
-          console.log(data, "this is data ");
           navigate("/checkin/photo-interaction");
         }
       })
       .catch(error => {
         toast.error("Invalid OTP");
         console.error("Error in Axios request:", error);
-        console.log("something went wrong while logging in");
       });
   };
   

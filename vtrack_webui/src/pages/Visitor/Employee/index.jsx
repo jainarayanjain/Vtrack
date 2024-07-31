@@ -49,7 +49,6 @@ const EmployeeForm = () => {
     // Basic validation
     const newErrors = {};
     if (!formData.firstName.trim()) {
-      console.log('this is being called,', formData.firstName)
       newErrors.firstName = "First Name is required";
     }
     if (!formData.lastName.trim()) {

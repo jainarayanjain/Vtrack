@@ -4,9 +4,7 @@ import { Confetti } from "../../components";
 import Lottie from "lottie-react";
 import animation from "../../assets/waiting.json";
 import { useAppSelector } from "../../hooks";
-import Axios from "../../services/axios";
-import { API, Browser } from "../../constants";
-import IdCard from "../../components/IdCard";
+import { Browser } from "../../constants";
 import { useNavigate } from "react-router-dom";
 
 const ApprovalPage = () => {
@@ -22,28 +20,7 @@ const ApprovalPage = () => {
   // Function to make the API call for approval status
   const checkApprovalStatus = async () => {
     try {
-      // const response = await Axios.get(`${API.V1.VISITOR_APPROVALS}${approvalData.ApprovalId}`);
-      // const data = await response.json();
-      // setIsApproved(data.is_approved);
-
-      // // Stop polling if response is received
-      // if (data.is_approved === true) {
-      //   setResponseReceived(true);
-      // }
-      // if (response.status == 200) {
-      // }
-      // const currentDate = new Date();
-      // const isoTimestamp = currentDate.toISOString();
-
-      // const timingPayload = {
-      //   approval: approvalData.ApprovalId,
-      //   check_in: isoTimestamp,
-      // };
-      // const response = await Axios.post(API.V1.TIMING_DETAILS, timingPayload);
-      // if (response.status === 201) {
-      //   // navigate(Browser.APPROVAL);
-      //   setIsApproved(true);
-      // }
+      
 
       return data.is_approved;
     } catch (error) {
@@ -52,20 +29,7 @@ const ApprovalPage = () => {
   };
 
   useEffect(() => {
-    // Initial API call on component mount
-    // const is_approved = checkApprovalStatus();
-    // is_approved.then((data) => console.log(data));
-    // setIsApproved(is_approved);
-
-    // // Polling every 20 seconds until response is received
-    // const intervalId = setInterval(() => {
-    //   if (!responseReceived) {
-    //     checkApprovalStatus();
-    //   }
-    // }, 10000);
-
-    // // Cleanup interval on component unmount or when response is received
-    // return () => clearInterval(intervalId);
+   
     checkApprovalStatus();
   }, []);
 

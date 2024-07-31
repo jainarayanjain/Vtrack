@@ -49,7 +49,6 @@ const Checkout = () => {
     }
 
     // If no errors, proceed with form submission or other actions
-    console.log("Phone Number:", phoneNumber);
   };
 
   return (
@@ -74,12 +73,6 @@ const Checkout = () => {
               {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
             </div>
 
-            {/* <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full rounded mt-4"
-              onClick={handleSubmit}
-            >
-              Checkout
-            </button> */}
 
             <div className="flex gap-4">
               <CancelButton />

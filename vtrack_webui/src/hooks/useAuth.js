@@ -12,14 +12,10 @@ export default function useAuth() {
 
   const logout = () => {
     dispatch(resetState());
-    // localStorage.clear();
     localStorage.removeItem("persist:root");
-    // localStorage.removeItem(LOCAL_STORAGE_KEY);
     dispatch(setLoggedIn(false));
     dispatch(resetState());
 
-    // Optionally, you can clear other parts of the state as needed
-    // dispatch(clearOtherState());
 
     navigate(Browser.HOME);
   };

@@ -25,7 +25,6 @@ const PageInteraction = () => {
 
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
-  console.log(userData, "this is userData--->photo");
 
   const videoRef = useRef(null);
   const signatureRef = useRef(null);
@@ -99,7 +98,6 @@ const PageInteraction = () => {
   };
 
   const handleBase64InputChange = (base64String) => {
-    console.log("this is being called..._?");
 
     // Convert Base64 to binary
     const binaryString = decodeURIComponent(base64String);
