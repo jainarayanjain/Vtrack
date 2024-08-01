@@ -29,7 +29,7 @@ services:
     volumes:
       - ./vtrack_webui:/vtrack
     depends_on:
-      - api
+      - api 
 
   nginx:
     image: nginx:latest
