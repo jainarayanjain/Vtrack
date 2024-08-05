@@ -1,0 +1,21 @@
+[
+    {
+      "pk": 1,
+      "model": "user.organization",
+      "fields": {
+        "name": "ACS Solutions",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 2,
+      "model": "user.organization",
+      "fields": {
+        "name": "Innova Solutions",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    }
+  ]
+  

@@ -1,0 +1,131 @@
+[
+    {
+      "pk": 1,
+      "model": "user.address",
+      "fields": {
+        "user":"3",
+        "organization":"1",
+        "street":"Noida127",
+        "city":"Noida",
+        "region":"Uttar Pradesh",
+        "country":"1",
+        "postcode":"201304",
+        "code":"NOI127",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+        "pk": 2,
+        "model": "user.address",
+        "fields": {
+          "user":"4",
+          "organization":"1",
+          "street":"Sector126",
+          "city":"Noida",
+          "region":"Uttar Pradesh",
+          "country":"1",
+          "postcode":"201303",
+          "code":"NOI127",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+      {
+        "pk": 3,
+        "model": "user.address",
+        "fields": {
+          "user":"5",
+          "organization":"1",
+          "street":"Raheja",
+          "city":"Hyderbad",
+          "region":"Telangana",
+          "country":"1",
+          "postcode":"222222",
+          "code":"TEST",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+      {
+        "pk": 4,
+        "model": "user.address",
+        "fields": {
+          "user":"6",
+          "organization":"1",
+          "street":"Security_NSL",
+          "city":"Hyderabad",
+          "region":"Telangana",
+          "country":"1",
+          "postcode":"222222",
+          "code":"TEST",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+  {
+        "pk": 5,
+        "model": "user.address",
+        "fields": {
+          "user":"7",
+          "organization":"1",
+          "street":"GAR15",
+          "city":"Hyderabad",
+          "region":"Telangana",
+          "country":"1",
+          "postcode":"222222",
+          "code":"TEST",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+  {
+        "pk": 6,
+        "model": "user.address",
+        "fields": {
+          "user":"8",
+          "organization":"1",
+          "street":"GAR14",
+          "city":"Hyderabad",
+          "region":"Telangana",
+          "country":"1",
+          "postcode":"222222",
+          "code":"TEST",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+  {
+        "pk": 7,
+        "model": "user.address",
+        "fields": {
+          "user":"9",
+          "organization":"1",
+          "street":"Chennai_Purva",
+          "city":"Chennai",
+          "region":"Tamil Nadu",
+          "country":"1",
+          "postcode":"222222",
+          "code":"TEST",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+  {
+        "pk": 8,
+        "model": "user.address",
+        "fields": {
+          "user":"10",
+          "organization":"1",
+          "street":"ACS-Bengaluru ",
+          "city":"Bengaluru",
+          "region":"Karnataka",
+          "country":"1",
+          "postcode":"222222",
+          "code":"TEST",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      }
+]
+  

@@ -1,0 +1,143 @@
+[
+    {
+      "pk": 1,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Forget Id",
+        "category": "1",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 2,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Misplaced",
+        "category": "1",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+  {
+      "pk": 3,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Project Guest",
+        "category": "2",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 4,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Normal Guest",
+        "category": "2",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+   {
+      "pk": 5,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "ITS",
+        "category": "3",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 6,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Staffing",
+        "category": "3",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+  {
+      "pk": 7,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "ITS",
+        "category": "4",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 8,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Staffing",
+        "category": "4",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+  {
+      "pk": 9,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Non Floor Vendor",
+        "category": "5",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 10,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Floor Vendor",
+        "category": "5",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+  {
+      "pk": 11,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Audit",
+        "category": "6",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 12,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Casual Visit",
+        "category": "6",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+  {
+      "pk": 13,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "ITS",
+        "category": "7",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+      "pk": 14,
+      "model": "visitor.purposeofvisit",
+      "fields": {
+        "name": "Staffing",
+        "category": "7",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    }
+
+  ]

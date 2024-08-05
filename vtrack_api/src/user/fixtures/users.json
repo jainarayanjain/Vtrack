@@ -1,0 +1,75 @@
+[
+    { "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "username": "Security_Noida127",
+            "password": "Acs@1234567",
+            "first_name": "Deepak",
+            "last_name": "Kumar"
+        }
+    },
+    { "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "username": "Security_Noida126",
+            "password": "Acs@1234567",
+            "first_name": "Onkar",
+            "last_name": "Singh"
+        }
+    },
+    { "model": "auth.user",
+        "pk": 5,
+        "fields": {
+            "username": "Security_Raheja",
+            "password": "Acs@1234567",
+            "first_name": "Pradeep",
+            "last_name": "Allagani"
+        }
+    },
+    { "model": "auth.user",
+        "pk": 6,
+        "fields": {
+            "username": "Security_NSL",
+            "password": "Acs@1234567",
+            "first_name": "Akhil",
+            "last_name": "Alle"
+        }
+    },
+    { "model": "auth.user",
+        "pk": 7,
+        "fields": {
+            "username": "Security_GAR15",
+            "password": "Acs@1234567",
+            "first_name": "Akhil",
+            "last_name": "Alle"
+        }
+    },
+    { "model": "auth.user",
+        "pk": 8,
+        "fields": {
+            "username": "Security_GAR14",
+            "password": "Acs@1234567",
+            "first_name": "Akhil",
+            "last_name": "Alle"
+        }
+    },
+    { "model": "auth.user",
+        "pk": 9,
+        "fields": {
+            "username": "Security_Chennai_Purva",
+            "password": "Acs@1234567",
+            "first_name": "Karna",
+            "last_name": "Maharaj"
+
+        }
+    },
+    { "model": "auth.user",
+        "pk": 10,
+        "fields": {
+            "username": "Security_Bengaluru",
+            "password": "Acs@1234567",
+            "first_name": "Vikram",
+            "last_name": "Loganathan"
+        }
+    }
+]

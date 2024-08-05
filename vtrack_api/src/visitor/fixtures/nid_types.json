@@ -1,0 +1,39 @@
+[
+    {
+      "pk": 1,
+      "model": "visitor.NIDType",
+      "fields": {
+        "name": "Aadhar Card",
+        "created": "2024-07-07 18:39:00+00:00",
+        "updated": "2023-07-07 18:39:00+00:00"
+      }
+    },
+    {
+        "pk": 2,
+        "model": "visitor.NIDType",
+        "fields": {
+          "name": "Pan Card",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+      {
+        "pk": 3,
+        "model": "visitor.NIDType",
+        "fields": {
+          "name": "Driving License",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      },
+      {
+        "pk": 4,
+        "model": "visitor.NIDType",
+        "fields": {
+          "name": "Voter Id",
+          "created": "2024-07-07 18:39:00+00:00",
+          "updated": "2023-07-07 18:39:00+00:00"
+        }
+      }
+  ]
+  
