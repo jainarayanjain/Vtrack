@@ -10,8 +10,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     image: vtrack:api
-    ports:
-      - "8000:8000"
+    # ports:
+      # - "8000:8000"
     restart: always
     volumes:
       - ./vtrack_api:/vtrack
@@ -35,8 +35,9 @@ services:
     image: nginx:latest
     container_name: "vTrack-Nginx"
     ports:
-      - "80:80"
-      - "443:443"
+      # - "8181:80"
+      # - "80:80"
+      # - "443:443"
     volumes:
       - ./nginx:/etc/nginx/conf.d
       -  /etc/ssl/certs/innovasolutions-WC-24-25:/etc/ssl/certs
