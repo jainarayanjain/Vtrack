@@ -83,11 +83,15 @@ class VisitorDetailSerializer(serializers.ModelSerializer):
     national_id = Base64ImageField(label=gettext_lazy("national_id"), required=False)
 
     def create(self, validated_data):
-        t = Timing.objects.filter(approval__visitor__email=validated_data['email'])
-        if not t.exists():  # new user
+        breakpoint()
+        t = Timing.objects.filter(
+            approval__visitor__email=validated_data['email']).last()
+        if not t:  # new user
             return super().create(validated_data)
-        elif t[0].check_out is None:
+        elif t.check_out is None:  # user is already in
             raise ValidationError("user is already inside")
+        else:  # same user coming again
+            return super().create(validated_data)
 
     class Meta:
         model = VisitorDetail

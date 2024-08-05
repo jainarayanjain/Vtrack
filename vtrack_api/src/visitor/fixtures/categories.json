@@ -48,7 +48,7 @@
     "pk": 6,
     "model": "visitor.category",
     "fields": {
-      "name": "Visitor",
+        "name": "Visitor",
       "created": "2024-07-07 18:39:00+00:00",
       "updated": "2023-07-07 18:39:00+00:00"
     }
