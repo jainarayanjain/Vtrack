@@ -12,7 +12,7 @@
     "pk": 2,
     "model": "visitor.category",
     "fields": {
-      "name": "Guest",
+      "name": "Interview",
       "created": "2024-07-07 18:39:00+00:00",
       "updated": "2023-07-07 18:39:00+00:00"
     }
@@ -21,7 +21,7 @@
     "pk": 3,
     "model": "visitor.category",
     "fields": {
-      "name": "Interview",
+      "name": "Vendor",
       "created": "2024-07-07 18:39:00+00:00",
       "updated": "2023-07-07 18:39:00+00:00"
     }
@@ -30,7 +30,7 @@
     "pk": 4,
     "model": "visitor.category",
     "fields": {
-      "name": "NewHires/New Joinee",
+      "name": "Guest",
       "created": "2024-07-07 18:39:00+00:00",
       "updated": "2023-07-07 18:39:00+00:00"
     }
@@ -39,7 +39,7 @@
     "pk": 5,
     "model": "visitor.category",
     "fields": {
-      "name": "Service Provider",
+      "name": "Client",
       "created": "2024-07-07 18:39:00+00:00",
       "updated": "2023-07-07 18:39:00+00:00"
     }
@@ -48,7 +48,7 @@
     "pk": 6,
     "model": "visitor.category",
     "fields": {
-        "name": "Visitor",
+      "name": "Visitor",
       "created": "2024-07-07 18:39:00+00:00",
       "updated": "2023-07-07 18:39:00+00:00"
     }
@@ -57,7 +57,7 @@
     "pk": 7,
     "model": "visitor.category",
     "fields": {
-      "name": "Client",
+      "name": "NewHires",
       "created": "2024-07-07 18:39:00+00:00",
       "updated": "2023-07-07 18:39:00+00:00"
     }

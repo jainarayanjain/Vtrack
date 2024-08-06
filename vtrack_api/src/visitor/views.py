@@ -1,4 +1,6 @@
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, viewsets
 from rest_framework.renderers import TemplateHTMLRenderer
 from visitor.filters import (
@@ -20,7 +22,6 @@ from visitor.serializers import (
     PurposeOfVisitSerializer
 )
 
-
 class AccessCardViewSet(viewsets.ModelViewSet):
     """AccessCard View Set"""
 
@@ -29,10 +30,15 @@ class AccessCardViewSet(viewsets.ModelViewSet):
     filterset_class = AccessCardFilterSet
 
     def get_queryset(self):
+        category = int(self.request.query_params['category_number'])
+        if category in [int(AccessCard.Choices.Guest.value),
+                        int(AccessCard.Choices.Visitor.value),
+                        int(AccessCard.Choices.Client.value),
+                        int(AccessCard.Choices.NewHires.value)]:
+            category = AccessCard.Choices.Guest.value
         filter_kwargs = {
             "is_allocated": False,
-            "category_id": self.request.query_params['category'],
-            "address_id": self.request.query_params['address']
+            "category_id": category
         }
         queryset = super().get_queryset().filter(**filter_kwargs)
         return queryset
@@ -125,19 +131,3 @@ class CheckoutViewSet(generics.ListAPIView):
         instance.check_out = timezone.now()
         instance.save()
         return self.list(request, *args, **kwargs)
-
-# class HostApprovalViewSet(generics.RetrieveAPIView):
-#     """Host Approval View Set"""
-#
-#     queryset = Approval.objects.all()
-#     serializer_class = ApprovalSerializer
-#     permission_classes = [permissions.AllowAny]
-#     renderer_classes = [TemplateHTMLRenderer]
-#     template_name = "success.html"
-#
-#     def get(self, request, *args, **kwargs):
-#         instance = Approval.objects.get(id=kwargs['pk'])
-#         instance.is_approved = self.request.query_params['is_approved']
-#         instance.save()
-#         Timing.objects.create(approval=instance, check_in=timezone.now())
-#         return super().get(request, *args, **kwargs)
