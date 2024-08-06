@@ -24,7 +24,7 @@ const CategoryDropdown = ({ formData, errors, handleChange, submitted }) => {
           {Category.catergoriesData.length !== 0 ? (
             Category.catergoriesData.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.visit_purpose}
+                {item.name}
               </option>
             ))
           ) : (
