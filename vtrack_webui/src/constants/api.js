@@ -7,7 +7,7 @@ const API = {
     ACCOUNT_DETAILS: "/v1/user/detail",
     ACCESS_CARD: "/v1/visitor/access-cards",
     NID_TYPES: "/v1/visitor/nid-types/",
-    VISIT_CATEGORIES: "/v1/visitor/categories/",
+    VISIT_CATEGORIES: "/v1/visitor/purpose-of-visits/",
     VISITOR_DETAILS: "/v1/visitor/visitor-details/",
     VISITOR_VALIDS: "/v1/visitor/valids/",
     VISITOR_APPROVALS:"/v1/visitor/approvals/",
