@@ -34,14 +34,6 @@ const Visitors = () => {
           <Link
             to="/visitor/appointment-visitor"
             onClick={() => handleVisitorType(2)}
-            className="md:h-16 h-12 text-xl md:text-2xl items-center border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
-          >
-            Guest
-            <span class="material-symbols-outlined md:text-5xl text-3xl">arrow_right_alt</span>
-          </Link>
-          <Link
-            to="/visitor/appointment-visitor"
-            onClick={() => handleVisitorType(3)}
             className="md:h-16 md:text-2xl h-12 text-xl items-center border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
             Interview
@@ -49,10 +41,18 @@ const Visitors = () => {
           </Link>
           <Link
             to="/visitor/appointment-visitor"
+            onClick={() => handleVisitorType(3)}
+            className="md:h-16 h-12 text-xl md:text-2xl items-center border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
+          >
+            Vendor
+            <span class="material-symbols-outlined md:text-5xl text-3xl">arrow_right_alt</span>
+          </Link>
+          <Link
+            to="/visitor/appointment-visitor"
             onClick={() => handleVisitorType(4)}
             className="md:h-16 md:text-2xl h-12 text-xl items-center border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
-            New Hires/ New Joinee
+            Guest
             <span class="material-symbols-outlined md:text-5xl text-3xl">arrow_right_alt</span>
           </Link>
           <Link
@@ -60,7 +60,7 @@ const Visitors = () => {
             onClick={() => handleVisitorType(5)}
             className="md:h-16 md:text-2xl h-12 text-xl items-center border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
-            Service Provider
+            Client
             <span class="material-symbols-outlined md:text-5xl text-3xl">arrow_right_alt</span>
           </Link>
           <Link
@@ -76,7 +76,7 @@ const Visitors = () => {
             onClick={() => handleVisitorType(7)}
             className="md:h-16 md:text-2xl h-12 text-xl items-center border border-black text-black hover:bg-gray-200  font-bold py-2 px-4 rounded flex justify-between hover:shadow-lg transition duration-300 ease-in-out"
           >
-            Client
+            New Hires/New Joinee
             <span class="material-symbols-outlined md:text-5xl text-3xl">arrow_right_alt</span>
           </Link>
         </div>
