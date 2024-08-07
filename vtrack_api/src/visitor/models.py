@@ -120,6 +120,17 @@ class Valid(models.Model):
 
 class AccessCard(models.Model):
     """Access Card Model"""
+
+    class Choices(models.TextChoices):
+        """Category Number  Enum"""
+        Employee = 1
+        Interview = 2
+        Vendor = 3
+        Guest = 4
+        Client = 5
+        Visitor = 6
+        NewHires = 7
+
     card_number = models.CharField(gettext_lazy("card number"), max_length=50)
     is_allocated = models.BooleanField(gettext_lazy("is allocated"), default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,

@@ -83,7 +83,6 @@ class VisitorDetailSerializer(serializers.ModelSerializer):
     national_id = Base64ImageField(label=gettext_lazy("national_id"), required=False)
 
     def create(self, validated_data):
-        breakpoint()
         t = Timing.objects.filter(
             approval__visitor__email=validated_data['email']).last()
         if not t:  # new user
