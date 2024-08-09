@@ -38,7 +38,6 @@ const Login = () => {
   };
 
   const clearWaitingQueue = () => {
-    // Easy, right 😎
     toast.clearWaitingQueue();
   };
   const handleLogin = async (event) => {
@@ -46,6 +45,7 @@ const Login = () => {
     try {
       const response = await Axios.post(API.V1.ACCOUNT_LOGIN, loginPayload);
       if (response.status === 400) {
+        console.log('printed', response.data)
         toast.error("Invalid Credentials", {
           position: "top-right",
           autoClose: 5000,
@@ -59,13 +59,10 @@ const Login = () => {
         });
       }
       const AccessToken = response.data.token;
-      console.log(response.data.address_id,'this is response data-->');
       const addressId= await response.data.address_id;
-      console.log(AccessToken,addressId, "this is access token--->");
       if (response.status === 201) {
         dispatch(setLoggedIn({ isLoggedIn: true}));
         dispatch(setAdminUserId({ adminUserId: addressId}))
-        console.log("this is successfully logged in");
         localStorage.setItem(LOCAL_STORAGE_KEY, AccessToken);
         navigate(Browser.HOME);
       }

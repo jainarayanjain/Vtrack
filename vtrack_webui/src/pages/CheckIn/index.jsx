@@ -40,10 +40,15 @@ const CheckIn = () => {
     }
   };
 
+  const clearWaitingQueue = () => {
+    toast.clearWaitingQueue();
+  };
+
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
-
   };
+
+
   const Email_Payload = {
     email,
   };
@@ -54,14 +59,13 @@ const CheckIn = () => {
   const handleSendOtp = async () => {
     try {
       const response = await Axios.post(API.V1.VISITOR_DETAILS, Email_Payload);
-      const data = response.data;
-      if (response.status === 401) {
+      if (response.status === 400) {
         toast.error("something went wrong while sending OTP");
       }
       const AccessToken = response.data.token;
       if (response.status === 201) {
         const payload = {
-          visitorId: data.id,
+          visitorId: response.data.id,
         };
         toast.success("OTP sent successfully! check your mail");
         setResponseReceived(true);
@@ -74,7 +78,11 @@ const CheckIn = () => {
         dispatch(setVisitorType(payload));
       }
     } catch (error) {
+      toast.error("User is Already Inside")
       console.log(error, "something went wrong while logging in");
+    }
+    finally {
+      clearWaitingQueue();
     }
   };
 

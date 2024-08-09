@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { CancelButton, Loader, NextButton } from "../../../components";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setAccessCardId, setHostDetails, setVisitorType } from "../../../features/VisitorSlice";
+import { setAccessCardId, setApprovalId, setHostDetails, setVisitorType } from "../../../features/VisitorSlice";
 import { setLoggedIn } from "../../../features/authSlice";
 
 const HostDetailsForm = () => {
@@ -21,6 +21,7 @@ const HostDetailsForm = () => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
   const visitorData = useAppSelector((state) => state.visitor);
+  console.log(visitorData,'this is visitordata--->')
   const [isLoading, setIsLoading] = useState(false);
   console.log(visitorData, "this is visitor Data-->");
   console.log(userData, "this is userData--->");
@@ -97,14 +98,14 @@ const HostDetailsForm = () => {
         dispatch(setHostDetails({ hostName: formData.name }));
         const approvalPayload = {
           access_card: visitorData?.AccessCardId,
-          category: visitorData?.CategoryId,
+          purpose_of_visit: visitorData?.CategoryId,
           visitor: userData.userId,
           host: data.id,
         };
 
         const responseApproval = await Axios.post(API.V1.VISITOR_APPROVALS, approvalPayload);
         if (responseApproval.status === 201) {
-          dispatch(setAccessCardId({ approvalId: response.data.id }));
+          dispatch(setApprovalId({ approvalId: response.data.id }));
           dispatch(setLoggedIn({ isApproved: true }));
 
           const currentDate = new Date();

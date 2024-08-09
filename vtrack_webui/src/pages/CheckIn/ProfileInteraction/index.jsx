@@ -206,14 +206,6 @@ const PageInteraction = () => {
             </button>
           </>
         )}
-        {/* {isPhotoCaptured && (
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mt-2"
-            onClick={handlePhotoSave}
-          >
-            Save Photo
-          </button>
-        )} */}
       </>
     </div>
 

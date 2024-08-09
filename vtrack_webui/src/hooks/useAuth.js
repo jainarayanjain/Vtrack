@@ -8,7 +8,6 @@ import { resetState } from "../features/resetSlice";
 export default function useAuth() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn); // Replace with your actual selector
 
   const logout = () => {
     dispatch(resetState());

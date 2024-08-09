@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useAccessCard, useAppDispatch, useAppSelector, useCategory } from "../../../hooks";
-import { AccessCardSelect, CancelButton, CategoryDropdown } from "../../../components";
-import { setAccessCardId } from "../../../features/VisitorSlice";
+import {
+  useAccessCard,
+  useAppDispatch,
+  useAppSelector,
+  useCategory,
+} from "../../../hooks";
+import {
+  AccessCardSelect,
+  CancelButton,
+  CategoryDropdown,
+} from "../../../components";
+import { setAccessCardId, setCategoryId } from "../../../features/VisitorSlice";
 import Axios from "../../../services/axios";
 import { API, Browser } from "../../../constants";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +25,6 @@ const ServiceProvider = () => {
     purposeOfVisit: "",
     meetingPerson: "",
     tempAccessCard: "",
-
   });
 
   const [errors, setErrors] = useState({});
@@ -33,12 +41,11 @@ const ServiceProvider = () => {
     Category.getCatergory();
     Access.getAccessCard();
   }, []);
- 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (e.target.name === "purposeOfVisit") {
-      dispatch(setAccessCardId({ categoryId: e.target.value }));
+      dispatch(setCategoryId({ categoryId: e.target.value }));
     }
 
     // Clear validation errors only if the user is typing
@@ -99,17 +106,13 @@ const ServiceProvider = () => {
     if (!formData.meetingPerson.trim()) {
       newErrors.meetingPerson = "Meeting Person is required";
     }
-    if (!formData.tempAccessCard.trim() || !/^\d{3}$/.test(formData.tempAccessCard.trim())) {
+    if (
+      !formData.tempAccessCard.trim() ||
+      !/^\d{3}$/.test(formData.tempAccessCard.trim())
+    ) {
       newErrors.tempAccessCard = "Temp Access Card must be 6 digits";
     }
 
-
-    // If there are errors, update the state and prevent form submission
-    // if (Object.keys(newErrors).length > 0) {
-    //   setErrors(newErrors);
-    //   setSubmitted(true);
-    //   return;
-    // }
 
     // If no errors, proceed to create a payload for the API
     const payload = {
@@ -120,24 +123,28 @@ const ServiceProvider = () => {
       purposeOfVisit: formData.purposeOfVisit,
       meetingPerson: formData.meetingPerson,
       access_card: formData.tempAccessCard,
-
     };
     try {
-      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
+      const response = await Axios.patch(
+        `${API.V1.VISITOR_DETAILS}${userData.userId}/`,
+        payload
+      );
       if (response.status === 401) {
         console.log(response.data, "something went strongly wrong");
       }
       const AccessToken = response.data.token;
       if (response.status === 200) {
-        // dispatch(setVisitorType({ visitorName: payload.firstName + "" + payload.lastName }));
-        dispatch(setVisitorType({ visitorName: payload.name, visitorType: visitorTypeData.visitorData.visitorType }));
+        dispatch(
+          setVisitorType({
+            visitorName: payload.name,
+            visitorType: visitorTypeData.visitorData.visitorType,
+          })
+        );
+        dispatch(setAccessCardId({ accessCardId: formData.tempAccessCard }));
+
 
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
-      // setUser(await response.data);
-      // await dispatch(fetchUser());
-      // navigate("/");
-      // setIsLoggedIn(true);
     } catch (error) {
       console.log(error, "something went wrong while logging in");
     }
@@ -157,7 +164,11 @@ const ServiceProvider = () => {
       <div className="form-shadow p-10 rounded-2xl">
         <div className=" flex flex-row justify-between gap-28">
           <h1 className="text-2xl font-bold mb-4">Service Provider Form</h1>
-          <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
+          <img
+            src="../images/innova.png"
+            alt="Company Logo"
+            className="h-7  w-auto"
+          />
         </div>
         <div className=" flex flex-col md:flex-col gap-4">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -168,9 +179,13 @@ const ServiceProvider = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.firstName ? "border-red-500" : ""}`}
+                className={`border rounded-md p-2 ${
+                  errors.firstName ? "border-red-500" : ""
+                }`}
               />
-              {errors.firstName && <p className="text-red-500">{errors.firstName}</p>}
+              {errors.firstName && (
+                <p className="text-red-500">{errors.firstName}</p>
+              )}
             </div>
 
             <div className="flex flex-col mb-2 md:w-1/2">
@@ -180,9 +195,13 @@ const ServiceProvider = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.lastName ? "border-red-500" : ""}`}
+                className={`border rounded-md p-2 ${
+                  errors.lastName ? "border-red-500" : ""
+                }`}
               />
-              {errors.lastName && <p className="text-red-500">{errors.lastName}</p>}
+              {errors.lastName && (
+                <p className="text-red-500">{errors.lastName}</p>
+              )}
             </div>
           </div>
           <div className="relative z-0 w-full mb-2 group flex flex-col">
@@ -192,9 +211,13 @@ const ServiceProvider = () => {
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
-              className={`border rounded-md p-2 ${errors.phoneNumber ? "border-red-500" : ""}`}
+              className={`border rounded-md p-2 ${
+                errors.phoneNumber ? "border-red-500" : ""
+              }`}
             />
-            {submitted && errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
+            {submitted && errors.phoneNumber && (
+              <p className="text-red-500">{errors.phoneNumber}</p>
+            )}
           </div>
           {/* <div className="relative z-0 w-full mb-2 group flex flex-col">
             <label className="text-gray-700">Company Name:*</label>
@@ -211,9 +234,16 @@ const ServiceProvider = () => {
             value={formData.tempAccessCard}
             onChange={handleChange}
             options={Access?.access || []}
-            error={submitted && errors.tempAccessCard ? errors.tempAccessCard : ""}
+            error={
+              submitted && errors.tempAccessCard ? errors.tempAccessCard : ""
+            }
           />
-          <CategoryDropdown formData={formData} errors={errors} handleChange={handleChange} submitted={submitted} />
+          <CategoryDropdown
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            submitted={submitted}
+          />
         </div>
 
         <button

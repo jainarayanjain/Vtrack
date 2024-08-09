@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/main.css";
-import { useAccessCard, useAppDispatch, useCategory, useRecordSubmit } from "../../../hooks";
+import {
+  useAccessCard,
+  useAppDispatch,
+  useCategory,
+  useRecordSubmit,
+} from "../../../hooks";
 import { useAuth } from "../../../hooks";
-import { AccessCardSelect, CancelButton, CategoryDropdown, NextButton } from "../../../components";
+import {
+  AccessCardSelect,
+  CancelButton,
+  CategoryDropdown,
+  NextButton,
+} from "../../../components";
 import { useSelector } from "react-redux";
 import { API, Browser } from "../../../constants";
-import { setAccessCardId } from "../../../features/VisitorSlice";
+import { setAccessCardId, setCategoryId } from "../../../features/VisitorSlice";
 import Axios from "../../../services/axios";
 import { toast } from "react-toastify";
 import { setVisitorType } from "../../../features/VisitorSlice";
@@ -38,7 +48,7 @@ const AppointmentForm = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (e.target.name === "purposeOfVisit") {
-      dispatch(setAccessCardId({ categoryId: e.target.value }));
+      dispatch(setCategoryId({ categoryId: e.target.value }));
     }
     setErrors({ ...errors, [e.target.name]: "" });
   };
@@ -88,29 +98,29 @@ const AppointmentForm = () => {
     };
 
     try {
-      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, payload);
+      const response = await Axios.patch(
+        `${API.V1.VISITOR_DETAILS}${userData.userId}/`,
+        payload
+      );
       if (response.status === 401) {
         toast.error("something went wrong.");
       }
       if (response.status === 200) {
-        dispatch(setVisitorType({ visitorName: payload.name, visitorType: visitorTypeData.visitorData.visitorType }));
+        dispatch(
+          setVisitorType({
+            visitorName: payload.name,
+            visitorType: visitorTypeData.visitorData.visitorType,
+          })
+        );
+        dispatch(setAccessCardId({ accessCardId: formData.tempAccessCard }));
+
         navigate(Browser.HOSTDETAIL); // Adjust the path accordingly
       }
-      // setUser(await response.data);
-      // await dispatch(fetchUser());
-      // navigate("/");
-      // setIsLoggedIn(true);
     } catch (error) {
       console.log(error, "something went wrong while logging in");
     }
 
-    if (payload != null) {
-      VisitorRecord.submitRecord(payload);
-
-      // navigate(Browser.HOSTDETAIL);
-    }
-    // Now you can use the 'payload' to send data to your API
-    console.log("API Payload:", payload);
+    
   };
 
   return (
@@ -118,7 +128,11 @@ const AppointmentForm = () => {
       <div className="form-shadow p-10 rounded-2xl">
         <div className="flex flex-row justify-between gap-28">
           <h1 className="text-2xl font-bold mb-6">Visitor Details Form</h1>
-          <img src="../images/innova.png" alt="Company Logo" className="h-7  w-auto" />
+          <img
+            src="../images/innova.png"
+            alt="Company Logo"
+            className="h-7  w-auto"
+          />
         </div>
         <form className="max-w-md mx-auto rounded-2xl" onSubmit={handleSubmit}>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -129,9 +143,13 @@ const AppointmentForm = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.firstName ? "border-red-500" : ""}`}
+                className={`border rounded-md p-2 ${
+                  errors.firstName ? "border-red-500" : ""
+                }`}
               />
-              {errors.firstName && <p className="text-red-500">{errors.firstName}</p>}
+              {errors.firstName && (
+                <p className="text-red-500">{errors.firstName}</p>
+              )}
             </div>
 
             <div className="flex flex-col mb-4 md:w-1/2">
@@ -141,9 +159,13 @@ const AppointmentForm = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.lastName ? "border-red-500" : ""}`}
+                className={`border rounded-md p-2 ${
+                  errors.lastName ? "border-red-500" : ""
+                }`}
               />
-              {errors.lastName && <p className="text-red-500">{errors.lastName}</p>}
+              {errors.lastName && (
+                <p className="text-red-500">{errors.lastName}</p>
+              )}
             </div>
           </div>
 
@@ -154,9 +176,13 @@ const AppointmentForm = () => {
               name="phoneNo"
               value={formData.phoneNo}
               onChange={handleChange}
-              className={`border rounded-md p-2 ${errors.phoneNo ? "border-red-500" : ""}`}
+              className={`border rounded-md p-2 ${
+                errors.phoneNo ? "border-red-500" : ""
+              }`}
             />
-            {submitted && errors.phoneNo && <p className="text-red-500">{errors.phoneNo}</p>}
+            {submitted && errors.phoneNo && (
+              <p className="text-red-500">{errors.phoneNo}</p>
+            )}
           </div>
 
           {/* <div className="relative flex flex-col z-0 w-full mb-5 group">
@@ -175,10 +201,17 @@ const AppointmentForm = () => {
             value={formData.tempAccessCard}
             onChange={handleChange}
             options={Access?.access || []}
-            error={submitted && errors.tempAccessCard ? errors.tempAccessCard : ""}
+            error={
+              submitted && errors.tempAccessCard ? errors.tempAccessCard : ""
+            }
           />
 
-          <CategoryDropdown formData={formData} errors={errors} handleChange={handleChange} submitted={submitted} />
+          <CategoryDropdown
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            submitted={submitted}
+          />
 
           <button
             type="submit"

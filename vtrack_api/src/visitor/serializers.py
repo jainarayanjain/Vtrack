@@ -88,7 +88,7 @@ class VisitorDetailSerializer(serializers.ModelSerializer):
         if not t:  # new user
             return super().create(validated_data)
         elif t.check_out is None:  # user is already in
-            raise ValidationError("user is already inside")
+            raise serializers.ValidationError("user is already inside")
         else:  # same user coming again
             return super().create(validated_data)
 

@@ -5,6 +5,7 @@ const initialState = {
     visitorType: null,
     visitorId: null,
     visitorName:null,
+    purposeOfVisit:null
   },
   AccessCardId: null,
   CategoryId: null,
@@ -23,12 +24,18 @@ const VisitorSlice = createSlice(
         state.visitorData.visitorType = action.payload.visitorType;
         state.visitorData.visitorId = action.payload.visitorId;
         state.visitorData.visitorName = action.payload.visitorName;
+        state.visitorData.purposeOfVisit = action.payload.purposeOfVisitId;
       },
       setAccessCardId: (state, action) => {
         state.AccessCardId = action.payload.accessCardId;
+      },
+      setCategoryId: (state, action) => {
         state.CategoryId = action.payload.categoryId;
+      },
+      setApprovalId: (state, action) => {
         state.ApprovalId = action.payload.approvalId;
       },
+      
       setHostDetails: (state, action) => {
         state.HostData.hostName = action.payload.hostName;
       },
@@ -37,5 +44,5 @@ const VisitorSlice = createSlice(
   },
 );
 
-export const { setVisitorType, ressetVisitorType, setAccessCardId,setHostDetails } = VisitorSlice.actions;
+export const { setVisitorType, ressetVisitorType, setAccessCardId, setApprovalId, setCategoryId,setHostDetails } = VisitorSlice.actions;
 export default VisitorSlice.reducer;

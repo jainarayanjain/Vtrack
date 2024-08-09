@@ -86,7 +86,6 @@ const EmployeeForm = () => {
       console.log(error, "something went wrong while logging in");
     }
 
-    console.log("API Payload:", payload);
   };
 
   return (
