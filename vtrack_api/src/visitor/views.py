@@ -120,12 +120,12 @@ class CheckoutViewSet(generics.ListAPIView):
     serializer_class = TimingSerializer
 
     def get(self, request, *args, **kwargs):
-        instance = Timing.objects.filter(approval__visitor__phone=self.request.query_params['phone']).last()
+        instance = Timing.objects.filter(approval__visitor__email=self.request.query_params['email']).last()
         if instance.approval.access_card is not None:
             access_card_instance = instance.approval.access_card
             access_card_instance.is_allocated = False
             access_card_instance.save()  # for making the access card available again
-        Valid.objects.get(visitor__phone=self.request.query_params['phone']).delete()
+        Valid.objects.get(visitor__email=self.request.query_params['email']).delete()
         instance.check_out = timezone.now()
         instance.save()
         return self.list(request, *args, **kwargs)

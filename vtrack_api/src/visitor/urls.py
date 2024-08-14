@@ -31,7 +31,6 @@ router.register(r"purpose-of-visits", PurposeOfVisitViewSet,
                 basename="purpose-of-visit")
 
 urlpatterns = [
-    path("check-out/", CheckoutViewSet.as_view(), name="check-out"),
-    # path("host-approval/<int:pk>/", HostApprovalViewSet.as_view(), name="host-approval")
+    path("check-out/", CheckoutViewSet.as_view(), name="check-out")
 ]
 urlpatterns += router.urls

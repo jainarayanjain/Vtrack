@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "django_filters",
     "guardian",
+    "import_export",
     # Custom Apps
     "config",
     "user",

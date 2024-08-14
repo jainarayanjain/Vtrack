@@ -1,5 +1,6 @@
 from django.contrib import admin
 from guardian.admin import GuardedModelAdmin
+from import_export.admin import ImportExportMixin
 
 from visitor.models import AccessCard, Approval, Category, Host, NIDType, \
     PurposeOfVisit, Timing, VisitorDetail, Valid
@@ -15,8 +16,10 @@ admin.site.register(Valid, GuardedModelAdmin)
 admin.site.register(VisitorDetail, GuardedModelAdmin)
 
 
-class AccessCardModelAdmin(admin.ModelAdmin):
-    """Access Card Model Admin : for removing extra category"""
+class AccessCardModelAdmin(ImportExportMixin, admin.ModelAdmin):
+    """
+    Subclass of ModelAdmin with import/export functionality.
+    """
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super(AccessCardModelAdmin, self).get_form(request, obj, **kwargs)
