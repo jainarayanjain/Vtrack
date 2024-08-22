@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { NextButton, StepProgressBar } from "../../components";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import { toast } from "react-toastify";
+import useWarnIfUnsavedChanges from "../../hooks/useWarnIfUnsavedChanges";
 
 const CheckIn = () => {
   const [email, setEmail] = useState("");
@@ -21,15 +22,17 @@ const CheckIn = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [countdown, setCountdown] = useState(20); // Initial countdown time in seconds
   const [responseReceived, setResponseReceived] = useState(false);
-
+  const [isFormDirty, setIsFormDirty] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
   const visitorTypeData = useSelector((state) => state.visitor);
+  const handleUserNavigation = useWarnIfUnsavedChanges(isFormDirty, API.V1.ACCESS_CARD);
 
   const handleEmailChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
     setEmail(input);
+    setIsFormDirty(true);
 
     // Simple email validation (replace with a more robust solution if needed)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -46,8 +49,8 @@ const CheckIn = () => {
 
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
+    setIsFormDirty(true);
   };
-
 
   const Email_Payload = {
     email,
@@ -78,19 +81,16 @@ const CheckIn = () => {
         dispatch(setVisitorType(payload));
       }
     } catch (error) {
-      toast.error("User is Already Inside")
+      toast.error("User is Already Inside");
       console.log(error, "something went wrong while logging in");
-    }
-    finally {
+    } finally {
       clearWaitingQueue();
     }
   };
 
   const handleCheckIn = () => {
-  
     Axios.patch(`${API.V1.VISITOR_VALIDS}${visitorTypeData.visitorData.visitorId}/`, OTP_Payload)
-      .then(response => {
-  
+      .then((response) => {
         if (response.status === 400) {
           toast.error("Validation failed. Please fix errors");
         } else if (response.status === 200) {
@@ -98,12 +98,11 @@ const CheckIn = () => {
           navigate("/checkin/photo-interaction");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         toast.error("Invalid OTP");
         console.error("Error in Axios request:", error);
       });
   };
-  
 
   useEffect(() => {
     let timer;

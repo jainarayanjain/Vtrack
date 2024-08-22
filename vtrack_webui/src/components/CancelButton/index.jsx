@@ -4,13 +4,15 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Browser } from "../../constants";
 
-
-const CancelButton = () => {
-  const navigate=useNavigate();
+const CancelButton = (props) => {
+  const navigate = useNavigate();
   const Auth = useAuth();
   const handleCancel = () => {
-    navigate(Browser.HOME)
+    navigate(Browser.HOME);
     Auth.logout();
+    if (props.handleUserNavigation) {
+      handleUserNavigation();
+    }
   };
 
   return (

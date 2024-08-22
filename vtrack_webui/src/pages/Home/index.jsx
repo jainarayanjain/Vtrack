@@ -17,8 +17,8 @@ const Home = () => {
           </h1>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-5">
-          <a href="/checkout" className="flex flex-col items-center space-x-2">
-            <div className="bg-[#20b2aa] hover:bg-[#49aea9] border  p-4 flex items-center  rounded-xl ">
+          <a href="/checkout" className="flex flex-col items-center space-x-2 min-w-64">
+            <div className="bg-[#20b2aa] hover:bg-[#49aea9] border  p-4 flex items-center  rounded-xl w-full ">
               <div className="border-white  p-3 text-white">
                 <i className="font-size">
                   <HiOutlineLogin />
@@ -31,8 +31,8 @@ const Home = () => {
               </div>
             </div>
           </a>
-          <a href="/checkin" className="flex flex-col items-center space-x-2">
-            <div className="bg-[#3E8EDE]  hover:bg-[#45a0fb] border rounded-xl p-4 flex items-center">
+          <a href="/checkin" className="flex flex-col items-center space-x-2 min-w-64">
+            <div className="bg-[#3E8EDE]  hover:bg-[#45a0fb] border rounded-xl p-4 flex items-center w-full">
               <div className="border-white  p-3 text-white ">
                 <i className="font-size">
                   <HiOutlineLogout />

@@ -117,7 +117,7 @@ const HostDetailsForm = () => {
           };
           const responseTiming = await Axios.post(API.V1.TIMING_DETAILS, timingPayload);
           if (responseTiming.status === 201) {
-            navigate(Browser.IDCARD);
+            navigate(Browser.THANKYOU);
           }
         }
       }

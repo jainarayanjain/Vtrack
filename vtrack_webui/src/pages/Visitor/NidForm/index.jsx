@@ -1,5 +1,3 @@
-// src/components/NidForm.js
-
 import React, { useState, useRef, useEffect } from "react";
 import { useAppDispatch, useAppSelector, useNidtypes } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +6,7 @@ import { API } from "../../../constants";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import { NextButton } from "../../../components";
 import { FiRepeat } from "react-icons/fi";
-
+import useWarnIfUnsavedChanges from "../../../hooks/useWarnIfUnsavedChanges";
 
 const NidForm = () => {
   const [nidType, setNIDType] = useState("");
@@ -16,36 +14,30 @@ const NidForm = () => {
   const [nidImageRaw, setNidImageRaw] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
 
   const videoRef = useRef();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const nidTypes = useNidtypes();
-  const userData=useAppSelector(state=>state.auth);
+  const userData = useAppSelector((state) => state.auth);
+  const handleUserNavigation = useWarnIfUnsavedChanges(isFormDirty, API.V1.ACCESS_CARD);
+
 
   useEffect(() => {
     nidTypes.getNidtypes();
   }, []);
 
-  const formData = new FormData();
-
-  const handleBase64InputChange = (base64String) => {
-    // Convert Base64 to binary
-    const binaryString = decodeURIComponent(base64String);
-    // Create an array buffer from the binary string
-    const arrayBuffer = new ArrayBuffer(binaryString.length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < binaryString.length; i++) {
-      uint8Array[i] = binaryString.charCodeAt(i);
+  // Ensure form is marked dirty when the user selects an NID type or uploads/captures an image
+  useEffect(() => {
+    if (nidType || nidImage) {
+      setIsFormDirty(true);
     }
+  }, [nidType, nidImage]);
 
-    // Create a Blob from the array buffer
-    const newBlob = new Blob([arrayBuffer], { type: "image/jpeg" });
-    // Update state with the new Blob object
-    // setNidImageBlob(newBlob);
-    return newBlob;
-    // setProfilePhoto(newBlob);
-  };
+  useEffect(() => {
+    console.log("Form Dirty State:", isFormDirty);
+  }, [isFormDirty]);
 
   const startCamera = async () => {
     try {
@@ -58,6 +50,7 @@ const NidForm = () => {
       console.error("Error accessing camera:", error);
     }
   };
+
   function removeImageDataPrefix(encodedString) {
     if (encodedString.startsWith("data:image/png;base64,")) {
       return encodedString.slice("data:image/png;base64,".length);
@@ -75,15 +68,12 @@ const NidForm = () => {
       canvas.height = video.videoHeight;
       canvas.getContext("2d").drawImage(video, 0, 0);
 
-      // Convert the canvas content to base64 data URL
-      formData.append("national_id", canvas);
       const dataURL = canvas.toDataURL("image/png");
       setNidImage(dataURL);
       const nationalId_raw = removeImageDataPrefix(dataURL);
-      const blobImage = handleBase64InputChange(dataURL);
       setNidImageRaw(nationalId_raw);
+      setIsFormDirty(true);
 
-      // Stop the camera stream
       const stream = video.srcObject;
       const tracks = stream.getTracks();
       tracks.forEach((track) => track.stop());
@@ -107,33 +97,26 @@ const NidForm = () => {
     setShowCamera(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/visitor");
 
+    const formData = new FormData();
     formData.append("nid_type", nidType);
     formData.append("national_id", nidImageRaw);
-    // You can handle the form submission logic here
-    const NidData = {
-      nid_type: nidType,
-      national_id: nidImageRaw,
-    };
+
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
+
     try {
-      const response = Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, formData, config);
-      const data = response.data;
-      if (data.status == 200) {
+      const response = await Axios.patch(`${API.V1.VISITOR_DETAILS}${userData.userId}/`, formData, config);
+      if (response.status === 200) {
         navigate("/visitor");
       }
     } catch (e) {
-      console.log("something went wrong", e);
-    }
-    if (nidType != "" && nidImage != null) {
-      navigate("/visitor");
+      console.log("Something went wrong", e);
     }
   };
 
@@ -196,10 +179,10 @@ const NidForm = () => {
             <button
               type="button"
               className=" flex items-center gap-1 justify-center bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded w-full"
-                onClick={handleRetakePhoto}
-              >
-                Retake Photo
-                <FiRepeat/>
+              onClick={handleRetakePhoto}
+            >
+              Retake Photo
+              <FiRepeat />
             </button>
             <NextButton name={"Submit"} icons={<MdOutlineCheckCircleOutline />} type={"submit"} />
           </div>

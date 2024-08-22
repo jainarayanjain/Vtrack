@@ -11,9 +11,8 @@ import {
   NIDForm,
   HostDetailsForm,
   Login,
-  ApprovalPage,
   Myform,
-  IdCard,
+  
 } from "./pages";
 
 // import store from "./store/store";
@@ -24,6 +23,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import ThankYou from "./pages/ThankYou";
+import { Loader } from "./components";
 function App() {
   
   return (
@@ -43,8 +44,7 @@ function App() {
               <Route path={Browser.APPOINTMENTVISITOR} element={<AppointmentForm />}></Route>
               <Route path={Browser.NIDTYPE} element={<NIDForm />}></Route>
               <Route path={Browser.LOGIN} element={<Login />}></Route>
-              <Route path={Browser.APPROVAL} element={<ApprovalPage />}></Route>
-              <Route path={Browser.IDCARD} element={<IdCard />}></Route>
+              <Route path={Browser.THANKYOU} element={<ThankYou />}></Route>
             </Routes>
           </BrowserRouter>
           <ToastContainer limit={1} />

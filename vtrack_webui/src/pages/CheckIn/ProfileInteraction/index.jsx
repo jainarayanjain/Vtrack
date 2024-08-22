@@ -1,17 +1,13 @@
-// pageInteraction.js
-
 import React, { useState, useRef, useEffect } from "react";
-
 import SignatureCanvas from "react-signature-canvas";
 import { GrLinkNext } from "react-icons/gr";
-
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { setUserData } from "../../../features/userMediaSlice";
 import { API, Browser } from "../../../constants";
 import { CancelButton } from "../../../components";
-
 import { useNavigate } from "react-router-dom";
 import Axios from "../../../services/axios";
+import useWarnIfUnsavedChanges from "../../../hooks/useWarnIfUnsavedChanges";
 
 const PageInteraction = () => {
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -20,14 +16,28 @@ const PageInteraction = () => {
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
   const [ProfilePhotoRaw, setProfilePhotoRaw] = useState(null);
   const [signatureBlob, setSignatureBlob] = useState(null);
-
+  const [isFormDirty, setIsFormDirty] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
 
+  // Ensure the custom hook is aware of isFormDirty state
+  const handleUserNavigation = useWarnIfUnsavedChanges(isFormDirty, API.V1.ACCESS_CARD);
+
   const videoRef = useRef(null);
   const signatureRef = useRef(null);
+
+  useEffect(() => {
+    // Mark form as dirty if there is existing profile photo or signature
+    if (profilePhoto || signature) {
+      console.log("this is being called--->", isFormDirty);
+      setIsFormDirty(true);
+    }
+    if (userData.userPhoto || userData.userSignature) {
+      setIsFormDirty(true);
+    }
+  }, [profilePhoto, signature]);
 
   const startCamera = async () => {
     try {
@@ -56,10 +66,11 @@ const PageInteraction = () => {
       return encodedString;
     }
   }
+
   const handleCapturePhoto = async () => {
     const canvas = document.createElement("canvas");
     const video = videoRef.current;
-
+    setIsFormDirty(true);
     if (video) {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
@@ -69,7 +80,6 @@ const PageInteraction = () => {
 
       // Convert the canvas content to base64 data URL
       const dataURL = canvas.toDataURL("image/png");
-      // const profilePhotoBlob = handleBase64InputChange(dataURL);
       setProfilePhoto(dataURL);
       const removeDataURL = removeImageDataPrefix(dataURL);
       setProfilePhotoRaw(removeDataURL);
@@ -84,13 +94,6 @@ const PageInteraction = () => {
       setIsPhotoCaptured(true);
     }
   };
-  const handleRetakePhoto = () => {
-    setIsPhotoCaptured(false);
-    setProfilePhoto(null); // Reset profilePhoto to null
-
-    startCamera();
-    setShowCaptureButton(true);
-  };
 
   const handleSignatureClear = () => {
     signatureRef.current.clear();
@@ -98,7 +101,6 @@ const PageInteraction = () => {
   };
 
   const handleBase64InputChange = (base64String) => {
-
     // Convert Base64 to binary
     const binaryString = decodeURIComponent(base64String);
 
@@ -111,13 +113,11 @@ const PageInteraction = () => {
 
     // Create a Blob from the array buffer
     const newBlob = new Blob([arrayBuffer], { type: "image/jpeg" });
-    // Update state with the new Blob object
     return newBlob;
-    // setProfilePhoto(newBlob);
   };
 
   const handleSignatureSave = () => {
-    // formData.append("signature", signature ? handleBase64InputChange(signature) : null);
+    setIsFormDirty(true);
     const dataURL = signatureRef.current.toDataURL();
     const blobSignature = handleBase64InputChange(dataURL);
     const removeDataURL = removeImageDataPrefix(dataURL);
@@ -130,18 +130,13 @@ const PageInteraction = () => {
     handleSignatureSave();
   };
 
-  // submit the form function.
   const handleMedia = async () => {
     try {
       const formData = new FormData();
       formData.append("photo", ProfilePhotoRaw);
       formData.append("signature", signature);
 
-      dispatch(setUserData({profilePhoto:profilePhoto, signature:signature}))
-      // Convert FormData entries to an array and print
-      const formDataArray = Array.from(formData.entries());
-
-      // Use FormData directly in Axios.patch and wait for the response
+      dispatch(setUserData({ profilePhoto, signature }));
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -157,102 +152,93 @@ const PageInteraction = () => {
     }
   };
 
-  const dummyImage = "/images/profile-photo.png";
-
   return (
     <div className="flex flex-col items-center p-10 rounded-2xl form-shadow justify-center overflow-x-hidden h-svh">
-  <div className="flex flex-col form-shadow justify-center items-center p-8 rounded-2xl max-w-screen-md gap-x-5 mx-auto w-full">
-    <div>
-      <img src="./images/vtrack-login" alt="" />
-    </div>
-
-    <div className="flex flex-row justify-between w-full">
-      <h1 className="text-2xl font-bold mb-4">Employee Check-In</h1>
-      <img src="../images/innova.png" alt="Company Logo" className="h-7 w-auto" />
-    </div>
-
-    <div className="flex object-cover items-center rounded-full h-52 w-52 overflow-hidden justify-center">
-      {profilePhoto ? (
-        <img src={profilePhoto} alt="Profile" className="object-cover w-full h-full" />
-      ) : (
+      <div className="flex flex-col form-shadow justify-center items-center p-8 rounded-2xl max-w-screen-md gap-x-5 mx-auto w-full">
         <div>
-          {!showCaptureButton && (
-            <img src="/images/profile-photo.png" alt="Dummy Profile" className="object-cover w-52 h-52" />
-          )}
-          {showCaptureButton && (
-            <video ref={videoRef} className="rounded-full w-52 h-52 object-cover" autoPlay={true} />
+          <img src="./images/vtrack-login" alt="" />
+        </div>
+
+        <div className="flex flex-row justify-between w-full">
+          <h1 className="text-2xl font-bold mb-4">Employee Check-In</h1>
+          <img src="../images/innova.png" alt="Company Logo" className="h-7 w-auto" />
+        </div>
+
+        <div className="flex object-cover items-center rounded-full h-52 w-52 overflow-hidden justify-center">
+          {profilePhoto ? (
+            <img src={profilePhoto} alt="Profile" className="object-cover w-full h-full" />
+          ) : (
+            <div>
+              {!showCaptureButton && (
+                <img src="/images/profile-photo.png" alt="Dummy Profile" className="object-cover w-52 h-52" />
+              )}
+              {showCaptureButton && (
+                <video ref={videoRef} className="rounded-full w-52 h-52 object-cover" autoPlay={true} />
+              )}
+            </div>
           )}
         </div>
-      )}
-    </div>
 
-    <div className="flex gap-3 justify-center">
-      <>
-        {showCaptureButton && (
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded form-shadow left-0 mt-2 ml-2 z-10"
-            onClick={handleCapturePhoto}
-          >
-            Capture Photo
-          </button>
-        )}
-        {!showCaptureButton && (
+        <div className="flex gap-3 justify-center">
           <>
-            <button
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded bottom-0 z-10 mt-2"
-              onClick={handleProfilePhotoClick}
-            >
-              {!isPhotoCaptured ? "Click for Profile Photo" : "retake photo"}
-            </button>
+            {showCaptureButton && (
+              <button
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded form-shadow left-0 mt-2 ml-2 z-10"
+                onClick={handleCapturePhoto}
+              >
+                Capture Photo
+              </button>
+            )}
+            {!showCaptureButton && (
+              <>
+                <button
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded bottom-0 z-10 mt-2"
+                  onClick={handleProfilePhotoClick}
+                >
+                  {!isPhotoCaptured ? "Click for Profile Photo" : "Retake Photo"}
+                </button>
+              </>
+            )}
           </>
+        </div>
+
+        <div className="mb-8">
+          <label className="block text-xl font-medium text-gray-700 mb-2">Signature</label>
+          <SignatureCanvas
+            ref={signatureRef}
+            canvasProps={{ className: "border rounded", width: "400%", height: "160%" }}
+            onEnd={handleSignatureEnd}
+          />
+        </div>
+
+        {signature && (
+          <div className="mb-2">
+            <button
+              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold form-shadow py-2 px-4 rounded"
+              onClick={handleSignatureClear}
+            >
+              Clear Signature
+            </button>
+          </div>
         )}
-      </>
-    </div>
 
-    <div className="mb-8">
-      <label className="block text-xl font-medium text-gray-700 mb-2">Signature</label>
-      <SignatureCanvas
-        ref={signatureRef}
-        canvasProps={{ className: "border rounded", width: "400%", height: "160%" }}
-        onEnd={handleSignatureEnd}
-      />
-    </div>
-
-    {signature && (
-      <div className="mb-2">
-        <button
-          className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold form-shadow py-2 px-4 rounded"
-          onClick={handleSignatureClear}
-        >
-          Clear Signature
-        </button>
-        {/* <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
-          onClick={handleSignatureSave}
-        >
-          Save Signature
-        </button> */}
+        <div className="flex w-full gap-x-5">
+          <CancelButton handleUserNavigation={handleUserNavigation} />
+          <button
+            className={`bg-green-500 ${
+              profilePhoto != null && signature != null ? "hover:bg-green-700 bg-green-600 cursor-pointer" : ""
+            } text-white font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-1`}
+            onClick={handleMedia}
+            disabled={profilePhoto == null || signature == null}
+          >
+            Next
+            <i>
+              <GrLinkNext />
+            </i>
+          </button>
+        </div>
       </div>
-    )}
-
-    <div className="flex w-full gap-x-5">
-      <CancelButton />
-      <button
-        className={`bg-green-500 ${
-          profilePhoto != null && signature != null ? "hover:bg-green-700 bg-green-600 cursor-pointer" : ""
-        } text-white font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-1`}
-        onClick={handleMedia}
-        disabled={profilePhoto == null || signature == null}
-      >
-        Next
-        <i>
-          <GrLinkNext />
-        </i>
-      </button>
     </div>
-  </div>
-</div>
-
   );
 };
 

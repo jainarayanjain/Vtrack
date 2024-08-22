@@ -7,9 +7,10 @@ import Axios from "../../services/axios";
 import { API, Browser } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks";
+import { toast } from "react-toastify";
 
 const Checkout = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Checkout = () => {
   const { logout } = useAuth();
 
   const handleChange = (e) => {
-    setPhoneNumber(e.target.value);
+    setEmail(e.target.value);
     setErrors({}); // Reset errors when the user starts typing
   };
 
@@ -25,10 +26,10 @@ const Checkout = () => {
     e.preventDefault();
     // Basic validation
     const newErrors = {};
-    const phoneRegex = /^[0-9]{10}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!phoneRegex.test(phoneNumber)) {
-      newErrors.phoneNumber = "Invalid phone number";
+    if (!emailRegex.test(email)) {
+      newErrors.email = "Invalid email address";
     }
 
     // If there are errors, update the state and prevent form submission
@@ -38,9 +39,10 @@ const Checkout = () => {
     }
 
     try {
-      const response = await Axios.get(`${API.V1.ACCOUNT_CHECKOUT}?phone=${phoneNumber}`);
+      const response = await Axios.get(`${API.V1.ACCOUNT_CHECKOUT}?email=${email}`);
       const data = response.data;
       if (response.status === 200) {
+        toast.success("User Logged out, Thanks for Visiting!");
         logout();
         navigate(Browser.HOME);
       }
@@ -61,18 +63,17 @@ const Checkout = () => {
           </div>
           <form onSubmit={handleSubmit} className="max-w-md mx-auto rounded-2xl">
             <div className="flex flex-col my-24">
-              <label className="text-gray-700 mb-1">Phone Number*:</label>
+              <label className="text-gray-700 mb-1">Email Address*:</label>
               <input
-                type="tel"
-                name="phoneNumber"
-                value={phoneNumber}
+                type="email"
+                name="email"
+                value={email}
                 onChange={handleChange}
-                className={`border rounded-md p-2 ${errors.phoneNumber ? "border-red-500" : ""}`}
-                placeholder="Enter your phone number"
+                className={`border rounded-md p-2 ${errors.email ? "border-red-500" : ""}`}
+                placeholder="Enter your email address"
               />
-              {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber}</p>}
+              {errors.email && <p className="text-red-500">{errors.email}</p>}
             </div>
-
 
             <div className="flex gap-4">
               <CancelButton />
