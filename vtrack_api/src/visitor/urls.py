@@ -8,12 +8,12 @@ from visitor.views import (
     CategoryViewSet,
     CheckoutViewSet,
     HostViewSet,
-    # HostApprovalViewSet,
     NIDTypeViewSet,
     PurposeOfVisitViewSet,
     TimingViewSet,
     VisitorDetailViewSet,
     ValidViewSet,
+    AuditVisitorView
 )
 
 app_name = VisitorConfig.name
@@ -31,6 +31,7 @@ router.register(r"purpose-of-visits", PurposeOfVisitViewSet,
                 basename="purpose-of-visit")
 
 urlpatterns = [
-    path("check-out/", CheckoutViewSet.as_view(), name="check-out")
+    path("check-out/", CheckoutViewSet.as_view(), name="check-out"),
+    path("report/", AuditVisitorView.as_view(), name="report")
 ]
 urlpatterns += router.urls

@@ -115,3 +115,14 @@ class ValidSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(msg)
         instance.is_valid = True
         return super().update(instance, validated_data)
+
+
+class VisitorSerializer(serializers.Serializer):
+    """Visitor Serializer """
+
+    from_datetime = serializers.DateTimeField(
+        label=gettext_lazy("from datetime"), required=True, write_only=True
+    )
+    to_datetime = serializers.DateTimeField(
+        label=gettext_lazy("to datetime"), required=True, write_only=True
+    )

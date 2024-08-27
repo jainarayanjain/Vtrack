@@ -1,3 +1,4 @@
+from django.db import connection
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
@@ -19,9 +20,10 @@ from visitor.serializers import (
     TimingSerializer,
     VisitorDetailSerializer,
     ValidSerializer,
+    VisitorSerializer,
     PurposeOfVisitSerializer
 )
-
+from visitor.renderes import CSVRenderer
 
 class AccessCardViewSet(viewsets.ModelViewSet):
     """AccessCard View Set"""
@@ -120,7 +122,8 @@ class CheckoutViewSet(generics.ListAPIView):
     serializer_class = TimingSerializer
 
     def get(self, request, *args, **kwargs):
-        instance = Timing.objects.filter(approval__visitor__email=self.request.query_params['email']).last()
+        instance = Timing.objects.filter(
+            approval__visitor__email=self.request.query_params['email']).last()
         if instance.approval.access_card is not None:
             access_card_instance = instance.approval.access_card
             access_card_instance.is_allocated = False
@@ -129,3 +132,48 @@ class CheckoutViewSet(generics.ListAPIView):
         instance.check_out = timezone.now()
         instance.save()
         return self.list(request, *args, **kwargs)
+
+
+class AuditVisitorView(generics.ListAPIView):
+    """Audit Visitor: View"""
+
+    query_serializer = VisitorSerializer
+    serializer_class = VisitorDetailSerializer
+    pagination_class = None
+    renderer_classes = [CSVRenderer]
+
+    def get_queryset(self):
+        # media_root = urljoin(self.request.build_absolute_uri("/"), settings.MEDIA_URL)
+        raw_query = f"""
+        Select vd.name as visitor_name, 
+        phone, 
+        email, 
+        photo,
+        va.id as address_id,
+        vh.name as host_name,
+        vh.email as host_email,
+        vh.phone as host_phone,
+        vt.check_in as check_in,
+        vt.check_out as check_out,
+        vp.name as purpose_of_visit,
+        from visitor_visitordetail vd 
+        inner join visitor_approval va on vd.id = va.visitor_id 
+        inner join visitor_host vh on va.host_id = vh.id
+        inner join visitor_timing vt on vt.approval_id = va.id
+        inner join visitor_purposeofvisit on vp on vt.id = va.purpose_of_visit_id
+        """
+        # serializer = self.query_serializer(data=self.request.query_params)
+        # serializer.is_valid(raise_exception=True)
+        # params = (
+        #     serializer.validated_data["from_datetime"],
+        #     serializer.validated_data["to_datetime"],
+        #     self.request.user.id,
+        # )
+
+        with connection.cursor() as cursor:
+            cursor.execute(raw_query)
+            columns = tuple(desc[0] for desc in cursor.description)
+            queryset = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return queryset
+
+

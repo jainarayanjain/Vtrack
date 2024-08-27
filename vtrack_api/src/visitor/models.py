@@ -169,6 +169,8 @@ class Approval(models.Model):
                                          verbose_name=gettext_lazy(
                                              "purpose_of_visit id"),
                                          blank=True, null=True)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE,
+                                verbose_name=gettext_lazy("address_id"))
     created = models.DateTimeField(gettext_lazy("created"), auto_now_add=True)
     updated = models.DateTimeField(gettext_lazy("updated"), auto_now=True)
 
