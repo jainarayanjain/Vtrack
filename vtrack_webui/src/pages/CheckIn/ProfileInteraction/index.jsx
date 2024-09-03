@@ -25,8 +25,7 @@ const PageInteraction = () => {
 
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth);
-
-  // Ensure the custom hook is aware of isFormDirty state
+  console.log(userData, "this is userData--->photo");
 
   const videoRef = useRef(null);
   const signatureRef = useRef(null);
@@ -246,23 +245,24 @@ const PageInteraction = () => {
       </div>
     )}
 
-        <div className="flex w-full gap-x-5">
-          <CancelButton />
-          <button
-            className={`bg-green-500 ${
-              profilePhoto != null && signature != null ? "hover:bg-green-700 bg-green-600 cursor-pointer" : ""
-            } text-white font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-1`}
-            onClick={handleMedia}
-            disabled={profilePhoto == null || signature == null}
-          >
-            Next
-            <i>
-              <GrLinkNext />
-            </i>
-          </button>
-        </div>
-      </div>
+    <div className="flex w-full gap-x-5">
+      <CancelButton />
+      <button
+        className={`bg-green-500 ${
+          profilePhoto != null && signature != null ? "hover:bg-green-700 bg-green-600 cursor-pointer" : ""
+        } text-white font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-1`}
+        onClick={handleMedia}
+        disabled={profilePhoto == null || signature == null}
+      >
+        Next
+        <i>
+          <GrLinkNext />
+        </i>
+      </button>
     </div>
+  </div>
+</div>
+
   );
 };
 

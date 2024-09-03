@@ -3,9 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoggedIn: false,
   userId: 0,
-  isApproved: null,
-  adminUserId: 0,
-  emailAddress: null,
+  isApproved:null,
+  adminUserId:0,
 };
 
 const userAuthSlice = createSlice({
@@ -18,14 +17,8 @@ const userAuthSlice = createSlice({
       state.adminUserId = action.payload.adminUserId;
       state.isApproved = action.payload.isApproved;
     },
-    setEmailAddress: (state, action) => {
-      state.emailAddress = action.payload.emailAddress;
-    },
-    setAdminUserId: (state, action) => {
-      state.adminUserId = action.payload.adminUserId;
-    },
   },
 });
 
-export const { setEmailAddress, setLoggedIn, setLoggedOut, setAdminUserId } = userAuthSlice.actions;
+export const { setLoggedIn, setLoggedOut } = userAuthSlice.actions;
 export default userAuthSlice.reducer;

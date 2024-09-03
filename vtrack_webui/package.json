@@ -14,7 +14,6 @@
     "@vitejs/plugin-react": "^4.2.1",
     "axios": "^1.6.5",
     "confetti-js": "^0.0.18",
-    "herotofu-react": "^1.0.6",
     "js-confetti": "^0.12.0",
     "lottie-react": "^2.4.0",
     "react": "^18.2.0",
