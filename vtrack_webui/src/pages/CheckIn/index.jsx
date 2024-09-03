@@ -5,7 +5,7 @@ import { API, LOCAL_STORAGE_KEY } from "../../constants";
 import Axios from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/index";
-import { setLoggedIn } from "../../features/authSlice";
+import { setEmailAddress, setLoggedIn } from "../../features/authSlice";
 import { setVisitorType } from "../../features/VisitorSlice";
 import { useSelector } from "react-redux";
 import { NextButton, StepProgressBar } from "../../components";
@@ -30,6 +30,10 @@ const CheckIn = () => {
   const handleEmailChange = (e) => {
     const input = e.target.value.trim(); // Trim whitespace
     setEmail(input);
+    console.log("this is email address", input);
+    dispatch(setEmailAddress({ emailAddress: input }));
+
+    setIsFormDirty(true);
 
     // Simple email validation (replace with a more robust solution if needed)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

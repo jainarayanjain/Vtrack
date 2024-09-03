@@ -8,7 +8,7 @@ import { API } from "../../../constants";
 import { MdOutlineCheckCircleOutline } from "react-icons/md";
 import { NextButton } from "../../../components";
 import { FiRepeat } from "react-icons/fi";
-
+import { setUserNidData } from "../../../features/userMediaSlice";
 
 const NidForm = () => {
   const [nidType, setNIDType] = useState("");
@@ -21,31 +21,23 @@ const NidForm = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const nidTypes = useNidtypes();
-  const userData=useAppSelector(state=>state.auth);
+  const userData = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     nidTypes.getNidtypes();
   }, []);
 
-  const formData = new FormData();
+  // Ensure form is marked dirty when the user selects an NID type or uploads/captures an image
+  useEffect(() => {
+    if (nidType) {
 
-  const handleBase64InputChange = (base64String) => {
-    // Convert Base64 to binary
-    const binaryString = decodeURIComponent(base64String);
-    // Create an array buffer from the binary string
-    const arrayBuffer = new ArrayBuffer(binaryString.length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < binaryString.length; i++) {
-      uint8Array[i] = binaryString.charCodeAt(i);
+      setIsFormDirty(true);
     }
+  }, [nidType]);
 
-    // Create a Blob from the array buffer
-    const newBlob = new Blob([arrayBuffer], { type: "image/jpeg" });
-    // Update state with the new Blob object
-    // setNidImageBlob(newBlob);
-    return newBlob;
-    // setProfilePhoto(newBlob);
-  };
+  useEffect(() => {
+    console.log("Form Dirty State:", isFormDirty);
+  }, [isFormDirty]);
 
   const startCamera = async () => {
     try {
@@ -83,6 +75,8 @@ const NidForm = () => {
       const blobImage = handleBase64InputChange(dataURL);
       setNidImageRaw(nationalId_raw);
 
+      setIsFormDirty(true);
+
       // Stop the camera stream
       const stream = video.srcObject;
       const tracks = stream.getTracks();
@@ -111,13 +105,13 @@ const NidForm = () => {
     e.preventDefault();
     navigate("/visitor");
 
-    formData.append("nid_type", nidType);
+    const formData = new FormData();
+    formData.append("nid_type", nidType); 
     formData.append("national_id", nidImageRaw);
-    // You can handle the form submission logic here
-    const NidData = {
-      nid_type: nidType,
-      national_id: nidImageRaw,
-    };
+    dispatch(setUserNidData({ nidType, nidImageRaw }));
+
+    console.log(nidType, "this is nid_type");
+
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
